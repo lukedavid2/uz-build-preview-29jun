@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Build chord progressions in any key, visualise scales on the fretboard, use the built-in tuner and arpeggiator. A free, interactive guitar songwriting tool. No sign-up required.">
+  <meta name="keywords" content="chord progression generator, guitar songwriting tool, chord progressions in key, music theory, scale finder, arpeggiator, guitar tuner, free songwriting tool">
+  <meta name="theme-color" content="#d4a745">
+  <meta property="og:title" content="Undercover Zest — Guitar Chord Progression Builder">
+  <meta property="og:description" content="Build chord progressions in any key, visualise scales, and explore music theory. Free interactive tool for songwriters.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://undercoverzest.app/">
+  <meta property="og:image" content="https://undercoverzest.app/lemon-logo.png">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Undercover Zest — Guitar Chord Progression Builder">
+  <meta name="twitter:description" content="Build chord progressions in any key. Free interactive songwriting tool with scale visualiser, tuner, and arpeggiator.">
+  <link rel="canonical" href="https://undercoverzest.app/">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="lemon-logo.png">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍋</text></svg>">
+  <title>Guitar Chord Progression Builder — Undercover Zest</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=107">
+  <link rel="stylesheet" href="builder/builder.css?v=11">
+  <link rel="stylesheet" href="mobile/mobile.css?v=12">
+  <!-- Mobile breakpoint shim: at phone width (≤480px + coarse pointer) serve the mobile view and
+       suppress the desktop UI before first paint (no flash). app.js dynamically mounts mobile/mobile.js. -->
+  <script>try{if(window.matchMedia('(max-width:480px) and (pointer:coarse)').matches||/[?&]mobile=1/.test(location.search))document.documentElement.classList.add('uz-mobile');}catch(e){}</script>
+  <style>html.uz-mobile body{overflow:hidden}#app-mobile{display:none}html.uz-mobile .container,html.uz-mobile .welcome-modal-overlay,html.uz-mobile #uzNavRail{display:none!important}html.uz-mobile #app-mobile{display:block;position:fixed;inset:0;z-index:10000;overflow:auto;-webkit-overflow-scrolling:touch}</style>
+  <style>
+    .welcome-modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 10010; opacity: 1; transition: opacity 0.3s ease;
+    }
+    .welcome-modal-overlay.hidden { display: none; opacity: 0; }
+    .welcome-modal-card {
+      background: #1a1a2a; border: 1px solid rgba(200, 160, 74, 0.3);
+      border-radius: 12px; padding: 28px 32px;
+      max-width: 540px; width: 92%;
+      max-height: 92vh;
+      max-height: calc(100dvh - 32px);
+      overflow-y: auto; -webkit-overflow-scrolling: touch;
+      padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+      animation: slideInModal 0.3s ease;
+    }
+    @keyframes slideInModal {
+      from { opacity: 0; transform: scale(0.95) translateY(-20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .welcome-modal-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .welcome-modal-header img { width: 36px; height: 36px; }
+    .welcome-modal-title { font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 700; color: #d4a745; margin: 0; }
+    .welcome-modal-body { color: #e0e0e0; font-family: 'Outfit', sans-serif; font-size: 0.92rem; line-height: 1.5; }
+    .welcome-modal-section { margin-bottom: 14px; }
+    .welcome-modal-section h3 { color: #c8a04a; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 8px 0; }
+    .welcome-modal-section p { margin: 0 0 6px 0; color: #d0d0d0; }
+    .welcome-modal-section ol { margin: 0; padding-left: 22px; color: #d0d0d0; }
+    .welcome-modal-section ol li { margin: 2px 0; }
+    .welcome-modal-section ul { margin: 0; padding: 0; list-style: none; }
+    .welcome-modal-section li { margin: 4px 0; color: #d0d0d0; }
+    .welcome-tools { display: grid; grid-template-columns: 1fr 1fr; column-gap: 16px; row-gap: 4px; }
+    .welcome-tools li { margin: 0; padding: 4px 0; font-size: 0.88rem; }
+    .welcome-tools li strong { color: #d4a745; font-weight: 600; }
+    .welcome-modal-section ul:not(.welcome-tools) li:before { content: "▸ "; color: #c8a04a; font-weight: 600; margin-right: 6px; }
+    .welcome-suite-footer { font-size: 0.8rem; color: #999; margin: 0; padding-top: 4px; border-top: 1px solid rgba(200, 160, 74, 0.15); }
+    .welcome-modal-footer { display: flex; gap: 12px; margin-top: 18px; justify-content: flex-end; }
+    .welcome-modal-btn { font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 600; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; transition: all 0.15s; min-height: 44px; }
+    .welcome-modal-btn-primary { background: #d4a745; color: #1a1a2a; }
+    .welcome-modal-btn-primary:hover { background: #e8ba50; }
+    .welcome-modal-btn-secondary { background: rgba(200, 160, 74, 0.1); color: #c8a04a; border: 1px solid rgba(200, 160, 74, 0.3); }
+    .welcome-modal-btn-secondary:hover { background: rgba(200, 160, 74, 0.2); border-color: #d4a745; }
+    @media (max-width: 480px) {
+      .welcome-modal-card { padding: 22px 20px; }
+      .welcome-modal-title { font-size: 1.3rem; }
+      .welcome-modal-section p, .welcome-modal-section li { font-size: 0.85rem; }
+      .welcome-tools { grid-template-columns: 1fr; }
+      .welcome-modal-footer { flex-direction: column; gap: 8px; }
+      .welcome-modal-btn { width: 100%; text-align: center; }
+    }
+  </style>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Undercover Zest \u2014 Guitar Chord Progression Builder",
+  "url": "https://undercoverzest.app/",
+  "description": "Build chord progressions in any key, visualise scales on the fretboard, use the built-in tuner and arpeggiator. A free, interactive guitar songwriting tool.",
+  "applicationCategory": "MusicApplication",
+  "operatingSystem": "Web Browser",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Undercover Zest",
+    "url": "https://undercoverzest.app/"
+  },
+  "creator": {
+    "@type": "Organization",
+    "name": "Undercover Zest",
+    "url": "https://undercoverzest.app/"
+  },
+  "alternateName": "Undercover Zest Chord Tool"
+}
+  </script>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icon-192.png">
+</head>
+<body>
+  <noscript>
+    <div style="max-width:640px;margin:60px auto;padding:0 24px;text-align:center;font-family:Outfit,sans-serif;color:#e0e0e0;">
+      <h1 style="font-size:1.8rem;font-weight:700;color:#d4a745;margin-bottom:12px;">Undercover Zest — Guitar Chord Progression Builder</h1>
+      <p style="font-size:1.05rem;line-height:1.7;color:#bbb;margin-bottom:16px;">Build chord progressions in any key, visualise scales on the fretboard, use the built-in tuner and arpeggiator.</p>
+      <p style="font-size:0.9rem;color:#888;">Part of the <a href="/homepage/" style="color:#d4a745;text-decoration:underline;">Undercover Zest</a> songwriting suite.</p>
+    </div>
+  </noscript>
+  <details id="uz-about-collapse" style="max-width:640px;margin:16px auto 0;text-align:center;font-family:Outfit,-apple-system,sans-serif;">
+  <summary style="cursor:pointer;font-size:0.95rem;color:#c8a04a;padding:8px 14px;font-weight:500;font-family:inherit;display:list-item;list-style-position:inside;">About this tool</summary>
+<div id="uz-static-intro" style="max-width:640px;margin:16px auto 24px;padding:0 24px;text-align:center;font-family:'Outfit',-apple-system,sans-serif;color:#e0e0e0;">
+  <h1 style="font-size:1.8rem;font-weight:700;color:#d4a745;margin-bottom:12px;">Guitar Chord Progression Builder</h1>
+  <p style="font-size:1.05rem;line-height:1.7;color:#bbb;margin-bottom:16px;">Build chord progressions in any key. Every diatonic chord in every major and minor key, laid out as a grid you can play and arrange — with a fretboard scale visualiser, sampled guitar playback, arpeggiator, chromatic tuner, key finder and chord picker. Free, browser-based, no sign-up.</p>
+  <p style="font-size:0.9rem;color:#888;">Part of the <a href="/homepage/" style="color:#d4a745;text-decoration:underline;">Undercover Zest</a> songwriting suite — find lyrics with <a href="/rhymeforge/" style="color:#d4a745;text-decoration:underline;">RhymeForge</a>, build metaphors with <a href="/collisionlab/" style="color:#d4a745;text-decoration:underline;">CollisionLab</a>.</p>
+</div>
+</details>
+
+  <div class="container">
+    <div class="header">
+      <div class="logo-container">
+        <img src="lemon-logo.png" alt="Undercover Zest" class="logo-image" onerror="this.style.display='none'">
+        <div class="logo">Undercover <span>Zest</span></div>
+      </div>
+      <div class="tagline">The zest in saucey songwriting</div>
+    </div>
+
+    <div class="key-selector" id="keySelector">
+      <button class="key-collapser" id="keyCollapser" data-action="toggleKeyExpander">
+        <span class="key-label">KEY</span>
+        <span class="key-collapser-current" id="keyCollapserCurrent">C</span>
+        <span class="key-collapser-arrow">▾</span>
+      </button>
+      <div id="keyButtons" class="key-buttons-row"></div>
+    </div>
+
+    <div class="controls-bar">
+      <div class="controls-left">
+        <button class="tab-collapser" id="tabCollapser" data-action="toggleTabExpander">
+          <span class="tab-collapser-current" id="tabCollapserCurrent">Bright Chords (Major)</span>
+          <span class="tab-collapser-arrow">▾</span>
+        </button>
+        <div id="tabButtons" class="tab-buttons"></div>
+      </div>
+      <div class="controls-right">
+        <button class="tool-toggle-btn" id="toolMenuToggle" data-action="toggleToolMenu">🛠 Tools ▾</button>
+        <div class="tool-buttons" id="toolButtons">
+          <button class="tool-menu-btn my-songs-btn" id="btnMySongs" data-action="toggleMySongs">🎵 My Songs</button>
+          <button class="tool-menu-btn file-btn-tool" id="btnFile" data-action="openFilePanel" title="Save, open, export">📁 File</button>
+          <button class="tool-menu-btn melody-btn" id="btnMelody" data-action="toggleMelodySketcher">✏️ Melody</button>
+          <button class="tool-menu-btn fretboard-btn" id="btnShowScale" data-action="toggleFretboard">📐 Show Scale</button>
+          <button class="tool-menu-btn arpeggiator-btn" id="btnArpeggiator" data-action="toggleArpeggiator">🎼 Arpeggiator</button>
+          <button class="tool-menu-btn chordpicker-btn" id="btnChordPicker" data-action="openChordPicker">🎹 Chord Picker</button>
+          <button class="tool-menu-btn keyfinder-btn" id="btnKeyFinder" data-action="openKeyFinder">🔍 Key Finder</button>
+          <button class="tool-menu-btn tuner-btn" id="btnTuner" data-action="toggleTuner">🎯 Tuner</button>
+          <button class="tool-menu-btn tutorial-btn" id="btnTutorial" data-action="openTutorial" title="How to use">📖 Tutorial</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="progression-builder">
+      <div class="progression-area" id="progressionArea">
+        <span class="progression-empty">Click chords to build a progression...</span>
+      </div>
+    </div>
+
+    <div id="melodySketcherContainer" class="melody-sketcher-band"></div>
+
+    <div class="main-content">
+      <div class="chord-section">
+        <div class="chord-grid" id="chordGrid"></div>
+        <div id="fretboardContainer" class="fretboard-container hidden"></div>
+        <div id="arpeggiatorContainer" class="arpeggiator-container hidden"></div>
+        <div id="tunerContainer" class="tuner-container hidden"></div>
+      </div>
+
+      <div class="detail-section">
+        <div class="chord-detail-panel always-visible" id="chordDetailPanel">
+          <div class="chord-detail-header">
+            <span class="chord-detail-title" id="chordDetailTitle">Select a chord</span>
+            <div class="cp-lbl-toggle" role="group" aria-label="Show scale degrees or note names">
+              <button type="button" class="cp-lbl-opt on" data-lbl="deg">Degrees</button>
+              <button type="button" class="cp-lbl-opt" data-lbl="note">Notes</button>
+            </div>
+            <button class="chord-detail-close" data-action="closeAnalysis" title="Close">×</button>
+          </div>
+          <div id="chordTheoryContext" class="theory-context">
+            <div class="theory-item" style="color:#666; text-align:center; padding:20px;">Click a chord to see theory tips, voicings, and voice leading advice.</div>
+          </div>
+          <div class="chord-variations" id="chordVariations"></div>
+          <div id="chordDiagrams" class="chord-diagrams"></div>
+          <button class="oolimo-btn" data-action="openOolimo">Open Extended Chords (Oolimo)</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="scalePopup" class="scale-popup hidden">
+      <div class="scale-popup-content">
+        <button class="close-btn" data-action="toggleScalePopup">×</button>
+        <div id="scaleContent"></div>
+      </div>
+    </div>
+
+    <div id="chordPickerPopup" class="chord-picker-popup hidden">
+      <div class="chord-picker-content">
+        <div class="chord-picker-header">
+          <span class="chord-picker-title">Chord Picker</span>
+          <button class="popout-btn" data-action="popoutPanel" data-panel="chordPicker" title="Pop out to window">⧉</button>
+          <button class="chord-picker-close" data-action="closeChordPicker">×</button>
+        </div>
+        <div class="root-note-grid" id="rootNoteGrid"></div>
+        <div class="quality-grid">
+          <div class="quality-col">
+            <div class="quality-col-label">Type</div>
+            <button class="quality-btn active" data-quality="">Major</button>
+            <button class="quality-btn" data-quality="m">Minor</button>
+            <button class="quality-btn" data-quality="sus2">Sus2</button>
+            <button class="quality-btn" data-quality="sus4">Sus4</button>
+            <button class="quality-btn" data-quality="dim">Dim</button>
+            <button class="quality-btn" data-quality="aug">Aug</button>
+          </div>
+          <div class="quality-col">
+            <div class="quality-col-label">Extensions</div>
+            <button class="quality-btn" data-ext="">Basic</button>
+            <button class="quality-btn" data-ext="6">6</button>
+            <button class="quality-btn" data-ext="7">7</button>
+            <button class="quality-btn" data-ext="maj7">maj7</button>
+            <button class="quality-btn" data-ext="add9">add9</button>
+            <button class="quality-btn" data-ext="9">9</button>
+          </div>
+        </div>
+        <div class="chord-picker-result">
+          <div class="result-chord-name" id="pickerResultChord">C</div>
+          <button class="add-to-progression-btn" data-action="addPickedChord">Add to Progression</button>
+          <button class="add-to-progression-btn" style="background:#555; color:#fff;" data-action="playPickedChord">▶ Play</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="playbackPopup" class="playback-popup hidden">
+      <div class="playback-content">
+        <div class="playback-header">
+          <span class="playback-title">🎶 Playback</span>
+          <button class="playback-close" data-action="closePlaybackPanel">×</button>
+        </div>
+        <div id="playbackBody" class="playback-body"></div>
+      </div>
+    </div>
+
+    <div id="filePopup" class="file-popup hidden">
+      <div class="file-content">
+        <div class="file-header">
+          <span class="file-title">📁 File</span>
+          <button class="file-close" data-action="closeFilePanel">×</button>
+        </div>
+        <div id="fileBody" class="file-body"></div>
+      </div>
+    </div>
+
+    <div id="mySongsPopup" class="my-songs-popup hidden">
+      <div class="my-songs-content">
+        <div class="my-songs-header">
+          <span class="my-songs-title">🎵 My Songs</span>
+          <div class="my-songs-header-actions">
+            <button class="file-btn" data-action="newSongHub">+ New song</button>
+            <button class="file-btn" data-action="importSongHub" title="Import .json or a .zip of songs">📂 Import</button>
+            <button class="file-btn" data-action="exportAllSongs" title="Download every song as a zip">⬇ Export all</button>
+            <button class="my-songs-close" data-action="closeMySongs" aria-label="Close">×</button>
+          </div>
+        </div>
+        <p class="my-songs-note">Songs live in this browser. Export anything you'd miss.</p>
+        <div id="mySongsBody" class="my-songs-body"></div>
+      </div>
+    </div>
+
+    <div id="keyFinderPopup" class="key-finder-popup hidden">
+      <div class="key-finder-content">
+        <div class="key-finder-header">
+          <span class="key-finder-title">🔍 Key Finder</span>
+          <button class="popout-btn" data-action="popoutPanel" data-panel="keyFinder" title="Pop out to window">⧉</button>
+          <button class="key-finder-close" data-action="closeKeyFinder">×</button>
+        </div>
+        <p class="key-finder-desc">Enter chords to find what key they're in</p>
+        <div class="kf-root-grid" id="kfRootGrid"></div>
+        <div class="kf-quality-row">
+          <button class="kf-quality-btn active" data-kf-quality="">Maj</button>
+          <button class="kf-quality-btn" data-kf-quality="m">min</button>
+          <button class="kf-quality-btn" data-kf-quality="7">7</button>
+          <button class="kf-quality-btn" data-kf-quality="m7">m7</button>
+          <button class="kf-quality-btn" data-kf-quality="maj7">maj7</button>
+          <button class="kf-quality-btn" data-kf-quality="dim">dim</button>
+          <button class="kf-quality-btn" data-kf-quality="sus4">sus4</button>
+        </div>
+        <div class="kf-add-row">
+          <span class="kf-preview" id="kfPreview">C</span>
+          <button class="kf-add-btn" data-action="kfAddChord">+ Add</button>
+        </div>
+        <div class="kf-progression" id="kfProgression">
+          <span class="kf-empty">Add chords above...</span>
+        </div>
+        <div class="kf-result" id="kfResult">
+          <div class="kf-result-label">Possible Keys:</div>
+          <div class="kf-result-keys" id="kfResultKeys">-</div>
+        </div>
+        <div class="kf-actions">
+          <button class="kf-clear-btn" data-action="kfClear">Clear</button>
+          <button class="kf-use-btn" data-action="kfUseKey">Use This Key</button>
+        </div>
+      </div>
+    </div>
+
+    <a href="/rhymeforge/" class="rf-banner">
+      <div class="rf-banner-top">
+        <img src="lemon-logo.png" alt="" class="rf-banner-lemon" onerror="this.style.display='none'">
+        <div class="rf-banner-from">Also from Undercover Zest</div>
+      </div>
+      <div class="rf-banner-middle">
+        <div class="rf-banner-text">
+          <div class="rf-banner-title">Rhyme<span>Forge</span></div>
+          <div class="rf-banner-body"><strong>From chords to words.</strong> Find the perfect rhyme for your lyrics with five types of rhyme matching, built for songwriters. Completely free.</div>
+        </div>
+        <div class="rf-banner-cta-wrap">
+          <div class="rf-banner-cta">Start writing lyrics</div>
+        </div>
+      </div>
+      <div class="rf-rhyme-types">
+        <span class="rf-chip rf-c1">Perfect</span>
+        <span class="rf-chip rf-c2">Family</span>
+        <span class="rf-chip rf-c3">Additive</span>
+        <span class="rf-chip rf-c4">Assonance</span>
+        <span class="rf-chip rf-c5">Consonance</span>
+      </div>
+    </a>
+  </div>
+
+  <div id="welcomeModal" class="welcome-modal-overlay hidden">
+    <div class="welcome-modal-card">
+      <div class="welcome-modal-header">
+        <img src="lemon-logo.png" alt="Undercover Zest" onerror="this.style.display='none'">
+        <h2 class="welcome-modal-title">Undercover Zest</h2>
+      </div>
+      <div class="welcome-modal-body">
+        <div class="welcome-modal-section">
+          <p>A free guitar songwriting suite — build chord progressions, write lyrics with chords above the words, and find rhymes without leaving the page.</p>
+        </div>
+        <div class="welcome-modal-section">
+          <h3>Quick start</h3>
+          <ol>
+            <li>Pick a key at the top</li>
+            <li>Click chords to build your progression</li>
+            <li>Hit ▶ Loop to hear it back</li>
+            <li>Open the <strong>♫ Lyrics</strong> tab on the left to write words and place chords above them</li>
+          </ol>
+        </div>
+        <div class="welcome-modal-section">
+          <h3>Tools</h3>
+          <ul class="welcome-tools">
+            <li><strong>🔍 Key Finder</strong></li>
+            <li><strong>🛠 Chord Picker</strong></li>
+            <li><strong>📐 Show Scale</strong></li>
+            <li><strong>🎵 Arpeggiator</strong></li>
+            <li><strong>🎯 Tuner</strong></li>
+            <li><strong>♫ Lyrics + Rhymes</strong></li>
+          </ul>
+        </div>
+        <div class="welcome-modal-section">
+          <p class="welcome-suite-footer">Part of the Undercover Zest suite — <strong>RhymeForge</strong>, <strong>CollisionLab</strong>, <strong>Morning Pages</strong>, <strong>SenseSpark</strong>.</p>
+        </div>
+      </div>
+      <div class="welcome-modal-footer">
+        <button class="welcome-modal-btn welcome-modal-btn-secondary" id="welcomeLearnMore">Learn More</button>
+        <button class="welcome-modal-btn welcome-modal-btn-primary" id="welcomeGotIt">Got it!</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const VISITED_KEY = 'uz-has-visited';
+      const modal = document.getElementById('welcomeModal');
+      const tutorialBtn = document.getElementById('btnTutorial');
+      const gotItBtn = document.getElementById('welcomeGotIt');
+      const learnMoreBtn = document.getElementById('welcomeLearnMore');
+      function hasVisited() { return localStorage.getItem(VISITED_KEY) === 'true'; }
+      function markAsVisited() { localStorage.setItem(VISITED_KEY, 'true'); }
+      function showModal() { if (modal) modal.classList.remove('hidden'); }
+      function hideModal() { if (modal) modal.classList.add('hidden'); }
+      if (!hasVisited()) { showModal(); }
+      if (tutorialBtn) { tutorialBtn.addEventListener('click', function(e) { e.preventDefault(); showModal(); }); }
+      window.uzShowTutorial = showModal;
+      if (gotItBtn) { gotItBtn.addEventListener('click', function() { markAsVisited(); hideModal(); }); }
+      if (learnMoreBtn) { learnMoreBtn.addEventListener('click', function() { window.location.href = '/homepage/'; }); }
+      if (modal) { modal.addEventListener('click', function(e) { if (e.target === modal) hideModal(); }); }
+    })();
+  </script>
+
+  <div class="lyrics-panel-tab" id="lyricsPanelTab" title="RhymeForge Lyrics">♫ Lyrics</div>
+  <div class="lyrics-panel" id="lyricsPanel">
+    <div class="lp-header">
+      <span class="lp-title">♫ RhymeForge</span>
+    </div>
+    <div class="lp-tabs">
+      <button class="lp-tab active" data-lp-tab="lyrics">Lyrics</button>
+      <button class="lp-tab" data-lp-tab="rhymes">Rhymes</button>
+      <div class="lp-tabs-controls">
+        <button class="lp-size-btn" data-lp-size="quarter">¼</button>
+        <button class="lp-size-btn" data-lp-size="third">⅓</button>
+        <button class="lp-size-btn active" data-lp-size="half">½</button>
+        <button class="lp-close-btn" id="lyricsPanelClose">×</button>
+      </div>
+    </div>
+    <div class="lp-body" id="lpBody"></div>
+  </div>
+
+  <!-- Mobile view mount point (filled by mobile/mobile.js at the breakpoint; covers the hidden desktop UI) -->
+  <div id="app-mobile"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- v2 builder library (classic globals: window.MODEL/TAB/MELODY/VIEWS + bridge); must load before the deferred app.js module -->
+  <script src="builder/model.js?v=7"></script>
+  <script src="builder/tab.js?v=9"></script>
+  <script src="builder/melody.js?v=9"></script>
+  <script src="builder/views.js?v=6"></script>
+  <script src="builder/uz-builder-bridge.js?v=6"></script>
+  <script type="module" src="app.js?v=129"></script>
+  <script src="uz-nav.js"></script>
+  <script src="uz-footer.js?v=15"></script>
+  <script src="uz-deferred-patches.js?v=6"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('/sw.js').catch(function () {});
+  });
+}
+</script>
+</body>
+</html>

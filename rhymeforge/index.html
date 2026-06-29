@@ -1,0 +1,4166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RhymeForge — Songwriter's Rhyme Engine | 54,000+ Words, 5 Rhyme Types</title>
+<meta name="description" content="Find the perfect rhyme for your lyrics with RhymeForge. Search 54,000+ words across five rhyme types — perfect, family, additive, assonance, and consonance. Built for songwriters, completely free.">
+<meta name="keywords" content="rhyme finder, songwriting tool, rhyming dictionary, lyric writing, perfect rhymes, slant rhymes, near rhymes, assonance, consonance, poetry tool, free rhyme engine">
+<meta property="og:title" content="RhymeForge — Songwriter's Rhyme Engine">
+<meta property="og:description" content="Search 54,000+ words across five rhyme types. Built for songwriters, completely free.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://undercoverzest.app/rhymeforge">
+<meta property="og:image" content="https://undercoverzest.app/lemon-logo.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RhymeForge — Songwriter's Rhyme Engine">
+<meta name="twitter:description" content="Find the perfect rhyme for your lyrics. 54,000+ words, five rhyme types, completely free.">
+<link rel="canonical" href="https://undercoverzest.app/rhymeforge">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9835;</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-primary: #08080c;
+  --bg-secondary: #0e0e14;
+  --bg-card: #14141e;
+  --bg-card-hover: #1a1a28;
+  --bg-input: #12121c;
+  --border: #252530;
+  --border-light: #2e2e3a;
+  --text-primary: #ebe8e2;
+  --text-secondary: #a0a0a8;
+  --text-muted: #606068;
+  --accent: #d4a853;
+  --accent-hover: #e4bc6c;
+  --accent-dim: #8b6914;
+  --accent-glow: rgba(212, 168, 83, 0.15);
+  --perfect: #5ec269;
+  --family: #4db8d4;
+  --additive: #e06b5e;
+  --assonance: #e8a94e;
+  --consonance: #a86bd4;
+  --ending: #d46ba8;
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+}
+
+html { font-size: 16px; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--accent); color: var(--bg-primary); }
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-secondary); }
+::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ===== HEADER ===== */
+.header {
+  padding: 2.5rem 2rem 2rem;
+  text-align: center;
+  position: relative;
+  background: linear-gradient(180deg, rgba(212,168,83,0.04) 0%, transparent 100%);
+  border-bottom: 1px solid var(--border);
+}
+.logo {
+  font-family: var(--font-display);
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.25rem;
+}
+.logo span { color: var(--accent); }
+.tagline {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 2rem;
+}
+
+/* ===== SEARCH ===== */
+.search-container {
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  gap: 0.5rem;
+}
+.search-input {
+  flex: 1;
+  padding: 0.9rem 1.2rem;
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  background: var(--bg-input);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.search-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.search-input::placeholder { color: var(--text-muted); }
+.btn {
+  padding: 0.9rem 1.4rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.btn-primary {
+  background: var(--accent);
+  color: var(--bg-primary);
+}
+.btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  border: 1.5px solid var(--border);
+}
+.btn-secondary:hover { border-color: var(--accent-dim); color: var(--text-primary); }
+.btn-icon {
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  border: 1.5px solid var(--border);
+  padding: 0.9rem;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+.btn-icon:hover { border-color: var(--accent-dim); color: var(--accent); }
+
+.header-actions {
+  max-width: 640px;
+  margin: 0.75rem auto 0;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+/* ===== MAIN LAYOUT ===== */
+.main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem 4rem;
+  position: relative;
+}
+
+/* ===== STATUS ===== */
+.status-bar {
+  text-align: center;
+  padding: 1rem 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+.status-bar .word { color: var(--accent); font-family: var(--font-mono); font-weight: 500; }
+.status-bar .phoneme { color: var(--text-secondary); font-family: var(--font-mono); font-size: 0.8rem; }
+.status-bar .count { color: var(--text-secondary); }
+
+/* ===== RESULT SECTIONS ===== */
+.result-section {
+  margin-bottom: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bg-secondary);
+  transition: border-color 0.2s;
+}
+.result-section:hover { border-color: var(--border-light); }
+.section-header {
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s;
+}
+.section-header:hover { background: var(--bg-card); }
+.section-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.section-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+.section-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-left: 0.5rem;
+  font-weight: 400;
+}
+.section-badge {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  background: var(--bg-card);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+.section-chevron {
+  color: var(--text-muted);
+  transition: transform 0.25s;
+  font-size: 0.8rem;
+}
+.result-section.open .section-chevron { transform: rotate(180deg); }
+.section-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+.result-section.open .section-content { max-height: 2000px; }
+.section-inner { padding: 0 1.25rem 1.25rem; }
+
+/* Syllable groups */
+.syllable-group { margin-bottom: 1rem; }
+.syllable-group:last-child { margin-bottom: 0; }
+.syllable-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+  padding-left: 0.1rem;
+}
+.words-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.word-chip {
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 6px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  /* v4.0 Change 13 — button reset (chips were spans previously) */
+  color: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  text-align: left;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.word-chip:hover {
+  border-color: var(--accent-dim);
+  background: var(--bg-card-hover);
+  transform: translateY(-1px);
+}
+.word-chip:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.word-chip .fav-star {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.word-chip .fav-star:hover,
+.word-chip .fav-star.active { color: var(--accent); }
+/* v4.0 Change 12 — rhyming tail visual highlight */
+.word-chip .rhyme-tail {
+  border-bottom: 1px dashed currentColor;
+  font-weight: 600;
+  opacity: 0.95;
+}
+/* v4.0 Change 7 — quality score badge */
+.word-chip .score-badge {
+  font-size: 0.62rem;
+  padding: 0.05rem 0.32rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-muted);
+  background: rgba(255,255,255,0.03);
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+}
+/* v4.0 Voice-Pair / Vowel-Slant sub-tier blocks */
+.sub-tier-divider {
+  margin: 0.85rem 0 0.4rem;
+  padding: 0.25rem 0;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  border-top: 1px dashed rgba(255,255,255,0.06);
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.sub-tier-divider .sub-tier-name { color: var(--text-secondary); font-weight: 600; }
+.sub-tier-divider .sub-tier-subtitle { font-size: 0.7rem; opacity: 0.7; text-transform: none; letter-spacing: 0; }
+.sub-tier-divider .sub-tier-count {
+  margin-left: auto;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0 0.42rem;
+}
+/* Voice-Pair chips get a slightly different accent so they're visually distinct
+   from "true" Perfect rhymes within the same card. */
+.type-perfect .voice-pair-block .word-chip { border-style: dashed; }
+/* Morphological shadow section header */
+.morph-section {
+  margin-top: 1.25rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed rgba(255,255,255,0.08);
+}
+.morph-section .morph-header {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+.morph-section .morph-header em { color: var(--accent); font-style: normal; }
+
+/* Tooltip */
+.tooltip {
+  position: fixed;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  white-space: nowrap;
+}
+.tooltip.show { opacity: 1; }
+
+/* Color coding for rhyme types */
+.type-perfect .section-dot { background: var(--perfect); }
+.type-perfect .section-badge { color: var(--perfect); border-color: rgba(94,194,105,0.3); }
+.type-family .section-dot { background: var(--family); }
+.type-family .section-badge { color: var(--family); border-color: rgba(77,184,212,0.3); }
+.type-additive .section-dot { background: var(--additive); }
+.type-additive .section-badge { color: var(--additive); border-color: rgba(224,107,94,0.3); }
+.type-assonance .section-dot { background: var(--assonance); }
+.type-assonance .section-badge { color: var(--assonance); border-color: rgba(232,169,78,0.3); }
+.type-consonance .section-dot { background: var(--consonance); }
+.type-consonance .section-badge { color: var(--consonance); border-color: rgba(168,107,212,0.3); }
+.type-ending .section-dot { background: var(--ending); }
+.type-ending .section-badge { color: var(--ending); border-color: rgba(212,107,168,0.3); }
+
+/* ===== FAVORITES PANEL ===== */
+.favorites-toggle {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 100;
+}
+.favorites-panel {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border);
+  padding: 1rem 2rem;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  z-index: 99;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.favorites-panel.open { transform: translateY(0); }
+.favorites-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 0.75rem;
+}
+.favorites-header h3 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--accent);
+}
+.favorites-words { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.fav-chip {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  background: var(--bg-card);
+  border: 1px solid var(--accent-dim);
+  color: var(--accent);
+  cursor: pointer;
+  transition: all 0.15s;
+  display: inline-flex; align-items: center; gap: 0.3rem;
+}
+.fav-chip:hover { background: var(--bg-card-hover); }
+.fav-chip .remove { font-size: 0.7rem; opacity: 0.6; }
+.fav-chip .remove:hover { opacity: 1; }
+
+/* ===== GUIDE SIDEBAR ===== */
+.guide-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.guide-overlay.open { opacity: 1; pointer-events: auto; }
+.guide-panel {
+  position: fixed;
+  top: 0; right: 0; bottom: 0;
+  width: min(480px, 90vw);
+  background: var(--bg-secondary);
+  border-left: 1px solid var(--border);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  z-index: 201;
+  overflow-y: auto;
+  padding: 2rem;
+}
+.guide-panel.open { transform: translateX(0); }
+.guide-close {
+  position: absolute; top: 1rem; right: 1rem;
+  background: none; border: none; color: var(--text-muted);
+  font-size: 1.5rem; cursor: pointer; line-height: 1;
+}
+.guide-close:hover { color: var(--text-primary); }
+.guide-panel h2 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--accent);
+  margin-bottom: 1.5rem;
+}
+.guide-panel h3 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  margin: 1.5rem 0 0.75rem;
+}
+.guide-panel p, .guide-panel li {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin-bottom: 0.5rem;
+}
+.guide-panel ul { padding-left: 1.2rem; }
+.guide-panel .cluster {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin: 0.5rem 0;
+}
+.guide-panel .cluster-title {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--accent);
+  margin-bottom: 0.3rem;
+}
+.guide-panel .cluster-words {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+/* ===== EMPTY/LOADING STATES ===== */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-muted);
+}
+.empty-state .icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.4; }
+.empty-state p { font-size: 0.95rem; }
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.result-section { animation: fadeIn 0.3s ease forwards; }
+.result-section:nth-child(2) { animation-delay: 0.05s; }
+.result-section:nth-child(3) { animation-delay: 0.1s; }
+.result-section:nth-child(4) { animation-delay: 0.15s; }
+.result-section:nth-child(5) { animation-delay: 0.2s; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+  .header { padding: 1.5rem 1rem 1.5rem; }
+  .logo { font-size: 2rem; }
+  .search-container { flex-wrap: wrap; }
+  .search-input { min-width: 100%; }
+  .main { padding: 1rem; }
+  .section-subtitle { display: none; }
+}
+
+/* ===== UZ-NAV INTEGRATION ===== */
+:root { --lab-bg: #08080c; }
+.lyrics-panel {
+  height: calc(100vh - var(--uz-rail-h, 52px));
+  position: sticky;
+  top: var(--uz-rail-h, 52px);
+}
+
+/* ===== PHASE 4: CONTROLS BAR ===== */
+.controls-bar {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0.75rem 2rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+.control-label {
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.68rem;
+  margin-right: 0.2rem;
+}
+.filter-btn, .sort-btn {
+  padding: 0.25rem 0.55rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.filter-btn:hover, .sort-btn:hover {
+  border-color: var(--accent-dim);
+  color: var(--text-secondary);
+}
+.filter-btn.active, .sort-btn.active {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.controls-spacer { flex: 1; }
+
+/* ===== CLICHÉ WARNING ===== */
+.word-chip.cliche {
+  border-color: rgba(224,107,94,0.5);
+  position: relative;
+}
+.word-chip.cliche::after {
+  content: '⚠';
+  font-size: 0.6rem;
+  color: var(--additive);
+  margin-left: 0.1rem;
+}
+.cliche-note {
+  font-size: 0.72rem;
+  color: var(--additive);
+  font-style: italic;
+  padding: 0.4rem 0 0.2rem 0.1rem;
+  opacity: 0.85;
+}
+
+/* ===== SEARCH HISTORY ===== */
+.history-bar {
+  max-width: 640px;
+  margin: 0.5rem auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  justify-content: center;
+  min-height: 0;
+}
+.history-chip {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.history-chip:hover {
+  border-color: var(--accent-dim);
+  color: var(--text-secondary);
+}
+
+/* ===== EXPORT BUTTON ===== */
+.export-btn {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.75rem;
+  background: transparent;
+  border: 1px solid var(--accent-dim);
+  color: var(--accent);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: var(--font-body);
+}
+.export-btn:hover {
+  background: var(--accent-dim);
+  color: var(--text-primary);
+}
+
+/* ===== STATS BAR ===== */
+.stats-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  margin-left: 0.5rem;
+}
+.stats-pill .num { color: var(--accent); font-weight: 500; }
+
+/* ===== TOAST ===== */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  padding: 0.6rem 1.2rem;
+  background: var(--bg-card);
+  border: 1px solid var(--accent-dim);
+  border-radius: 8px;
+  color: var(--accent);
+  font-size: 0.85rem;
+  z-index: 500;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* ===== WORD COUNT HEADER BADGE ===== */
+.word-count-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+}
+.word-count-badge:empty { display: none; }
+.word-count-badge .num { color: var(--accent); }
+
+/* ===== SEARCH INPUT ANIMATION ===== */
+@keyframes searchPulse {
+  0% { box-shadow: 0 0 0 3px var(--accent-glow); }
+  50% { box-shadow: 0 0 0 6px var(--accent-glow); }
+  100% { box-shadow: 0 0 0 3px var(--accent-glow); }
+}
+.search-input.searching {
+  animation: searchPulse 0.6s ease;
+}
+
+/* ===== PHASE 5: LYRICS PANEL ===== */
+
+/* App wrapper: flex layout for side-by-side lyrics + main content */
+.app-wrapper {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Lyrics toggle button — fixed left edge */
+.lyrics-toggle {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: none;
+  padding: 1rem 0.45rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.25s;
+  z-index: 60;
+  border-radius: 0 6px 6px 0;
+  font-size: 1rem;
+  line-height: 1;
+  writing-mode: vertical-rl;
+  letter-spacing: 0.08em;
+}
+.lyrics-toggle:hover {
+  border-color: var(--accent-dim);
+  color: var(--accent);
+  background: var(--bg-card-hover);
+  padding-right: 0.6rem;
+}
+.lyrics-toggle.active {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Lyrics panel — left side, takes 1/3 width when open */
+.lyrics-panel {
+  width: 0;
+  min-width: 0;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border);
+  overflow: hidden;
+  transition: width 0.3s ease, min-width 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+.lyrics-panel.open {
+  width: 33.333%;
+  min-width: 340px;
+}
+
+/* Main content area — fills remaining space */
+.main-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+/* Lyrics panel header */
+.lyrics-panel-header {
+  padding: 1rem 1.25rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.lyrics-panel-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.lyrics-panel-title span { color: var(--accent); }
+.lyrics-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.2rem;
+  line-height: 1;
+  transition: color 0.15s;
+}
+.lyrics-close:hover { color: var(--text-primary); }
+
+.lyrics-name-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.lyrics-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+.lyrics-name-input {
+  padding: 0.5rem 0.75rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-primary);
+  outline: none;
+  transition: all 0.2s;
+}
+.lyrics-name-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.lyrics-name-input::placeholder { color: var(--text-muted); }
+
+/* Scratch pad section */
+.lyrics-scratch {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 30%;
+  min-height: 0;
+  border-bottom: 1px solid var(--border);
+  padding: 0.6rem 1.25rem;
+}
+.lyrics-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.35rem;
+  flex-shrink: 0;
+}
+.lyrics-section-head .lyrics-label { margin: 0; }
+.scratch-textarea {
+  flex: 1;
+  min-height: 0;
+  padding: 0.6rem 0.7rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text-secondary);
+  resize: none;
+  outline: none;
+  transition: border-color 0.2s;
+  overflow-y: auto;
+}
+.scratch-textarea:focus {
+  border-color: var(--accent);
+}
+
+/* Poem section */
+.lyrics-poem {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0.6rem 1.25rem;
+}
+.poem-textarea {
+  flex: 1;
+  min-height: 0;
+  padding: 0.7rem 0.8rem;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  line-height: 1.7;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text-primary);
+  resize: none;
+  outline: none;
+  transition: border-color 0.2s;
+  overflow-y: auto;
+}
+.poem-textarea:focus {
+  border-color: var(--accent);
+}
+
+/* Action bar */
+.lyrics-actions {
+  display: flex;
+  gap: 0.35rem;
+  padding: 0.6rem 1.25rem;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.lyrics-btn {
+  flex: 1;
+  padding: 0.4rem 0.5rem;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.lyrics-btn:hover {
+  border-color: var(--accent-dim);
+  color: var(--accent);
+  background: var(--bg-card-hover);
+}
+.lyrics-btn.primary {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.lyrics-btn.primary:hover {
+  background: var(--accent);
+  color: var(--bg-primary);
+}
+
+/* Floating search-selection button */
+.search-selection-btn {
+  position: fixed;
+  padding: 0.35rem 0.7rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  background: var(--accent);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 10001;
+  display: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.search-selection-btn:hover {
+  background: var(--accent-hover);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .lyrics-panel.open {
+    position: fixed;
+    left: 0; top: var(--uz-rail-h, 52px); bottom: 0;
+    width: 320px;
+    max-width: 85vw;
+    z-index: 250;
+    box-shadow: 2px 0 12px rgba(0,0,0,0.5);
+    height: auto;
+  }
+  .lyrics-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 249;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .lyrics-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+@media (max-width: 768px) {
+  .header { padding: 1.5rem 1rem 1.5rem; }
+  .logo { font-size: 2rem; }
+  .main { padding: 1rem 1rem 3rem; }
+  .controls-bar { padding: 0.5rem 1rem 0; }
+  .search-container { flex-direction: column; }
+  .result-section .section-header { padding: 0.75rem 1rem; }
+  .section-inner { padding: 0 1rem 1rem; }
+  .favorites-panel { padding: 0.75rem 1rem; }
+}
+
+/* UZ pill removed — navigation now handled by uz-nav.js */
+
+/* Footer CSS now provided by uz-footer.js */
+
+@media (max-width: 768px) {
+}
+
+/* ===== PHASE 7: COMPOUND RHYMES ===== */
+:root { --compound: #e67ec2; }
+.type-compound .section-dot { background: var(--compound); }
+.type-compound .section-badge { color: var(--compound); border-color: rgba(230,126,194,0.3); }
+.type-compound .section-header:hover .section-dot { box-shadow: 0 0 8px rgba(230,126,194,0.5); }
+.compound-chip {
+  display: inline-flex; align-items: center; gap: 0;
+  padding: 0.35rem 0.7rem; border-radius: 6px; cursor: pointer;
+  font-size: 0.85rem; font-weight: 500;
+  background: rgba(230,126,194,0.06); border: 1px solid rgba(230,126,194,0.15);
+  color: var(--text-primary); transition: all 0.15s ease;
+}
+.compound-chip:hover {
+  background: rgba(230,126,194,0.12); border-color: rgba(230,126,194,0.3);
+  transform: translateY(-1px); box-shadow: 0 2px 8px rgba(230,126,194,0.15);
+}
+.compound-sep {
+  margin: 0 0.3rem; color: rgba(230,126,194,0.4); font-size: 0.7rem;
+  user-select: none; pointer-events: none;
+}
+.compound-chip .fav-star { margin-left: 0.3rem; }
+.compound-score {
+  font-size: 0.65rem; color: var(--text-muted); margin-left: 0.4rem;
+  opacity: 0.6; font-family: 'JetBrains Mono', monospace;
+}
+
+/* ===== LOOSENESS SLIDER ===== */
+.compound-looseness-group {
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.looseness-slider {
+  width: 120px; height: 5px; cursor: pointer;
+  -webkit-appearance: none; appearance: none;
+  background: linear-gradient(to right, rgba(100,180,255,0.35) 0%, rgba(230,126,194,0.35) 50%, rgba(255,150,80,0.35) 100%);
+  border-radius: 3px; outline: none; margin: 0;
+}
+.looseness-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--compound); cursor: pointer;
+  box-shadow: 0 2px 4px rgba(230,126,194,0.3);
+  transition: box-shadow 0.15s;
+}
+.looseness-slider::-webkit-slider-thumb:hover {
+  box-shadow: 0 2px 8px rgba(230,126,194,0.5);
+}
+.looseness-slider::-moz-range-thumb {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--compound); cursor: pointer; border: none;
+  box-shadow: 0 2px 4px rgba(230,126,194,0.3);
+}
+.looseness-label {
+  font-size: 0.7rem; color: var(--text-muted); min-width: 52px;
+  text-align: center; font-family: var(--font-mono);
+  background: rgba(230,126,194,0.08); padding: 0.15rem 0.4rem;
+  border-radius: 4px; border: 1px solid rgba(230,126,194,0.15);
+}
+
+/* ===== PHASE 8: THREE-WORD COMPOUNDS ===== */
+:root { --compound3: #a97bff; }
+.type-compound3 .section-dot { background: var(--compound3); }
+.type-compound3 .section-badge { color: var(--compound3); border-color: rgba(169,123,255,0.3); }
+.type-compound3 .section-header:hover .section-dot { box-shadow: 0 0 8px rgba(169,123,255,0.5); }
+.type-compound3 .compound-chip {
+  background: rgba(169,123,255,0.06); border-color: rgba(169,123,255,0.15);
+}
+.type-compound3 .compound-chip:hover {
+  background: rgba(169,123,255,0.12); border-color: rgba(169,123,255,0.3);
+  box-shadow: 0 2px 8px rgba(169,123,255,0.15);
+}
+.type-compound3 .compound-sep { color: rgba(169,123,255,0.4); }
+
+/* ===== METER MATCH + VIBE CONTROLS ===== */
+.meter-toggle {
+  display: flex; align-items: center; gap: 0.4rem; cursor: pointer;
+  font-size: 0.75rem; color: var(--text-muted);
+  user-select: none;
+}
+.meter-toggle input[type="checkbox"] {
+  width: 14px; height: 14px; accent-color: var(--accent);
+  cursor: pointer; margin: 0;
+}
+.meter-toggle:hover { color: var(--text-secondary); }
+.meter-toggle.active { color: var(--accent); }
+
+/* ===== SYLLABLE INDICATOR (dots under each word chip) ===== */
+.word-chip .syl-dots {
+  display: inline-flex;
+  gap: 3px;
+  align-items: center;
+  margin-left: 0.45rem;
+  height: 1em;
+  pointer-events: none;
+}
+.word-chip .syl-dots .syl-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent-dim);
+  opacity: 0.75;
+  display: inline-block;
+}
+.word-chip:hover .syl-dots .syl-dot,
+.word-chip.syl-match .syl-dots .syl-dot { background: var(--accent); opacity: 1; }
+
+/* When the syllable-match toggle is on, dim chips whose count doesn't match. */
+.word-chip.syl-mismatch { opacity: 0.3; }
+.word-chip.syl-mismatch:hover { opacity: 0.55; }
+
+/* ===== SYLLABLE-MATCH TOGGLE BUTTON (sits next to Meter) ===== */
+.syl-match-toggle {
+  display: flex; align-items: center; gap: 0.4rem; cursor: pointer;
+  font-size: 0.75rem; color: var(--text-muted);
+  user-select: none;
+}
+.syl-match-toggle input[type="checkbox"] {
+  width: 14px; height: 14px; accent-color: var(--accent);
+  cursor: pointer; margin: 0;
+}
+.syl-match-toggle:hover { color: var(--text-secondary); }
+.syl-match-toggle.active { color: var(--accent); }
+.syl-match-toggle.disabled { opacity: 0.45; cursor: not-allowed; }
+.syl-match-toggle.disabled input { cursor: not-allowed; }
+
+.vibe-select {
+  font-family: var(--font-mono); font-size: 0.72rem;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 5px; color: var(--text-muted); cursor: pointer;
+  padding: 0.2rem 0.4rem; outline: none;
+  transition: all 0.15s;
+}
+.vibe-select:hover { border-color: var(--accent-dim); color: var(--text-secondary); }
+.vibe-select:focus { border-color: var(--accent); color: var(--accent); }
+
+/* Stress pattern indicator on compound chips */
+.stress-indicator {
+  font-size: 0.55rem; color: var(--text-muted); margin-left: 0.3rem;
+  opacity: 0.5; font-family: var(--font-mono); letter-spacing: 1px;
+}
+.compound-chip.meter-match .stress-indicator { color: var(--accent); opacity: 0.8; }
+.compound-chip.meter-clash { opacity: 0.45; }
+.compound-chip.theme-match { border-color: rgba(100,200,120,0.3); }
+.compound-chip.theme-match::after {
+  content: '\2022'; color: rgba(100,200,120,0.6); margin-left: 0.2rem; font-size: 0.5rem;
+}
+
+/* Info modal */
+.rf-info-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.7); display:flex; align-items:center; justify-content:center; z-index:10001; animation:fadeIn 0.2s ease; padding:20px; }
+.rf-info-modal { background:var(--bg-secondary, #111118); border:1px solid var(--border, #2a2a3a); border-radius:12px; max-width:520px; width:100%; max-height:85vh; overflow-y:auto; padding:28px; box-shadow:0 8px 32px rgba(0,0,0,0.5); }
+.rf-info-modal h3 { font-size:1.15rem; font-weight:600; margin-bottom:16px; color:var(--accent, #c8a04a); }
+.rf-info-quote { font-style:italic; font-size:0.9rem; color:var(--text-muted, #888); padding:14px 18px; background:rgba(212,168,83,0.05); border-radius:8px; margin-bottom:16px; line-height:1.6; border-left:3px solid var(--accent, #c8a04a); }
+.rf-info-section { margin-bottom:14px; }
+.rf-info-section h4 { font-size:0.88rem; font-weight:600; margin-bottom:4px; color:var(--text-primary, #e0e0e0); }
+.rf-info-section p { font-size:0.82rem; color:var(--text-secondary, #aaa); line-height:1.6; }
+.rf-info-actions { display:flex; justify-content:space-between; margin-top:20px; }
+.rf-info-actions .btn { padding:8px 18px; }
+.rf-info-btn { display:inline-flex; align-items:center; gap:5px; }
+.rf-info-btn svg { width:14px; height:14px; }
+@media (max-width: 640px) {
+  .header-actions { flex-wrap:wrap; gap:0.4rem; }
+  .header-actions .btn { font-size:0.78rem; padding:0.6rem 0.8rem; flex:1; min-width:0; text-align:center; }
+  .rf-info-modal { padding:20px; }
+  .word-count-badge:empty { display:none; }
+}
+
+/* v4.0 — Import-to-UZ field-picker modal */
+.uz-import-modal h3 { color: var(--accent, #c8a04a); }
+.uz-import-meta { font-size:0.92rem; margin: 0 0 0.5rem; color: var(--text-secondary, #d8d8d8); }
+.uz-import-meta .muted, .uz-import-choices .muted { color: var(--text-muted, #888); font-weight:400; }
+.uz-import-help { font-size:0.82rem; color: var(--text-muted, #888); margin: 0 0 1rem; line-height:1.5; }
+.uz-import-choices { display:flex; flex-direction:column; gap:0.55rem; margin-bottom:1.2rem; }
+.uz-import-choices label { display:flex; gap:0.55rem; align-items:flex-start; padding:0.55rem 0.7rem; border:1px solid var(--border, #2a2a3a); border-radius:8px; cursor:pointer; transition:background 0.15s, border-color 0.15s; font-size:0.85rem; color:var(--text-primary, #e0e0e0); line-height:1.45; }
+.uz-import-choices label:hover { background: rgba(255,255,255,0.03); border-color: var(--accent-dim, #c8a04a55); }
+.uz-import-choices input[type="radio"] { margin-top: 0.18rem; accent-color: var(--accent, #c8a04a); flex-shrink:0; }
+.uz-import-choices input[type="radio"]:checked + strong + .muted,
+.uz-import-choices label:has(input:checked) { border-color: var(--accent, #c8a04a); background: rgba(200,160,74,0.06); }
+.uz-import-actions { display:flex; justify-content:flex-end; gap:0.5rem; margin-top:0.5rem; }
+
+/* ── Embed mode (loaded as iframe inside the chord builder's lyrics panel) ──
+   Hides the duplicate UZ nav, suite footer, and big RhymeForge hero so the
+   iframe shows only the search UI and results. Activated by `?embed=1` in
+   the URL — see the IIFE near the bottom of this file. */
+body.uz-embed .uz-nav-rail,
+body.uz-embed .uz-nav-spacer,
+body.uz-embed .uz-fab,
+body.uz-embed .uz-site-footer,
+body.uz-embed .header .logo,
+body.uz-embed .header .tagline {
+  display: none !important;
+}
+body.uz-embed .header { padding-top: 12px; }
+body.uz-embed { --uz-rail-h: 0px; }
+</style>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "RhymeForge",
+  "url": "https://undercoverzest.app/rhymeforge/",
+  "description": "Find the perfect rhyme for your lyrics. Searches 54,000+ words across five rhyme types \u2014 perfect, family, additive, assonance and consonance. Built for songwriters, completely free.",
+  "applicationCategory": "MusicApplication",
+  "operatingSystem": "Web Browser",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Undercover Zest",
+    "url": "https://undercoverzest.app/"
+  },
+  "creator": {
+    "@type": "Organization",
+    "name": "Undercover Zest",
+    "url": "https://undercoverzest.app/"
+  }
+}
+  </script>
+</head>
+<body>
+
+<details id="uz-about-collapse" style="max-width:640px;margin:16px auto 0;text-align:center;font-family:Outfit,-apple-system,sans-serif;">
+  <summary style="cursor:pointer;font-size:0.95rem;color:#c8a04a;padding:8px 14px;font-weight:500;font-family:inherit;display:list-item;list-style-position:inside;">About this tool</summary>
+<div id="uz-static-intro" style="max-width:640px;margin:16px auto 24px;padding:0 24px;text-align:center;font-family:'Outfit',-apple-system,sans-serif;color:#e0e0e0;">
+  <h1 style="font-size:1.8rem;font-weight:700;color:#d4a745;margin-bottom:12px;">RhymeForge — A Songwriter's Rhyme Engine</h1>
+  <p style="font-size:1.05rem;line-height:1.7;color:#bbb;margin-bottom:16px;">Find the perfect rhyme for your lyrics. RhymeForge searches 54,000+ words across five rhyme types — perfect, family, additive, assonance and consonance — so you can move past the obvious pairs and find the slant and near rhymes great songs actually use. Free, no account, no paywalls.</p>
+  <p style="font-size:0.9rem;color:#888;">Part of the <a href="/homepage/" style="color:#d4a745;text-decoration:underline;">Undercover Zest</a> songwriting suite — pair with the <a href="/" style="color:#d4a745;text-decoration:underline;">chord progression builder</a> and <a href="/collisionlab/" style="color:#d4a745;text-decoration:underline;">CollisionLab</a>.</p>
+</div>
+</details>
+
+
+<div class="lyrics-overlay" id="lyricsOverlay"></div>
+
+<div class="app-wrapper">
+
+<!-- ===== LYRICS PANEL (LEFT) ===== -->
+<div class="lyrics-panel" id="lyricsPanel">
+  <div class="lyrics-panel-header">
+    <div class="lyrics-panel-title"><span>&#9998;</span> Lyrics Pad <button class="lyrics-close" id="lyricsClose">&times;</button></div>
+    <div class="lyrics-name-field">
+      <label class="lyrics-label">Title</label>
+      <input type="text" class="lyrics-name-input" id="lyricsTitle" placeholder="Untitled poem..." maxlength="120">
+    </div>
+  </div>
+
+  <div class="lyrics-scratch">
+    <div class="lyrics-section-head">
+      <span class="lyrics-label">Scratch Pad</span>
+    </div>
+    <textarea id="scratchpad" class="scratch-textarea" placeholder="Rough notes, word lists, ideas..."></textarea>
+  </div>
+
+  <div class="lyrics-poem">
+    <div class="lyrics-section-head">
+      <span class="lyrics-label">Your Poem / Lyrics</span>
+    </div>
+    <textarea id="poemtext" class="poem-textarea" placeholder="Write your piece here..."></textarea>
+  </div>
+
+  <div class="lyrics-actions">
+    <button class="lyrics-btn primary" id="lyricsSaveBtn">Save</button>
+    <button class="lyrics-btn" id="lyricsLoadBtn">Open</button>
+    <!-- v4.0 — only visible inside an Undercover Zest embed (?embed=1). Toggled by JS. -->
+    <button class="lyrics-btn uz-only" id="lyricsImportToUZBtn" style="display:none">Import to UZ</button>
+    <button class="lyrics-btn" id="lyricsPDFBtn">PDF</button>
+    <button class="lyrics-btn" id="lyricsNewBtn">New</button>
+  </div>
+</div>
+
+<!-- ===== MAIN CONTENT (RIGHT) ===== -->
+<div class="main-content" id="mainContent">
+
+<div class="header">
+  <div class="logo">Rhyme<span>Forge</span></div>
+  <div class="tagline">Songwriter's Rhyme Engine</div>
+  <div class="search-container">
+    <input type="text" class="search-input" id="searchInput" placeholder="Enter a word or phrase..." autocomplete="off" spellcheck="false">
+    <button class="btn btn-primary" id="searchBtn">Search</button>
+  </div>
+  <div class="header-actions">
+    <button class="btn btn-secondary" id="randomBtn">Random Word</button>
+    <button class="btn btn-secondary" id="guideBtn">Songwriter's Guide</button>
+    <button class="btn btn-secondary rf-info-btn" id="rfInfoBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>Info</button>
+  </div>
+  <div class="history-bar" id="historyBar"></div>
+  <div class="word-count-badge" id="wordCountBadge"></div>
+</div>
+
+<div class="controls-bar" id="controlsBar" style="display:none">
+  <div class="control-group">
+    <span class="control-label">Syllables:</span>
+    <button class="filter-btn active" data-syl="all">All</button>
+    <button class="filter-btn" data-syl="1">1</button>
+    <button class="filter-btn" data-syl="2">2</button>
+    <button class="filter-btn" data-syl="3">3</button>
+    <button class="filter-btn" data-syl="4">4+</button>
+  </div>
+  <div class="control-group">
+    <span class="control-label">Sort:</span>
+    <button class="sort-btn" data-sort="syllables">By Syllables</button>
+    <button class="sort-btn" data-sort="alpha">A&rarr;Z</button>
+    <button class="sort-btn active" data-sort="score">Best Match</button>
+  </div>
+  <div class="control-group compound-looseness-group" id="compoundLooseGroup" style="display:none">
+    <span class="control-label">Match:</span>
+    <input type="range" class="looseness-slider" id="loosenessSlider" min="0" max="4" value="2" step="1" title="Adjust compound match flexibility">
+    <span class="looseness-label" id="loosenessLabel">Standard</span>
+  </div>
+  <div class="control-group">
+    <label class="meter-toggle" id="meterToggle" title="Hide compound results that clash with the input word's rhythm">
+      <input type="checkbox" id="meterCheck"> <span>Meter</span>
+    </label>
+  </div>
+  <div class="control-group">
+    <label class="syl-match-toggle" id="sylMatchToggle" title="Dim rhymes whose syllable count doesn't match the input word">
+      <input type="checkbox" id="sylMatchCheck"> <span>Match syllables</span>
+    </label>
+  </div>
+  <div class="control-group">
+    <span class="control-label">Vibe:</span>
+    <select class="vibe-select" id="vibeSelect" title="Boost results matching a songwriting theme">
+      <option value="">Any</option>
+      <option value="love">Love</option>
+      <option value="dark">Dark</option>
+      <option value="nature">Nature</option>
+      <option value="urban">Urban</option>
+      <option value="party">Party</option>
+      <option value="spiritual">Spiritual</option>
+      <option value="time">Time</option>
+      <option value="war">War</option>
+    </select>
+  </div>
+  <div class="controls-spacer"></div>
+  <div class="control-group">
+    <button class="export-btn" id="exportBtn" title="Copy favorites to clipboard">Export Shortlist</button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="status-bar" id="statusBar"></div>
+  <div id="results">
+    <div class="empty-state" id="emptyState">
+      <div class="icon">&#9835;</div>
+      <p>Type a word above to discover rhymes across seven dimensions.</p>
+      <p style="margin-top:0.5rem;font-size:0.8rem;">Perfect &middot; Family &middot; Additive/Subtractive &middot; Assonance &middot; Consonance &middot; Compound &middot; Three-Word</p>
+    </div>
+  </div>
+</div>
+
+
+</div><!-- /main-content -->
+</div><!-- /app-wrapper -->
+
+<!-- Lyrics toggle button (left edge) -->
+<button class="lyrics-toggle" id="lyricsToggle" title="Open Lyrics Pad">&#9998;</button>
+
+<button class="btn btn-icon favorites-toggle" id="favToggle" title="Favorites" style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:100">&#9733;</button>
+<div class="favorites-panel" id="favPanel">
+  <div class="favorites-header">
+    <h3>Shortlist</h3>
+    <div style="display:flex;gap:0.4rem">
+      <button class="export-btn" id="favExportBtn">Copy to Clipboard</button>
+      <button class="btn btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.75rem" id="favClear">Clear All</button>
+    </div>
+  </div>
+  <div class="favorites-words" id="favWords"></div>
+</div>
+
+<div class="guide-overlay" id="guideOverlay"></div>
+<div class="guide-panel" id="guidePanel">
+  <button class="guide-close" id="guideClose">&times;</button>
+  <h2>Songwriter's Guide</h2>
+  <div id="guideContent"></div>
+</div>
+
+<div class="rf-info-overlay" id="rfInfoOverlay" style="display:none;">
+  <div class="rf-info-modal" onclick="event.stopPropagation()">
+    <h3>Welcome to RhymeForge</h3>
+    <div class="rf-info-quote">"Good lyrics make you feel something. Great lyrics make you feel it with sounds that match." — Pat Pattison</div>
+    <div class="rf-info-section">
+      <h4>What It Is</h4>
+      <p>RhymeForge is a rhyme engine built specifically for songwriters and poets. Search over 54,000 words across five types of rhyme — from perfect rhymes for your chorus hooks to subtle assonance for verse texture.</p>
+    </div>
+    <div class="rf-info-section">
+      <h4>The Five Rhyme Types</h4>
+      <p><strong>Perfect:</strong> Exact vowel + consonant match from stressed syllable ("light" → "night"). <strong>Family:</strong> Same vowel, related consonants ("light" → "ride"). <strong>Additive:</strong> Extra consonants added/dropped ("see" → "seed"). <strong>Assonance:</strong> Matching vowels, different consonants ("lake" → "rain"). <strong>Consonance:</strong> Matching consonants, different vowels ("back" → "book").</p>
+    </div>
+    <div class="rf-info-section">
+      <h4>The Lyrics Pad</h4>
+      <p>Open the side panel to write as you search. Keep a scratchpad for rough ideas and a clean lyrics area for your piece. Save multiple songs, load them back, and export to PDF.</p>
+    </div>
+    <div class="rf-info-section">
+      <h4>Songwriter's Guide</h4>
+      <p>Click "Songwriter's Guide" for deep-dive tips on rhyme strategy, thematic sound clusters, and how to pair rhyme types with different song sections and keys.</p>
+    </div>
+    <div class="rf-info-section">
+      <p style="font-size:0.78rem;color:#999;">Part of the <a href="/homepage/" style="color:#c8a04a;text-decoration:underline;">Undercover Zest</a> songwriting suite.</p>
+    </div>
+    <div class="rf-info-actions">
+      <button class="btn btn-secondary" id="rfInfoGuideBtn">Open Songwriter's Guide</button>
+      <button class="btn btn-primary" id="rfInfoCloseBtn">Got it</button>
+    </div>
+  </div>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+<div class="toast" id="toast"></div>
+<button class="search-selection-btn" id="searchSelBtn">Search</button>
+<script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ============================================================
+// RHYMEFORGE ENGINE v4.0 — Optimized for 54091+ words
+// ============================================================
+// v4.0 changelog (2026-05-10):
+//   • Change 1  — TH/DH added as a consonant family (voiced/unvoiced dental fricatives)
+//   • Change 2  — Voice-Pair near-perfect tier (single voicing-pair swap → perfectNear)
+//   • Change 3  — Multi-pronunciation dictionary support (inline ;-delimited variants)
+//   • Change 4  — G2P voicing heuristic (intervocalic 'th' → DH, plus exception list)
+//   • Change 5  — Identity-rhyme guard via stress-onset comparison (was: whole-prefix)
+//   • Change 6  — Subtractive loosened to ordered-subset of trailing consonants
+//   • Change 7  — Quality score per match + sort-by-score wired in
+//   • Change 8  — stressInTail soft penalty for misaligned candidates
+//   • Change 9  — Morphological shadow search (S/Z/T/D inflections only)
+//   • Change 10 — Vowel Slant tier (uses existing VOWEL_FAMILIES, sub-section of Assonance)
+//   • Change 11 — Single-word stress-pattern weighting in Quality score
+//   • Change 12 — displayTail highlighted on chips
+//   • Change 13 — <button> chips (a11y: keyboard-navigable + screen-reader-friendly)
+// ============================================================
+
+// === PHONEME CONSTANTS ===
+const VOWELS = new Set(['AA','AE','AH','AO','AW','AY','EH','ER','EY','IH','IY','OW','OY','UH','UW']);
+const CONSONANT_FAMILIES = [
+  new Set(['B','P']), new Set(['D','T']), new Set(['G','K']),
+  new Set(['V','F']), new Set(['Z','S']), new Set(['ZH','SH']),
+  new Set(['TH','DH']),                  // v4.0 Change 1: dental fricatives
+  new Set(['M','N','NG'])
+];
+
+// v4.0 Change 2 — voicing pairs that count as "near-perfect" when swapped (no nasals).
+const VOICING_PAIRS = [
+  new Set(['B','P']), new Set(['D','T']), new Set(['G','K']),
+  new Set(['V','F']), new Set(['Z','S']), new Set(['ZH','SH']),
+  new Set(['TH','DH'])
+];
+
+function stripStress(p) { return p.replace(/[012]/g, ''); }
+function isVowel(p) { return VOWELS.has(stripStress(p)); }
+
+function sameFamily(a, b) {
+  if (a === b) return true;
+  for (const f of CONSONANT_FAMILIES) { if (f.has(a) && f.has(b)) return true; }
+  return false;
+}
+
+function isVoicingPair(a, b) {
+  if (a === b) return false;
+  for (const f of VOICING_PAIRS) { if (f.has(a) && f.has(b)) return true; }
+  return false;
+}
+
+function getRhymeTail(phonemes) {
+  // v4.2 — rhyme from the LAST stressed vowel, primary OR secondary.
+  // Words with early primary + late secondary stress (butterfly, yesterday,
+  // satellite) rhyme on the secondary in practice: butterfly/sky,
+  // yesterday/day. The old primary-only rule made their tails span nearly
+  // the whole word, so they matched nothing.
+  let idx = -1;
+  for (let i = phonemes.length - 1; i >= 0; i--) {
+    if (/[12]$/.test(phonemes[i])) { idx = i; break; }
+  }
+  if (idx === -1) for (let i = phonemes.length - 1; i >= 0; i--) {
+    if (isVowel(phonemes[i])) { idx = i; break; }
+  }
+  return idx >= 0 ? phonemes.slice(idx) : phonemes;
+}
+
+// v4.0 Change 5 — immediate consonant cluster preceding the primary-stressed vowel.
+// Used as the identity-rhyme guard: if input and candidate share this cluster,
+// they're an identity rhyme (e.g. write/right, cent/sent) and must be excluded
+// from Perfect / Voice-Pair regardless of tail equality.
+function getStressOnset(phonemes) {
+  // v4.2 — anchor on the same vowel the rhyme tail uses (stress 1 OR 2)
+  // so the identity-rhyme guard stays consistent with getRhymeTail.
+  let stressIdx = -1;
+  for (let i = phonemes.length - 1; i >= 0; i--) {
+    if (/[12]$/.test(phonemes[i])) { stressIdx = i; break; }
+  }
+  if (stressIdx === -1) return '';
+  const onset = [];
+  for (let i = stressIdx - 1; i >= 0; i--) {
+    if (isVowel(phonemes[i])) break;
+    onset.unshift(stripStress(phonemes[i]));
+  }
+  return onset.join(' ');
+}
+
+// v4.0 Change 11 — stress digit pattern e.g. "1 0 2" for satellite (used for meter match).
+function getStressPatternSingle(phonemes) {
+  return phonemes.filter(p => isVowel(p)).map(p => {
+    const m = p.match(/[012]$/);
+    return m ? m[0] : '0';
+  }).join('');
+}
+
+function countSyllables(phonemes) {
+  return phonemes.filter(p => isVowel(p)).length;
+}
+
+// v4.0 Change 12 — given a word and its tail length in phonemes, return the
+// approximate trailing portion of the spelled word that corresponds to the
+// rhyme tail. Used purely for visual highlighting on chips.
+function approximateDisplayTail(word, tailPhonemeCount) {
+  // Heuristic: roughly tailPhonemeCount letters, clamped 2..ceil(word.length/2).
+  // Snap to the last vowel boundary for a more natural break.
+  if (!word || word.length < 3) return '';
+  const minChars = 2;
+  const maxChars = Math.max(2, Math.ceil(word.length / 2));
+  let n = Math.min(maxChars, Math.max(minChars, tailPhonemeCount));
+  // Try to snap n to the start of the last vowel-run we cover, looking back at most 2 chars.
+  const start = word.length - n;
+  for (let s = start; s >= Math.max(0, start - 2); s--) {
+    if ('aeiouy'.includes(word[s])) { n = word.length - s; break; }
+  }
+  return word.slice(-n);
+}
+
+// === GRAPHEME-TO-PHONEME ESTIMATOR (for words not in dict) ===
+// v4.0 Change 4 — context-aware 'th' → DH/TH disambiguation.
+const VOICED_TH_EXCEPTIONS = new Set([
+  'this','that','these','those','they','them','their','there','then','than',
+  'though','thus','the','thou','thee','thy','thine','than','thence','thither',
+  'with','within','without','rather','whether','either','neither','wither',
+  'mother','father','brother','other','another','gather','bother','smother',
+  'leather','feather','weather','together','northern','southern',
+  'breathe','bathe','clothe','soothe','seethe','writhe','tithe','blithe','lithe',
+  'breathing','bathing','clothing','soothing','seething','writhing',
+  'mothers','fathers','brothers','others','anothers','gathers','bothers'
+]);
+const G2P = (() => {
+  const RULES = [
+    ['ght','T'],['kn','N'],['wr','R'],['gn','N'],['mb$','M'],
+    ['mn$','M'],['ps','S'],['igh','AY1'],['ough','AO1'],
+    ['tion','SH AH0 N'],['sion','ZH AH0 N'],['cious','SH AH0 S'],
+    ['tious','SH AH0 S'],['ture','CH ER0'],['sure','ZH ER0'],
+    ['ould','UH1 D'],['ound','AW1 N D'],['ount','AW1 N T'],
+    ['oo','UW1'],['ee','IY1'],['ea','IY1'],['ai','EY1'],['ay','EY1'],
+    ['oa','OW1'],['ow','OW1'],['oi','OY1'],['oy','OY1'],
+    ['ou','AW1'],['au','AO1'],['aw','AO1'],['ei','EY1'],['ey','EY1'],
+    ['ie','IY1'],['ir','ER1'],['ur','ER1'],['er','ER0'],
+    ['ar','AA1 R'],['or','AO1 R'],
+    ['ch','CH'],['sh','SH'],['ph','F'],['wh','W'],
+    ['ck','K'],['ng','NG'],['qu','K W'],['dge','JH'],
+    ['b','B'],['c','K'],['d','D'],['f','F'],['g','G'],['h','HH'],
+    ['j','JH'],['k','K'],['l','L'],['m','M'],['n','N'],['p','P'],
+    ['r','R'],['s','S'],['t','T'],['v','V'],['w','W'],['x','K S'],
+    ['y','Y'],['z','Z'],
+  ];
+  // Decide whether a given 'th' digraph should map to DH or TH.
+  // word-level: check the exception list. If matched, DH everywhere in this word.
+  // contextual: 'th' between two vowels → DH (intervocalic voicing); else TH.
+  function thPhoneme(word, idx, wholeWordIsVoiced) {
+    if (wholeWordIsVoiced) return 'DH';
+    const prev = idx > 0 ? word[idx - 1] : '';
+    const next = idx + 2 < word.length ? word[idx + 2] : '';
+    const prevIsV = 'aeiouy'.includes(prev);
+    const nextIsV = 'aeiouy'.includes(next);
+    if (prevIsV && nextIsV) return 'DH';
+    return 'TH';
+  }
+  function estimate(word) {
+    word = word.toLowerCase().trim();
+    let w = word, phonemes = [], i = 0;
+    const wholeWordIsVoiced = VOICED_TH_EXCEPTIONS.has(w);
+    const hasSilentE = w.length > 2 && w.endsWith('e') && !/[aeiouy]/.test(w[w.length-2]);
+    while (i < w.length) {
+      if (hasSilentE && i === w.length-1 && w[i]==='e') break;
+      // v4.0 Change 4: handle 'th' before the generic rule loop so we can pick DH vs TH.
+      if (w[i] === 't' && w[i+1] === 'h') {
+        phonemes.push(thPhoneme(w, i, wholeWordIsVoiced));
+        i += 2;
+        continue;
+      }
+      let matched = false;
+      for (let len = Math.min(5,w.length-i); len>=2; len--) {
+        const sub = w.substring(i,i+len);
+        for (const [pat,ph] of RULES) {
+          const isEnd = pat.endsWith('$');
+          const p = isEnd ? pat.slice(0,-1) : pat;
+          if (sub===p && (!isEnd || i+len===w.length)) {
+            phonemes.push(...ph.split(' ')); i+=len; matched=true; break;
+          }
+        }
+        if (matched) break;
+      }
+      if (matched) continue;
+      const ch = w[i];
+      if ('aeiou'.includes(ch)) {
+        const nextCons = i+1<w.length && !'aeiou'.includes(w[i+1]);
+        const magic = hasSilentE && nextCons && i+2===w.length-1;
+        if (magic) {
+          phonemes.push({a:'EY1',e:'IY1',i:'AY1',o:'OW1',u:'UW1'}[ch]||'AH1');
+        } else {
+          phonemes.push({a:'AE1',e:'EH1',i:'IH1',o:'AA1',u:'AH1'}[ch]||'AH1');
+        }
+        i++;
+      } else if (ch==='y') {
+        if (i>0 && (i===w.length-1 || !'aeiou'.includes(w[i+1]))) phonemes.push('IY0');
+        else phonemes.push('Y');
+        i++;
+      } else {
+        const cm = {b:'B',c:'K',d:'D',f:'F',g:'G',h:'HH',j:'JH',k:'K',l:'L',m:'M',n:'N',p:'P',q:'K',r:'R',s:'S',t:'T',v:'V',w:'W',x:'K S',z:'Z'};
+        if (cm[ch]) cm[ch].split(' ').forEach(p=>phonemes.push(p));
+        i++;
+      }
+    }
+    if (!phonemes.some(p=>/[012]$/.test(p)) && phonemes.length>0) {
+      for (let j=0;j<phonemes.length;j++) { if (isVowel(phonemes[j])) { phonemes[j]=stripStress(phonemes[j])+'1'; break; } }
+    }
+    return phonemes.length>0 ? phonemes : ['AH1'];
+  }
+  return { estimate };
+})();
+
+// === DICTIONARY & INDEXES ===
+// v4.2 — dictionary moved to dict.txt, fetched async so the page is
+// interactive immediately instead of parsing a 1.5MB literal up front.
+let DICT_READY = false;
+let PENDING_SEARCH = null;
+
+const DICT = {};                       // word -> primary phoneme string (back-compat)
+const DICT_VARIANTS = {};              // word -> [phoneme strings]  (v4.0 Change 3)
+const WORDS = []; // flat word array for iteration
+const WORD_DATA = new Map(); // word -> { primary: variantData, variants: [variantData...] }
+
+// Indexes for fast lookup. Built as Sets for cross-variant dedup, then frozen as arrays.
+const TAIL_INDEX = new Map();       // tailStr -> [words] (perfect rhyme index)
+const END_INDEX = new Map();        // v4.3 unstressed-final-syllable -> [words]
+const VOWEL_INDEX = new Map();      // first vowel -> [words] (assonance index)
+const CONSONANT_INDEX = new Map();  // consonant pattern -> [words] (consonance index)
+const _tailSet = new Map(), _vowelSet = new Map(), _consSet = new Map(), _endSet = new Map();
+
+function _addIndex(map, setMap, key, word) {
+  if (!setMap.has(key)) setMap.set(key, new Set());
+  const s = setMap.get(key);
+  if (s.has(word)) return;
+  s.add(word);
+  if (!map.has(key)) map.set(key, []);
+  map.get(key).push(word);
+}
+
+// v4.0 Change 3 — build variant data once per pronunciation.
+// v4.3 — "ending rhyme" key: the final syllable (last vowel + trailing
+// consonants) when that vowel is UNSTRESSED. window/shadow/yellow share
+// endKey "OW"; spirit/minute share "AH T". Null when the final vowel is
+// stressed (those words rhyme through the normal tail).
+function getEndKey(phonemes) {
+  let vIdx = -1;
+  for (let i = phonemes.length - 1; i >= 0; i--) {
+    if (isVowel(phonemes[i])) { vIdx = i; break; }
+  }
+  if (vIdx === -1) return null;
+  const fin = phonemes[vIdx];
+  // unstressed final — always ending-eligible. CMU marks final "-o" /-oʊ/
+  // inconsistently (window OW0, shadow OW2), so a SECONDARY-stressed final
+  // also qualifies when a primary stress sits earlier in the word.
+  let ok = fin.endsWith('0');
+  if (!ok && fin.endsWith('2')) {
+    for (let i = 0; i < vIdx; i++) {
+      if (phonemes[i].endsWith('1')) { ok = true; break; }
+    }
+  }
+  if (!ok) return null;
+  return phonemes.slice(vIdx).map(stripStress).join(' ');
+}
+
+// consonant immediately before the final vowel ("D" in window/shadow) —
+// matching it makes an ending rhyme land much harder, so it earns a bonus.
+function getEndOnset(phonemes) {
+  let vIdx = -1;
+  for (let i = phonemes.length - 1; i >= 0; i--) {
+    if (isVowel(phonemes[i])) { vIdx = i; break; }
+  }
+  if (vIdx <= 0) return '';
+  return isVowel(phonemes[vIdx - 1]) ? '' : stripStress(phonemes[vIdx - 1]);
+}
+
+function buildVariantData(word, phoneStr) {
+  const phonemes = phoneStr.split(/\s+/);
+  const tail = getRhymeTail(phonemes).map(stripStress);
+  const tailStr = tail.join(' ');
+  const endKey = getEndKey(phonemes);
+  const vowels = tail.filter(p => VOWELS.has(p));
+  const consonants = tail.filter(p => !VOWELS.has(p));
+  const syllables = phonemes.filter(p => isVowel(p)).length;
+
+  // v4.0 Change 8 — does the primary stress fall inside the rhyme tail?
+  const stressIdx = phonemes.findIndex(p => p.endsWith('1'));
+  const tailStartIdx = phonemes.length - tail.length;
+  const stressInTail = stressIdx >= 0 && stressIdx >= tailStartIdx;
+
+  // v4.0 Change 11 — stress digit pattern (e.g. "1 0 2" → "102")
+  const stressPattern = getStressPatternSingle(phonemes);
+
+  // v4.0 Change 12 — pre-compute the tail for visual highlighting on chips.
+  const displayTail = approximateDisplayTail(word, tail.length);
+
+  return {
+    phonemes, tail, tailStr, vowels, consonants, endKey,
+    vowelStr: vowels.join(','), consStr: consonants.join(','),
+    syllables, stressInTail, stressPattern, displayTail
+  };
+}
+
+// Parse and index. Lines may carry multiple pronunciations separated by ';'.
+const FREQ_TIER1 = new Set();   // top-5k songwriter words
+const FREQ_TIER2 = new Set();   // rest of the curated 15k
+
+// Common-word ranking bonus. Three signals: the curated frequency tiers,
+// the page's COMMON_WORDS set, and a light suffix-strip so inflections of
+// common words ("higher" -> "high") inherit a bonus too.
+function uzFreqBonus(word) {
+  if (FREQ_TIER1.has(word)) return 12;
+  if (FREQ_TIER2.has(word)) return 6;
+  if (typeof COMMON_WORDS !== 'undefined' && COMMON_WORDS.has(word)) return 6;
+  for (const suf of ['s', 'ed', 'er', 'est', 'ing']) {
+    if (word.length > suf.length + 2 && word.endsWith(suf)) {
+      const stem = word.slice(0, -suf.length);
+      if (FREQ_TIER1.has(stem) || FREQ_TIER2.has(stem)) return 6;
+      // doubled final consonant: "bigger" -> "big"
+      const undoubled = stem.slice(0, -1);
+      if (stem.length > 2 && stem[stem.length - 1] === stem[stem.length - 2] && (FREQ_TIER1.has(undoubled) || FREQ_TIER2.has(undoubled))) return 6;
+      // "-ies"/"-ied"/"-ier" style: "carried" -> "carry"
+      if (stem.endsWith('i') && (FREQ_TIER1.has(stem.slice(0, -1) + 'y') || FREQ_TIER2.has(stem.slice(0, -1) + 'y'))) return 6;
+    }
+  }
+  return 0;
+}
+
+function ingestDict(raw) {
+// v4.2 — dict.txt carries two frequency tiers after #FREQ1 / #FREQ2
+// markers (from the curated, frequency-ordered 15k word list).
+const fi = raw.indexOf('#FREQ1');
+if (fi !== -1) {
+  const tail = raw.slice(fi);
+  const m1 = tail.match(/#FREQ1\n([^\n]*)/);
+  const m2 = tail.match(/#FREQ2\n([^\n]*)/);
+  if (m1) m1[1].split(',').forEach(w => FREQ_TIER1.add(w));
+  if (m2) m2[1].split(',').forEach(w => FREQ_TIER2.add(w));
+  raw = raw.slice(0, fi);
+}
+raw.split('\n').forEach(line => {
+  const pipe = line.indexOf('|');
+  if (pipe === -1) return;
+  const word = line.substring(0, pipe).trim().toLowerCase();
+  const rest = line.substring(pipe + 1).trim();
+  if (!word || !rest) return;
+
+  const variantStrs = rest.split(';').map(s => s.trim()).filter(s => s.length > 0);
+  if (variantStrs.length === 0) return;
+
+  // back-compat: DICT[word] stays as the first/primary pronunciation
+  DICT[word] = variantStrs[0];
+  DICT_VARIANTS[word] = variantStrs;
+  WORDS.push(word);
+
+  const variantData = variantStrs.map(s => buildVariantData(word, s));
+  // Flatten primary fields onto the entry (back-compat with existing code that
+  // reads data.phonemes / data.syllables / data.consStr etc.) and add the full
+  // variants array for multi-pron-aware code paths.
+  WORD_DATA.set(word, Object.assign({}, variantData[0], { variants: variantData }));
+
+  // index every pronunciation, deduping word entries per index bucket
+  for (const data of variantData) {
+    _addIndex(TAIL_INDEX, _tailSet, data.tailStr, word);
+    if (data.endKey) _addIndex(END_INDEX, _endSet, data.endKey, word);
+    if (data.vowels.length > 0) _addIndex(VOWEL_INDEX, _vowelSet, data.vowels[0], word);
+    if (data.consonants.length > 0) _addIndex(CONSONANT_INDEX, _consSet, data.consonants.join(','), word);
+  }
+});
+}
+
+// Kick off the async dictionary load immediately.
+fetch('dict.txt?v=2')
+  .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+  .then(t => {
+    ingestDict(t);
+    DICT_READY = true;
+    const badge = document.getElementById('wordCountBadge');
+    if (badge) badge.innerHTML = '<span class="num">' + WORDS.length.toLocaleString() + '</span> words with phonemes';
+    if (PENDING_SEARCH !== null) { const w = PENDING_SEARCH; PENDING_SEARCH = null; doSearch(w); }
+  })
+  .catch(err => {
+    const badge = document.getElementById('wordCountBadge');
+    if (badge) badge.textContent = 'Dictionary failed to load — refresh to retry.';
+    console.error('dict load failed:', err);
+  });
+
+function getWordPhonemes(word) {
+  word = word.toLowerCase().trim();
+  if (DICT[word]) return DICT[word].split(/\s+/);
+  return G2P.estimate(word);
+}
+
+// v4.0 Change 3 — return all variant phoneme arrays for a word (or just G2P estimate).
+function getWordVariants(word) {
+  word = word.toLowerCase().trim();
+  if (DICT_VARIANTS[word]) return DICT_VARIANTS[word].map(s => s.split(/\s+/));
+  return [G2P.estimate(word)];
+}
+
+// ============================================================
+// === RHYME ALGORITHMS (v4.0 — indexed for speed) ============
+// ============================================================
+//
+// Categories returned by findRhymes:
+//   perfect      — exact tail match (with identity-rhyme guard via stress-onset)
+//   perfectNear  — Voice-Pair: 1 voicing-pair swap from perfect (rendered inside Perfect)
+//   family       — vowels match, consonants family-match (≥1 diff, not voicing-pair-only)
+//   additive     — input tail is prefix of candidate's longer tail (extra consonants)
+//   subtractive  — candidate's tail = input vowel + ordered subset of trailing consonants
+//   assonance    — vowel match, consonant pattern differs
+//   vowelSlant   — vowel-family swap (uses VOWEL_FAMILIES, e.g. pen↔pin) — sub-tier of assonance
+//   consonance   — consonant pattern matches, vowels differ
+//
+// Each match carries: { word, syllables, phonemes, score, displayTail }
+// score (0..~120) drives the "Best Match" sort. Computed by computeQualityScore.
+
+// v4.0 Change 7 — quality score per candidate.
+function computeQualityScore(input, cand) {
+  let s = 0;
+  // Vowel sequence in tail
+  const vMatches = input.vowels.length === cand.vowels.length
+    && input.vowels.every((v,i) => v === cand.vowels[i]);
+  if (vMatches) s += 50;
+  else if (input.vowels.length === cand.vowels.length) {
+    // partial vowel alignment within tail
+    for (let i = 0; i < input.vowels.length; i++) {
+      if (input.vowels[i] === cand.vowels[i]) s += 6;
+      else if (sameVowelFamilySafe(input.vowels[i], cand.vowels[i])) s += 3;
+    }
+  }
+  // Trailing consonants — exact vs family
+  if (input.consonants.length === cand.consonants.length) {
+    for (let i = 0; i < input.consonants.length; i++) {
+      if (input.consonants[i] === cand.consonants[i]) s += 15;
+      else if (sameFamily(input.consonants[i], cand.consonants[i])) s += 8;
+    }
+  } else {
+    // partial credit for shared-position trailing consonants
+    const minLen = Math.min(input.consonants.length, cand.consonants.length);
+    for (let i = 0; i < minLen; i++) {
+      if (input.consonants[i] === cand.consonants[i]) s += 10;
+      else if (sameFamily(input.consonants[i], cand.consonants[i])) s += 5;
+    }
+  }
+  // v4.0 Change 8 — strong bias toward stress alignment (Gemini: meter > consonant accuracy)
+  if (cand.stressInTail) s += 22;
+  // v4.0 Change 11 — exact stress pattern match
+  if (input.stressPattern && cand.stressPattern && input.stressPattern === cand.stressPattern) s += 20;
+  else if (input.stressPattern && cand.stressPattern) {
+    const dist = Math.abs(input.stressPattern.length - cand.stressPattern.length);
+    if (dist === 0) s += 6;  // same length, different shape
+  }
+  // Grok's syllable proximity bonus
+  if (Math.abs(input.syllables - cand.syllables) <= 1) s += 8;
+  return s;
+}
+
+// Safe wrapper — sameVowelFamily lives further down the file in the compound engine.
+function sameVowelFamilySafe(a, b) {
+  if (typeof sameVowelFamily === 'function') return sameVowelFamily(a, b);
+  return a === b;
+}
+
+// v4.3 — explicit/vulgar words stay searchable but sink to the bottom of
+// suggestion lists: a free songwriting tool shouldn't lead with them.
+const UZ_EXPLICIT = new Set(['dildo','dildos','crap','crappy','crappie','shit','shitty','bullshit','fuck','fucking','fucked','fucker','bitch','bitches','bitchy','cock','cocks','cunt','cunts','dick','dicks','piss','pissed','whore','whores','slut','sluts','tits','titties','wank','wanker','jizz','smegma','spunk','arse','arsehole','asshole','assholes','douche','douchebag','dyke','fag','faggot','retard','retarded','nigger','niggers','spastic','horny','orgasm','orgasms','penis','penises','vagina','vaginas','rectum','scrotum','testicle','testicles','clitoris','anal','anus','enema','feces','faeces','poop','urine','vomit','snot']);
+
+// v4.1 — function words & non-lexical fillers are never useful rhyme suggestions
+const RHYME_STOPWORDS = new Set(['a','an','the','to','uh','um','huh','duh','dah','da','de','ah','eh','er','err','hm','hmm','mm','mmm','brugh','shh','psst','tsk','gov','com','org','www','edu','http','https','html','htm','url']);
+
+function findRhymes(inputWord) {
+  inputWord = inputWord.toLowerCase().trim();
+  // v4.0 Change 3 — try every variant pronunciation; merge results (deduped via classified Set).
+  const variants = getWordVariants(inputWord);
+  const results = {
+    perfect: [], perfectNear: [], family: [],
+    additive: [], subtractive: [], ending: [],
+    assonance: [], vowelSlant: [], consonance: []
+  };
+  const classified = new Set();
+
+  for (const inputPhonemes of variants) {
+    findRhymesForVariant(inputWord, inputPhonemes, results, classified);
+  }
+
+  // Sort: by syllables then alpha (default). Score-sort handled in sortWords UI step.
+  for (const key of Object.keys(results)) {
+    results[key].sort((a, b) => a.syllables - b.syllables || a.word.localeCompare(b.word));
+  }
+  return results;
+}
+
+function findRhymesForVariant(inputWord, inputPhonemes, results, classified) {
+  const inputTail = getRhymeTail(inputPhonemes).map(stripStress);
+  const inputTailStr = inputTail.join(' ');
+  const inputVowels = inputTail.filter(p => VOWELS.has(p));
+  const inputConsonants = inputTail.filter(p => !VOWELS.has(p));
+  const inputVowelStr = inputVowels.join(',');
+  const inputConsStr = inputConsonants.join(',');
+  const inputStressOnset = getStressOnset(inputPhonemes);
+  const inputStressPattern = getStressPatternSingle(inputPhonemes);
+  const inputSyllables = countSyllables(inputPhonemes);
+
+  // Synthetic input data shape used by computeQualityScore.
+  const inputData = {
+    vowels: inputVowels, consonants: inputConsonants,
+    syllables: inputSyllables, stressInTail: true,
+    stressPattern: inputStressPattern
+  };
+
+  function pushScored(bucket, word, candData, extraBonus = 0, scoreOverride = null) {
+    if (word === inputWord || classified.has(word)) return;
+    if (RHYME_STOPWORDS.has(word) || word.length === 1) return;
+    // v4.2 — frequency-aware ranking: common singable words outrank
+    // dictionary obscurities at equal phonetic quality ("above" > "gov").
+    const base = scoreOverride !== null ? scoreOverride : computeQualityScore(inputData, candData);
+    const score = base + uzFreqBonus(word) + extraBonus - (UZ_EXPLICIT.has(word) ? 30 : 0);
+    results[bucket].push({
+      word,
+      syllables: candData.syllables,
+      phonemes: DICT[word],
+      score,
+      displayTail: candData.displayTail
+    });
+    classified.add(word);
+  }
+
+  // --- PERFECT RHYME + VOICE-PAIR (v4.0 Change 5: stress-onset identity guard) ---
+  const perfectWords = TAIL_INDEX.get(inputTailStr) || [];
+  for (const word of perfectWords) {
+    if (word === inputWord) continue;
+    const data = WORD_DATA.get(word);
+    // Find which variant matches the input tail (multi-pron)
+    let matchedVariant = data.variants.find(v => v.tailStr === inputTailStr) || data;
+    const candStressOnset = getStressOnset(matchedVariant.phonemes);
+    // v4.0 Change 5: identity rhyme = same immediate pre-stress consonant cluster
+    if (candStressOnset && candStressOnset === inputStressOnset) continue;
+    pushScored('perfect', word, matchedVariant);
+  }
+
+  // --- FAMILY RHYME + VOICE-PAIR sub-tier (v4.0 Changes 1 + 2) ---
+  for (const [tailStr, words] of TAIL_INDEX) {
+    const tail = tailStr.split(' ');
+    if (tail.length !== inputTail.length || tailStr === inputTailStr) continue;
+
+    let vowelsMatch = true, valid = true, familyDiffs = 0;
+    let lastDiffPair = null;
+    for (let i = 0; i < tail.length; i++) {
+      const isV1 = VOWELS.has(inputTail[i]), isV2 = VOWELS.has(tail[i]);
+      if (isV1 !== isV2) { valid = false; break; }
+      if (isV1) {
+        if (inputTail[i] !== tail[i]) { vowelsMatch = false; break; }
+      } else {
+        if (inputTail[i] !== tail[i]) {
+          if (!sameFamily(inputTail[i], tail[i])) { valid = false; break; }
+          familyDiffs++;
+          lastDiffPair = [inputTail[i], tail[i]];
+        }
+      }
+    }
+    if (!valid || !vowelsMatch || familyDiffs === 0) continue;
+
+    // v4.0 Change 2 — exactly 1 swap AND that swap is a voicing pair → near-perfect
+    const isNearPerfect = familyDiffs === 1
+      && lastDiffPair && isVoicingPair(lastDiffPair[0], lastDiffPair[1]);
+
+    for (const word of words) {
+      if (word === inputWord || classified.has(word)) continue;
+      const data = WORD_DATA.get(word);
+      const matchedVariant = data.variants.find(v => v.tailStr === tailStr) || data;
+      // Identity-rhyme guard also applies to near-perfect
+      if (isNearPerfect) {
+        const candStressOnset = getStressOnset(matchedVariant.phonemes);
+        if (candStressOnset && candStressOnset === inputStressOnset) continue;
+      }
+      pushScored(isNearPerfect ? 'perfectNear' : 'family', word, matchedVariant);
+    }
+  }
+
+  // --- ADDITIVE (input tail is prefix; extra are consonants) ---
+  for (const [tailStr, words] of TAIL_INDEX) {
+    const tail = tailStr.split(' ');
+    if (tail.length <= inputTail.length || inputTail.length === 0) continue;
+    let prefix = true;
+    for (let i = 0; i < inputTail.length; i++) {
+      if (inputTail[i] !== tail[i]) { prefix = false; break; }
+    }
+    if (!prefix) continue;
+    let allCons = true;
+    for (let i = inputTail.length; i < tail.length; i++) {
+      if (VOWELS.has(tail[i])) { allCons = false; break; }
+    }
+    if (!allCons) continue;
+    for (const word of words) {
+      if (word === inputWord || classified.has(word)) continue;
+      const data = WORD_DATA.get(word);
+      const matchedVariant = data.variants.find(v => v.tailStr === tailStr) || data;
+      pushScored('additive', word, matchedVariant);
+    }
+  }
+
+  // --- SUBTRACTIVE (v4.0 Change 6 — loosened to ordered-subset of trailing consonants) ---
+  // Strategy: enumerate contiguous suffixes + single-consonant drops of inputConsonants
+  // (capped to keep complexity bounded; tails rarely exceed 4 trailing consonants).
+  if (inputConsonants.length > 0 && inputVowels.length > 0) {
+    const subsetSeen = new Set();
+    const cands = [];
+
+    // (a) Bare-vowel tail (no trailing consonants).
+    cands.push([inputVowels[0]]);
+    // (b) Every contiguous suffix of inputConsonants of length 1..N-1.
+    for (let start = 1; start < inputConsonants.length; start++) {
+      const suffix = inputConsonants.slice(start);
+      cands.push([inputVowels[0], ...suffix]);
+    }
+    // (c) Single-consonant drops (drop exactly one trailing consonant).
+    if (inputConsonants.length >= 2) {
+      for (let drop = 0; drop < inputConsonants.length; drop++) {
+        const subset = inputConsonants.filter((_, i) => i !== drop);
+        cands.push([inputVowels[0], ...subset]);
+      }
+    }
+
+    for (const tailArr of cands) {
+      const k = tailArr.join(' ');
+      if (k === inputTailStr || subsetSeen.has(k)) continue;
+      subsetSeen.add(k);
+      const words = TAIL_INDEX.get(k);
+      if (!words) continue;
+      for (const word of words) {
+        if (word === inputWord || classified.has(word)) continue;
+        const data = WORD_DATA.get(word);
+        const matchedVariant = data.variants.find(v => v.tailStr === k) || data;
+        pushScored('subtractive', word, matchedVariant);
+      }
+    }
+  }
+
+  // --- ASSONANCE + VOWEL SLANT (v4.0 Change 10) ---
+  if (inputVowels.length > 0) {
+    const inputV = inputVowels[0];
+    // Strict assonance: same vowel bucket, different consonant pattern.
+    const bucket = VOWEL_INDEX.get(inputV) || [];
+    for (const word of bucket) {
+      if (word === inputWord || classified.has(word)) continue;
+      const data = WORD_DATA.get(word);
+      if (data.consStr !== inputConsStr) {
+        pushScored('assonance', word, data);
+      }
+    }
+    // Vowel slant: each vowel in inputV's family bucket EXCEPT inputV itself.
+    if (typeof VOWEL_FAMILIES !== 'undefined') {
+      const slantVs = new Set();
+      for (const fam of VOWEL_FAMILIES) {
+        if (fam.has(inputV)) {
+          for (const v of fam) if (v !== inputV) slantVs.add(v);
+        }
+      }
+      for (const v of slantVs) {
+        const slantBucket = VOWEL_INDEX.get(v) || [];
+        for (const word of slantBucket) {
+          if (word === inputWord || classified.has(word)) continue;
+          const data = WORD_DATA.get(word);
+          // require ≥1 trailing consonant in same family for some sonic anchor
+          let anchor = false;
+          if (inputConsonants.length === 0 || data.consonants.length === 0) {
+            anchor = inputConsonants.length === 0 && data.consonants.length === 0;
+          } else {
+            for (const ic of inputConsonants) {
+              for (const cc of data.consonants) {
+                if (sameFamily(ic, cc)) { anchor = true; break; }
+              }
+              if (anchor) break;
+            }
+          }
+          if (anchor) pushScored('vowelSlant', word, data);
+        }
+      }
+    }
+  }
+
+  // --- CONSONANCE ---
+  if (inputConsonants.length > 0) {
+    const bucket = CONSONANT_INDEX.get(inputConsStr) || [];
+    for (const word of bucket) {
+      if (word === inputWord || classified.has(word)) continue;
+      const data = WORD_DATA.get(word);
+      if (data.vowelStr !== inputVowelStr) {
+        pushScored('consonance', word, data);
+      }
+    }
+  }
+
+  // --- ENDING RHYME (v4.3) ---
+  // Words sharing an UNSTRESSED final syllable: window/shadow/yellow,
+  // spirit/minute. The classic feminine slant — weaker than a perfect
+  // rhyme but completely idiomatic in song.
+  const inputEndKey = getEndKey(inputPhonemes);
+  if (inputEndKey) {
+    const inputEndOnset = getEndOnset(inputPhonemes);
+    const primaryV = (ph) => {
+      for (const x of ph) if (x.endsWith('1')) return stripStress(x);
+      return '';
+    };
+    const inputPrimaryV = primaryV(inputPhonemes);
+    const bucket = END_INDEX.get(inputEndKey) || [];
+    for (const word of bucket) {
+      if (word === inputWord || classified.has(word)) continue;
+      const data = WORD_DATA.get(word);
+      const matchedVariant = data.variants.find(v => v.endKey === inputEndKey) || data;
+      // Dedicated ending-rhyme score: the tail formula misranks this tier
+      // (it compares whole tails, which differ by construction here).
+      let es = 40;
+      if (inputEndOnset && getEndOnset(matchedVariant.phonemes) === inputEndOnset) es += 15;
+      const candPV = primaryV(matchedVariant.phonemes);
+      if (inputPrimaryV && candPV === inputPrimaryV) es += 10;
+      if (Math.abs(inputSyllables - matchedVariant.syllables) <= 0) es += 5;
+      pushScored('ending', word, matchedVariant, 0, es);
+    }
+  }
+}
+
+// v4.0 Change 9 — morphological shadow search (S/Z/T/D inflections only).
+// If the input ends in one of these phonemes, run a second findRhymes on the
+// stripped root and return its results separately so the UI can render a
+// "Rhymes for <root>" mini-section.
+function findMorphologicalRhymes(inputWord) {
+  inputWord = inputWord.toLowerCase().trim();
+  const variants = getWordVariants(inputWord);
+  for (const phonemes of variants) {
+    if (phonemes.length < 3) continue;
+    const last = stripStress(phonemes[phonemes.length - 1]);
+    if (!['S','Z','T','D'].includes(last)) continue;
+    // Build root word — try simple grapheme strip first, fall back to phoneme strip
+    let root = null;
+    if (inputWord.endsWith('s') || inputWord.endsWith('z')) root = inputWord.slice(0, -1);
+    else if (inputWord.endsWith('ed')) root = inputWord.slice(0, -2);
+    else if (inputWord.endsWith('d') || inputWord.endsWith('t')) root = inputWord.slice(0, -1);
+    if (!root || root.length < 2) continue;
+    if (!DICT[root]) continue; // only run shadow if root is in dictionary
+    const rootResults = findRhymes(root);
+    return { root, results: rootResults };
+  }
+  return null;
+}
+
+// === SONGWRITING GUIDE ===
+const GUIDE_HTML = `
+<h3>Rhyme Selection Strategy</h3>
+<p><strong>End rhyme vs internal rhyme:</strong> Place rhymes at line endings for emphasis and resolution. Embed them within lines for subtlety and flow. Internal rhymes make verses feel effortless; end rhymes make choruses feel inevitable.</p>
+<p><strong>Rhyme density:</strong> Sparse rhyming creates a contemplative, folk-like feel. Dense rhyming drives energy — think hip-hop, rap, and uptempo pop. Vary density between sections to create contrast.</p>
+<p><strong>Perfect vs imperfect spectrum:</strong> Use perfect rhymes in choruses and hooks — they feel resolved and satisfying. Use family rhymes and slant rhymes in verses — they feel conversational and authentic. Too many perfect rhymes can sound forced; too few can sound unfinished.</p>
+<p><strong>Avoiding clich&eacute; rhymes:</strong> These pairs are heavily overused: love/above, fire/desire, heart/apart, eyes/skies, rain/pain, night/light, feel/real, soul/whole, time/mine, dance/chance. Try the Family Rhyme and Assonance categories to find fresher alternatives.</p>
+<p><strong>Multi-syllable preference:</strong> Two and three-syllable rhymes sound more sophisticated than monosyllabic ones. "Satellite / dynamite / oversight" hits differently than "night / fight / light." Push yourself toward longer matches.</p>
+<p><strong>Mosaic rhyme:</strong> Rhyme a multi-syllable word with multiple shorter words: "furniture" &rarr; "burn it sure," "melody" &rarr; "fell on me." This is a hallmark of elite lyricists.</p>
+
+<h3>Thematic Sound Clusters</h3>
+<p>When you find a rhyme family that overlaps with your song's theme, you've struck gold — the sounds reinforce the meaning.</p>
+
+<div class="cluster"><div class="cluster-title">Water / Flow</div><div class="cluster-words">ocean, motion, potion, devotion, erosion, emotion, commotion</div></div>
+<div class="cluster"><div class="cluster-title">Light / Night</div><div class="cluster-words">bright, sight, ignite, delight, midnight, satellite, starlight, twilight, dynamite</div></div>
+<div class="cluster"><div class="cluster-title">Heart / Feeling</div><div class="cluster-words">start, apart, heart, art, smart, depart, sweetheart, dart, chart</div></div>
+<div class="cluster"><div class="cluster-title">Freedom / Movement</div><div class="cluster-words">free, breeze, ease, release, peace, believe, leave, breathe, achieve</div></div>
+<div class="cluster"><div class="cluster-title">Fire / Passion</div><div class="cluster-words">fire, desire, inspire, higher, wire, empire, retire, admire</div></div>
+<div class="cluster"><div class="cluster-title">Dream / Sleep</div><div class="cluster-words">dream, stream, gleam, seem, beam, team, scheme, supreme, esteem</div></div>
+<div class="cluster"><div class="cluster-title">Dark / Heavy</div><div class="cluster-words">dark, stark, mark, spark, bark, embark, remark, shark</div></div>
+<div class="cluster"><div class="cluster-title">Time / Memory</div><div class="cluster-words">time, rhyme, climb, prime, mime, sublime, paradigm, lifetime</div></div>
+<div class="cluster"><div class="cluster-title">Storm / Power</div><div class="cluster-words">storm, form, warm, swarm, norm, transform, reform, perform, inform</div></div>
+<div class="cluster"><div class="cluster-title">Soul / Depth</div><div class="cluster-words">soul, whole, role, goal, control, console, patrol, rock and roll</div></div>
+<div class="cluster"><div class="cluster-title">Sky / High</div><div class="cluster-words">sky, fly, high, cry, eye, goodbye, alibi, satisfy, butterfly, lullaby</div></div>
+<div class="cluster"><div class="cluster-title">Rain / Longing</div><div class="cluster-words">rain, pain, chain, vain, remain, explain, insane, refrain, sustain, domain</div></div>
+
+<h3>Key &amp; Mood Pairing</h3>
+<p><strong>Minor keys (Am, Em, Dm):</strong> Melancholy, introspection, longing. Favour softer consonants (m, n, l, r), longer vowel sounds (oo, oh, ee). Family rhymes and assonance work beautifully here — they feel unresolved, like the emotion itself.</p>
+<p><strong>Major keys (C, G, D):</strong> Brightness, confidence, joy. Sharper consonants (t, k, p), brighter vowels (ay, ee, eye). Perfect rhymes reinforce the upbeat energy.</p>
+<p><strong>Modal keys (Dorian, Mixolydian):</strong> Ambiguity, tension, groove. Mix perfect and imperfect rhymes freely. Consonance rhymes add a subtle, mysterious texture here.</p>
+<p><strong>Blues keys:</strong> Raw, earthy, honest. Short vowels (ah, eh, ih), strong consonant endings (d, t, k, n). Additive and subtractive rhymes give that slightly rough, imperfect-but-perfect blues feel.</p>
+
+<h3>Understanding the Five Rhyme Types</h3>
+<p><strong>Perfect Rhyme:</strong> The vowel sound and all following consonant sounds match exactly from the stressed syllable onward. Essential for hooks and choruses.</p>
+<p><strong>Family Rhyme:</strong> The vowel sounds match, but the final consonants are from the same phonetic family (voiced/unvoiced pairs like b/p, d/t, g/k, v/f, z/s, m/n/ng). This is the SECRET WEAPON — sounds like a rhyme but feels more sophisticated.</p>
+<p><strong>Additive &amp; Subtractive:</strong> One word has extra consonant sounds at the end. "See" &rarr; "seed" (additive). "Belt" rhymes with "fell" (subtractive). These create polished near-matches.</p>
+<p><strong>Assonance:</strong> The vowel sounds match but the consonants are completely different. "Lake" &rarr; "rain", "flame", "cage". Essential for internal rhyme and sonic cohesion.</p>
+<p><strong>Consonance:</strong> The consonant sounds match but the vowels differ. "Back" &rarr; "book", "bike", "bake". Subtle sonic texture for rap, spoken word, and sophisticated pop.</p>
+
+<h3>Rhyme Types by Song Section</h3>
+<p>Different parts of a song serve different emotional purposes — and the type of rhyme you use should shift to match.</p>
+
+<div class="cluster"><div class="cluster-title">Chorus / Hook</div><div class="cluster-words">Perfect rhymes dominate here. The chorus is where your listener arrives — the moment of recognition and release. Perfect rhymes feel resolved, satisfying, inevitable. They make hooks stick. Use tight, punchy end rhymes. If your chorus doesn't feel "landed," swap family rhymes for perfect ones and see if it locks in.</div></div>
+
+<div class="cluster"><div class="cluster-title">Verse</div><div class="cluster-words">Family rhymes and assonance are your best friends in verses. Verses tell the story — they should feel conversational, not sing-songy. Family rhymes (light/ride, dream/green) sound like rhymes but feel unstudied. Assonance (lake/rain/flame) weaves sonic cohesion without the formality of a perfect match. Use sparse end rhymes with rich internal rhyme to keep verses flowing.</div></div>
+
+<div class="cluster"><div class="cluster-title">Pre-Chorus</div><div class="cluster-words">Build tension with additive/subtractive rhymes and increasing rhyme density. The pre-chorus is transition — it should feel like something is about to happen. Near-misses (additive: "see"→"seed", subtractive: "belt"→"fell") create a sense of reaching for resolution without quite getting there. Increase your rhyme rate as you approach the chorus.</div></div>
+
+<div class="cluster"><div class="cluster-title">Bridge</div><div class="cluster-words">Consonance and unexpected pairings. The bridge breaks the pattern — it's where you say something the song hasn't said yet. Consonance rhymes (back/book, light/lot) feel surprising and unfamiliar. Mix with assonance for an almost dreamlike texture. This is the place to experiment: mosaic rhymes, cross-line rhymes, or even dropping rhyme entirely for a bar to create contrast.</div></div>
+
+<div class="cluster"><div class="cluster-title">Rap Verses &amp; Spoken Word</div><div class="cluster-words">All five types, layered densely. Rap lives on internal rhyme, multi-syllable rhyme, and rhyme stacking. Layer perfect rhymes at line endings with family and assonance rhymes mid-line. Use consonance for texture in fast passages. The best rap verses often have 3-4 rhyme threads running simultaneously — RhymeForge's colour-coded types help you spot opportunities to weave them together.</div></div>
+
+<p><strong>The golden rule:</strong> Rhyme tighter as the emotional stakes rise. Loose in the verse, building through the pre-chorus, locked in the chorus. When you break this pattern intentionally — a perfect rhyme in a verse, or a near-miss in a chorus — it draws attention. Use that power deliberately.</p>
+`;
+
+// === UI CONTROLLER ===
+// v4.0 — main sections each may carry a sub-tier:
+//   Perfect ▸ Voice-Pair (single voicing-pair swap; near-perfect)
+//   Assonance ▸ Vowel Slant (vowel-family swap, e.g. pen↔pin)
+const RHYME_TYPES = [
+  { key: 'perfect', title: 'Perfect Rhyme', subtitle: 'Exact match from stressed vowel', cssClass: 'type-perfect',
+    subTier: { key: 'perfectNear', title: 'Voice-Pair Rhymes',
+      subtitle: 'Single voicing-pair swap (e.g. with → myth, breathe → teeth)' } },
+  { key: 'family', title: 'Family Rhyme', subtitle: 'Consonant family substitution', cssClass: 'type-family' },
+  { key: 'additive', title: 'Additive & Subtractive', subtitle: 'Extra consonants added or dropped', cssClass: 'type-additive',
+    combineWith: 'subtractive' },
+  { key: 'assonance', title: 'Assonance', subtitle: 'Matching vowel sounds', cssClass: 'type-assonance',
+    subTier: { key: 'vowelSlant', title: 'Vowel Slant',
+      subtitle: 'Vowel-family swap — pen ↔ pin, cot ↔ caught', pinTop: true } },
+  { key: 'ending', title: 'Ending Rhyme', subtitle: 'Shared final syllable — window ↔ shadow', cssClass: 'type-ending' },
+  { key: 'consonance', title: 'Consonance', subtitle: 'Matching consonant sounds', cssClass: 'type-consonance' }
+];
+
+// === COMPOUND RHYME ENGINE ===
+
+// Patch getWordPhonemes to handle multi-word input (e.g., "top gun")
+const _origGetWordPhonemes = getWordPhonemes;
+getWordPhonemes = function(word) {
+  word = word.toLowerCase().trim();
+  if (DICT[word]) return DICT[word].split(/\s+/);
+  // Multi-word: split and concatenate phonemes per word
+  if (word.includes(' ')) {
+    const parts = word.split(/\s+/).filter(w => w.length > 0);
+    if (parts.length > 1) {
+      const allPhonemes = [];
+      for (const part of parts) {
+        const ph = DICT[part] ? DICT[part].split(/\s+/) : G2P.estimate(part);
+        allPhonemes.push(...ph);
+      }
+      return allPhonemes;
+    }
+  }
+  return _origGetWordPhonemes(word);
+};
+
+// Build compound indexes from existing parsed data
+const FULL_PHONEME_INDEX = new Map();
+const PHONEME_SUFFIX_INDEX = new Map();
+
+WORDS.forEach(word => {
+  const phoneStr = DICT[word];
+  if (!phoneStr) return;
+  const phonemes = phoneStr.split(/\s+/).map(stripStress);
+  const fullKey = phonemes.join(' ');
+
+  // Full phoneme index: exact phoneme sequence -> words
+  if (!FULL_PHONEME_INDEX.has(fullKey)) FULL_PHONEME_INDEX.set(fullKey, []);
+  FULL_PHONEME_INDEX.get(fullKey).push(word);
+
+  // Suffix index: last N phonemes (1-7) -> words
+  for (let len = 1; len <= Math.min(7, phonemes.length); len++) {
+    const suffix = phonemes.slice(-len).join(' ');
+    if (!PHONEME_SUFFIX_INDEX.has(suffix)) PHONEME_SUFFIX_INDEX.set(suffix, []);
+    PHONEME_SUFFIX_INDEX.get(suffix).push(word);
+  }
+});
+
+// Common words: high-frequency anchor words for quality filtering (~600 words)
+const COMMON_WORDS = new Set([
+  // Articles, pronouns, determiners
+  'a','an','the','this','that','these','those','my','your','his','her','its','our','their',
+  'i','me','we','us','you','he','him','she','it','they','them','who','what','which',
+  'myself','yourself','himself','herself','itself','ourselves','themselves',
+  // Prepositions & conjunctions
+  'in','on','at','to','for','of','with','by','from','up','out','off','down','over',
+  'under','into','onto','through','about','after','before','between','around','against',
+  'and','or','but','so','if','when','while','than','as','because','until','since',
+  'above','below','across','along','behind','beside','beyond','during','toward','towards',
+  // Common verbs (expanded)
+  'be','is','am','are','was','were','been','do','does','did','done','have','has','had',
+  'go','goes','went','gone','come','came','get','got','make','made','take','took',
+  'give','gave','say','said','tell','told','see','saw','know','knew','think','thought',
+  'find','found','feel','felt','hear','heard','let','put','keep','kept','leave','left',
+  'set','run','ran','stand','stood','hold','held','try','tried','turn','turned',
+  'show','showed','call','called','ask','asked','move','moved','live','lived',
+  'want','need','like','love','hate','miss','kill','hit','cut','break','broke',
+  'bring','brought','buy','bought','send','sent','fall','fell','grow','grew',
+  'play','played','pay','paid','meet','met','lead','led','lose','lost','win','won',
+  'sing','sang','write','wrote','read','speak','spoke','eat','ate','drink','drank',
+  'draw','drew','drive','drove','ride','rode','rise','rose','sit','sat','die','died',
+  'catch','caught','pick','picked','pull','pulled','push','pushed','throw','threw',
+  'blow','blew','fly','flew','fight','fought','burn','burned','hang','hung',
+  'wake','woke','wear','wore','shake','shook','cry','cried','smile','smiled',
+  'laugh','laughed','dance','danced','walk','walked','talk','talked',
+  'wait','watch','work','rest','sleep','slept','stop','start','stay','close',
+  'open','shut','change','changed','help','helped','touch','touched','reach','reached',
+  'cover','drop','dropped','fill','filled','fix','fixed','kick','kissed','kiss',
+  'knock','lift','mark','pass','passed','plan','planned','point','pour','press',
+  'raise','raised','roll','rolled','save','saved','share','shared','sign','signed',
+  'step','stick','stuck','strike','struck','swing','swung','test','tested','tie','tied',
+  'trap','trapped','trip','trust','wrap','wrapped',
+  // Common nouns (expanded)
+  'man','men','woman','women','boy','girl','child','baby','day','night','time','year',
+  'way','world','life','hand','eye','eyes','face','head','heart','mind','soul',
+  'door','house','home','room','car','street','road','water','fire','sun','moon',
+  'star','sky','rain','wind','air','sea','land','earth','rock','tree','light',
+  'name','word','line','end','side','back','part','place','thing','point',
+  'god','king','war','bed','song','game','money','book','story','dream',
+  'arm','blood','bone','brain','breath','chain','church','cloud','coat','cross',
+  'crowd','cup','dance','death','dog','cat','bird','fish','horse','dust','edge',
+  'fear','field','floor','flower','food','foot','friend','fruit','glass','gold',
+  'grass','ground','gun','hair','hat','hill','hole','hope','ice','iron','joy',
+  'judge','key','knife','lake','lap','leaf','leg','lip','lock','luck','map',
+  'milk','mouth','mud','neck','nose','oil','page','pain','paper','path','peace',
+  'piece','plan','plate','power','price','prince','prize','queen','rage','red',
+  'rest','ring','river','rope','salt','sand','school','shade','shadow','shape',
+  'ship','shirt','shoe','shop','sign','silk','skin','smoke','snow','sound',
+  'space','speed','spot','spring','stage','steel','stone','storm','string','stuff',
+  'sun','sword','tail','taste','tea','teeth','test','tongue','tooth','touch','town',
+  'train','trick','truck','truth','voice','wall','wave','weight','wheel','wife',
+  'wine','wing','wire','wood','cap','tap','map','gap','trap','snap','strap','clap',
+  'crack','track','stack','black','pack','sack','flag','bag','drag','grab','stab',
+  'jam','slam','dam','ham','ram','scam','spam','van','ban','can','fan','man',
+  'pan','plan','ran','tan','bar','car','far','jar','scar','charge','march',
+  'mask','task','cash','crash','flash','trash','class','grass','mass','pass',
+  'bee','fee','flea','glee','knee','pea','plea','ski','spree','wee',
+  'bay','clay','day','gray','hay','lay','may','pay','play','pray','ray','say','spray','stay','sway','way',
+  'bow','blow','crow','flow','glow','grow','know','low','row','show','slow','snow','throw',
+  // Common adjectives (expanded)
+  'good','bad','big','small','old','young','new','long','short','high','low',
+  'hot','cold','fast','slow','hard','soft','loud','quiet','dark','bright',
+  'right','wrong','true','false','real','free','full','empty','deep','wide',
+  'rich','poor','strong','weak','safe','dead','alive','alone','still','sure',
+  'pretty','sweet','wild','strange','mad','sick','glad','proud','scared',
+  'clean','clear','cool','dry','wet','fair','fat','fine','firm','fit',
+  'flat','fresh','grand','gray','great','green','gross','happy','huge','keen',
+  'kind','late','lean','lost','mean','neat','nice','odd','pale','plain',
+  'pure','quick','rare','raw','red','rough','round','rude','sharp','sheer',
+  'smooth','sore','spare','steep','stiff','straight','strict','tall','thick','thin',
+  'tight','tired','tough','vast','warm','worn','blank','blind','bold','calm',
+  'cheap','dull','dumb','fierce','gentle','grim','harsh','heavy','humble','light',
+  // Common adverbs & others (expanded)
+  'not','no','yes','just','still','even','never','always','ever','here','there',
+  'now','then','how','why','where','well','more','much','very','too','only',
+  'also','back','away','again','once','far','near','own','every','all','some',
+  'any','each','both','most','half','few','many','enough','another','other',
+  'one','two','three','four','five','six','seven','eight','nine','ten',
+  'first','last','next','own','quite','rather','really','soon','yet','almost',
+  'already','hard','fast','late','early','home','together','apart','ahead','aside'
+]);
+
+// Word-category system for compound rhyme quality scoring
+// Tier 0 = content words (default, no penalty)
+// Tier 1 = interjections/fillers → heavy penalty as compound anchor
+const FILLER_WORDS = new Set([
+  'pah','yeah','brugh','uh','oh','ah','eh','huh','hmm','ooh','aah',
+  'er','um','erm','blah','bah','meh','nah','duh','psst','shh','tsk'
+]);
+// Tier 2 = articles/auxiliaries/copulas → moderate penalty as word-A
+const WEAK_ANCHOR_WORDS = new Set([
+  'the','a','an','am','is','are','be','was','were','been',
+  'do','does','did','done','has','had','shall','should',
+  'would','could','might','may','must','will','can',
+  'its','whose'
+]);
+// Tier 3 = short function words → mild penalty as word-A
+const FUNCTION_WORDS = new Set([
+  'i','me','we','us','he','him','it','they','them',
+  'in','on','at','to','of','by','as','or','if','so',
+  'no','not','nor','yet','but','and','than'
+]);
+// Bonus: words that make especially strong compound anchors
+// (concrete nouns, vivid verbs, evocative adjectives)
+const STRONG_ANCHORS = new Set([
+  'door','floor','wall','stone','bone','blood','star','storm','fire','rain',
+  'heart','mind','soul','hand','eye','face','skin','mouth','tooth','crown',
+  'night','day','sun','moon','light','dark','shadow','dream','death','life',
+  'war','love','hate','fear','rage','pain','hope','joy','pride','shame',
+  'gold','iron','steel','glass','ice','smoke','dust','flame','flash','crash',
+  'kill','burn','break','shake','strike','fight','fall','rise','fly','run',
+  'fast','slow','hard','cold','hot','deep','wild','blind','loud','sharp',
+  'black','white','red','blue','green','bright','dark','raw','grand','grim',
+  'change','strange','brain','chain','train','spring','string','chill','still',
+  'crack','track','stack','slam','crash','smash','blast','cast','class','mass',
+  'her','his','your','my','our','their'
+]);
+
+// All ARPAbet vowels (stress-stripped)
+const VOWELS_LIST = ['AA','AE','AH','AO','AW','AY','EH','ER','EY','IH','IY','OW','OY','UH','UW'];
+const VOWEL_SET = new Set(VOWELS_LIST);
+
+// === STRESS PATTERN ENGINE ===
+// Extract stress pattern from raw phonemes (with stress numbers intact)
+// Returns string like "100" for DUM-da-da (symphony) or "01" for da-DUM (above)
+function getStressPattern(phonemes) {
+  const pattern = [];
+  for (const p of phonemes) {
+    if (p.endsWith('1')) pattern.push('1');
+    else if (p.endsWith('2')) pattern.push('2');
+    else if (p.endsWith('0')) pattern.push('0');
+  }
+  return pattern.join('');
+}
+
+// Compare two stress patterns. Returns a rhythm score:
+// 0 = perfect match, higher = worse mismatch
+function stressDistance(patA, patB) {
+  if (patA === patB) return 0;
+  const len = Math.max(patA.length, patB.length);
+  if (len === 0) return 0;
+  let dist = 0;
+  // Compare from the end (rhyme tails align at the end)
+  const a = patA.split('').reverse();
+  const b = patB.split('').reverse();
+  for (let i = 0; i < len; i++) {
+    const sa = a[i] || '0';
+    const sb = b[i] || '0';
+    if (sa === sb) continue;
+    // Primary vs unstressed = big clash
+    if ((sa === '1' && sb === '0') || (sa === '0' && sb === '1')) dist += 3;
+    // Primary vs secondary = small clash
+    else if ((sa === '1' && sb === '2') || (sa === '2' && sb === '1')) dist += 1;
+    // Secondary vs unstressed = medium clash
+    else dist += 2;
+  }
+  return dist;
+}
+
+// Build stress pattern index for fast lookups
+const STRESS_INDEX = new Map(); // word -> stress pattern string
+WORDS.forEach(word => {
+  const phoneStr = DICT[word];
+  if (!phoneStr) return;
+  const phonemes = phoneStr.split(/\s+/);
+  STRESS_INDEX.set(word, getStressPattern(phonemes));
+});
+
+// === VOWEL FAMILY CLUSTERS ===
+// Vowels that sound similar in song — within-cluster swaps get reduced penalty
+const VOWEL_FAMILIES = [
+  new Set(['IY', 'IH']),           // v4.2 tense/lax I: "feel" / "still"
+  new Set(['AE', 'EH']),           // v4.2 short A/E: "man" / "then"
+  new Set(['IH', 'EH']),           // short I/E: "bin" / "ben"
+  new Set(['AH', 'UH', 'ER']),     // neutral/schwa family
+  new Set(['EY', 'IY']),           // long A/E: often interchangeable in song
+  new Set(['AA', 'AO']),           // open back: "cot" / "caught"
+  new Set(['OW', 'UW']),           // rounded back: "go" / "do"
+  new Set(['AW', 'AO', 'OW']),    // diphthong-round overlap
+  new Set(['AY', 'OY']),           // diphthong-y
+];
+
+function sameVowelFamily(v1, v2) {
+  if (v1 === v2) return true;
+  for (const fam of VOWEL_FAMILIES) {
+    if (fam.has(v1) && fam.has(v2)) return true;
+  }
+  return false;
+}
+
+// === SEMANTIC THEME ENGINE ===
+const SONG_THEMES = {
+  love: new Set(['love','heart','kiss','hold','arms','touch','feel','baby','honey','darling','sweet','desire','passion','embrace','tender','gentle','warm','forever','always','mine','yours','together','beside','close','dream','soul','lips','eyes','beauty','beautiful','rose','flower','blush','flame','burn','fire','glow','romance','adore','cherish','devotion','crush','whisper','breath','skin','body','bed','night','heaven','angel','fate','destiny','dance','moonlight','starlight','deep','fall','falling']),
+  dark: new Set(['dark','death','die','dead','blood','bone','grave','ghost','shadow','night','black','cold','pain','fear','scream','cry','tears','lost','broken','shatter','fall','drown','burn','ash','dust','skull','tomb','hell','demon','devil','sin','curse','haunt','hollow','empty','alone','silence','void','abyss','fade','wither','decay','rot','wound','scar','blade','knife','poison','venom','rage','hate','bitter','bleed','suffer']),
+  nature: new Set(['sun','moon','star','sky','rain','wind','storm','cloud','thunder','lightning','ocean','sea','wave','river','stream','lake','water','mountain','hill','valley','forest','tree','leaf','flower','garden','field','meadow','earth','stone','rock','sand','snow','ice','frost','spring','summer','winter','autumn','bird','eagle','dove','wolf','lion','fish','whale','green','bloom','grow','root','seed','sunrise','sunset','dawn','dusk','horizon','shore','tide']),
+  urban: new Set(['street','city','road','block','corner','light','neon','club','bar','smoke','glass','steel','concrete','wire','bridge','train','car','ride','drive','fast','speed','crowd','noise','loud','bass','beat','hustle','grind','cash','money','gold','chain','crown','king','queen','throne','hood','gang','gun','shot','fight','run','chase','cop','siren','wall','paint','sign','alley','tower','roof','window','door','lock']),
+  party: new Set(['dance','party','club','night','drink','drunk','bottle','shot','toast','cheer','fun','wild','crazy','loud','bass','beat','drop','move','shake','groove','vibe','feel','high','fly','free','live','young','forever','tonight','celebrate','fire','lit','turn','bang','boom','jump','spin','roll','wave','hands','crowd','floor','music','song','sing','play','dj','pop','rock','break']),
+  spiritual: new Set(['god','lord','heaven','angel','soul','spirit','faith','pray','prayer','grace','holy','sacred','divine','bless','blessed','light','hope','peace','mercy','glory','praise','worship','church','cross','redemption','salvation','sin','forgive','forgiven','believe','truth','wisdom','eternal','everlasting','almighty','father','rise','resurrect','miracle','promise','covenant','psalm','hymn','hallelujah','amen','temple','crown']),
+  time: new Set(['time','clock','hour','minute','second','day','night','year','age','old','young','past','present','future','memory','remember','forget','yesterday','tomorrow','today','forever','never','always','moment','instant','wait','gone','lost','change','turn','season','cycle','begin','end','start','stop','last','first','slow','fast','rush','still','pause','fade','dawn','dusk','morning','evening','midnight','noon','late','early']),
+  war: new Set(['war','fight','battle','soldier','army','march','weapon','gun','sword','shield','blood','wound','die','death','kill','enemy','hero','brave','courage','honor','victory','defeat','fall','rise','charge','attack','defend','retreat','fire','shoot','bomb','blast','shell','trench','field','flag','country','nation','freedom','liberty','justice','power','force','strength','glory','sacrifice','fallen','medal','scar','survive'])
+};
+
+// Reverse index: word → theme(s)
+const WORD_THEMES = new Map();
+for (const [theme, words] of Object.entries(SONG_THEMES)) {
+  for (const w of words) {
+    if (!WORD_THEMES.has(w)) WORD_THEMES.set(w, []);
+    WORD_THEMES.get(w).push(theme);
+  }
+}
+
+// Get theme boost for a word given a context theme
+function getThemeBoost(word, contextTheme) {
+  if (!contextTheme) return 0;
+  const themes = WORD_THEMES.get(word);
+  if (!themes) return 0;
+  return themes.includes(contextTheme) ? 1 : 0;
+}
+
+// Looseness profiles for compound rhyme matching
+const LOOSENESS_PROFILES = {
+  0: { vowelSubPenalty: 999, consonantSkipPenalty: 999, syllableBudget: 0, requireCommonWord: true, consonantSubAllowed: false },
+  1: { vowelSubPenalty: 5, consonantSkipPenalty: 999, syllableBudget: 1, requireCommonWord: true, consonantSubAllowed: false },
+  2: { vowelSubPenalty: 5, consonantSkipPenalty: 8, syllableBudget: 1, requireCommonWord: true, consonantSubAllowed: false },
+  3: { vowelSubPenalty: 3, consonantSkipPenalty: 4, syllableBudget: 2, requireCommonWord: false, consonantSubAllowed: true },
+  4: { vowelSubPenalty: 1, consonantSkipPenalty: 2, syllableBudget: 2, requireCommonWord: false, consonantSubAllowed: true }
+};
+
+// Similar-consonant substitution map (for loose/slant levels)
+const CONSONANT_SUBS = {
+  'T': ['D','S'], 'D': ['T','Z'], 'S': ['Z','T','SH'], 'Z': ['S','D','ZH'],
+  'P': ['B','F'], 'B': ['P','V'], 'F': ['V','P','TH'], 'V': ['F','B','DH'],
+  'K': ['G'], 'G': ['K'], 'CH': ['JH','SH'], 'JH': ['CH','ZH'],
+  'SH': ['CH','S','ZH'], 'ZH': ['SH','JH','Z'],
+  'TH': ['DH','F'], 'DH': ['TH','V'],
+  'M': ['N'], 'N': ['M','NG'], 'NG': ['N'],
+  'L': ['R'], 'R': ['L']
+};
+
+function findCompoundRhymes(inputWord, looseLevel) {
+  if (looseLevel === undefined) looseLevel = 2;
+  const profile = LOOSENESS_PROFILES[looseLevel] || LOOSENESS_PROFILES[2];
+  inputWord = inputWord.toLowerCase().trim();
+  const inputPhonemes = getWordPhonemes(inputWord);
+  const inputTail = getRhymeTail(inputPhonemes).map(stripStress);
+  const inputSyllables = inputPhonemes.filter(p => isVowel(p)).length;
+  const inputStress = getStressPattern(inputPhonemes);
+
+  if (inputTail.length < 2) return [];
+
+  const results = [];
+  const seen = new Set();
+
+  // Helper: populate B-candidate map from a segment with vowel + consonant substitution
+  function populateCandidatesB(seg, basePenalty, map) {
+    const segStr = seg.join(' ');
+    // Exact suffix + full match
+    const exactSuf = PHONEME_SUFFIX_INDEX.get(segStr);
+    if (exactSuf) exactSuf.forEach(w => { if (!map.has(w) || map.get(w) > basePenalty) map.set(w, basePenalty); });
+    const exactFul = FULL_PHONEME_INDEX.get(segStr);
+    if (exactFul) exactFul.forEach(w => { if (!map.has(w) || map.get(w) > basePenalty) map.set(w, basePenalty); });
+    // Vowel substitutions (with family-based reduced penalties)
+    if (profile.vowelSubPenalty < 999) {
+      for (let i = 0; i < seg.length; i++) {
+        if (VOWEL_SET.has(seg[i])) {
+          const orig = seg[i];
+          for (const alt of VOWELS_LIST) {
+            if (alt === orig) continue;
+            const variant = [...seg];
+            variant[i] = alt;
+            const vs = variant.join(' ');
+            // Within-family swaps cost less (e.g., IH/EH, AH/UH/ER)
+            const famPen = sameVowelFamily(orig, alt) ? Math.max(1, Math.floor(profile.vowelSubPenalty * 0.4)) : profile.vowelSubPenalty;
+            const pen = basePenalty + famPen;
+            const vSuf = PHONEME_SUFFIX_INDEX.get(vs);
+            if (vSuf) vSuf.forEach(w => { if (!map.has(w) || map.get(w) > pen) map.set(w, pen); });
+            const vFul = FULL_PHONEME_INDEX.get(vs);
+            if (vFul) vFul.forEach(w => { if (!map.has(w) || map.get(w) > pen) map.set(w, pen); });
+          }
+        }
+      }
+    }
+    // Consonant substitutions (loose/slant only)
+    if (profile.consonantSubAllowed) {
+      for (let ci = 0; ci < seg.length; ci++) {
+        if (!VOWEL_SET.has(seg[ci]) && CONSONANT_SUBS[seg[ci]]) {
+          for (const altC of CONSONANT_SUBS[seg[ci]]) {
+            const variant = [...seg];
+            variant[ci] = altC;
+            const cs = variant.join(' ');
+            const pen = basePenalty + 6;
+            const cSuf = PHONEME_SUFFIX_INDEX.get(cs);
+            if (cSuf) cSuf.forEach(w => { if (!map.has(w) || map.get(w) > pen) map.set(w, pen); });
+            const cFul = FULL_PHONEME_INDEX.get(cs);
+            if (cFul) cFul.forEach(w => { if (!map.has(w) || map.get(w) > pen) map.set(w, pen); });
+          }
+        }
+      }
+    }
+  }
+
+  for (let splitPos = 1; splitPos < inputTail.length; splitPos++) {
+    const segA = inputTail.slice(0, splitPos);
+    const segB = inputTail.slice(splitPos);
+
+    if (segA.length < 1 || segB.length < 1) continue;
+
+    // Segment A: exact match + vowel/consonant substitutions in suffix index
+    const allCandidatesA = new Map(); // word -> fuzzyPenalty
+    const segAStr = segA.join(' ');
+    const exactA = PHONEME_SUFFIX_INDEX.get(segAStr);
+    if (exactA) exactA.forEach(w => allCandidatesA.set(w, 0));
+    // Vowel subs on segA with family-based penalties
+    if (segA.length >= 2 && profile.vowelSubPenalty < 999) {
+      for (let vi = 0; vi < segA.length; vi++) {
+        if (VOWEL_SET.has(segA[vi])) {
+          const origV = segA[vi];
+          for (const altV of VOWELS_LIST) {
+            if (altV === origV) continue;
+            const variant = [...segA];
+            variant[vi] = altV;
+            const vStr = variant.join(' ');
+            const famPen = sameVowelFamily(origV, altV) ? Math.max(1, Math.floor(profile.vowelSubPenalty * 0.4)) : profile.vowelSubPenalty;
+            const vCand = PHONEME_SUFFIX_INDEX.get(vStr);
+            if (vCand) vCand.forEach(w => { if (!allCandidatesA.has(w)) allCandidatesA.set(w, famPen); });
+          }
+        }
+      }
+    }
+    // Consonant subs on segA (loose/slant only)
+    if (segA.length >= 2 && profile.consonantSubAllowed) {
+      for (let ci = 0; ci < segA.length; ci++) {
+        if (!VOWEL_SET.has(segA[ci]) && CONSONANT_SUBS[segA[ci]]) {
+          for (const altC of CONSONANT_SUBS[segA[ci]]) {
+            const variant = [...segA];
+            variant[ci] = altC;
+            const cStr = variant.join(' ');
+            const cCand = PHONEME_SUFFIX_INDEX.get(cStr);
+            if (cCand) cCand.forEach(w => { if (!allCandidatesA.has(w)) allCandidatesA.set(w, 6); });
+          }
+        }
+      }
+    }
+    if (allCandidatesA.size === 0) continue;
+
+    const allCandidatesB = new Map(); // word -> fuzzyPenalty
+
+    // Standard: match segB exactly + vowel subs
+    populateCandidatesB(segB, 0, allCandidatesB);
+
+    // Consonant-skip: if the first phoneme of segB is a consonant,
+    // try dropping it (models consonant absorption at word boundary)
+    if (segB.length >= 2 && !VOWEL_SET.has(segB[0]) && profile.consonantSkipPenalty < 999) {
+      populateCandidatesB(segB.slice(1), profile.consonantSkipPenalty, allCandidatesB);
+    }
+
+    // Also: if segA ends with a consonant, try extending segA by one phoneme
+    // (consonant absorbed into word A instead)
+    if (segB.length >= 2 && !VOWEL_SET.has(segB[0])) {
+      const extA = [...segA, segB[0]];
+      const extAStr = extA.join(' ');
+      const extCandA = PHONEME_SUFFIX_INDEX.get(extAStr);
+      if (extCandA && extCandA.length > 0) {
+        const shortB = segB.slice(1);
+        if (shortB.length >= 1) {
+          // These will be handled in the main loop with the extended A candidates
+          // We add them as additional A candidates with a penalty marker
+        }
+      }
+    }
+
+    if (allCandidatesB.size === 0) continue;
+
+    // Prioritize common words to avoid missing quality matches in long lists
+    const candidatesAArr = [...allCandidatesA.entries()]
+      .sort((a, b) => (COMMON_WORDS.has(b[0]) ? 1 : 0) - (COMMON_WORDS.has(a[0]) ? 1 : 0))
+      .slice(0, 200);
+    const candidatesBArr = [...allCandidatesB.entries()]
+      .sort((a, b) => (COMMON_WORDS.has(b[0]) ? 1 : 0) - (COMMON_WORDS.has(a[0]) ? 1 : 0))
+      .slice(0, 300);
+
+    for (const [wordA, fuzzyPenaltyA] of candidatesAArr) {
+      if (wordA === inputWord) continue;
+
+      for (const [wordB, fuzzyPenalty] of candidatesBArr) {
+        if (wordB === inputWord || wordB === wordA) continue;
+
+        // Ordered key (preserve phrase order: A then B)
+        const key = wordA + '|' + wordB;
+        if (seen.has(key)) continue;
+        seen.add(key);
+
+        // Quality: at least one common word (relaxed at loose levels)
+        const aCommon = COMMON_WORDS.has(wordA);
+        const bCommon = COMMON_WORDS.has(wordB);
+        if (profile.requireCommonWord && !aCommon && !bCommon) continue;
+
+        // Quality: syllable budget
+        const dataA = WORD_DATA.get(wordA);
+        const dataB = WORD_DATA.get(wordB);
+        if (!dataA || !dataB) continue;
+        const compSyl = dataA.syllables + dataB.syllables;
+        if (Math.abs(compSyl - inputSyllables) > profile.syllableBudget) continue;
+
+        // Quality: skip very short phoneme words unless common
+        const aPhon = dataA.phonemes.length;
+        const bPhon = dataB.phonemes.length;
+        if (aPhon < 2 && !aCommon) continue;
+        if (bPhon < 2 && !bCommon) continue;
+
+        // Score
+        let score = 80;
+        if (aCommon && bCommon) score += 15;
+        else if (aCommon) score += 10;
+        score -= Math.abs(compSyl - inputSyllables) * 5;
+        if (segA.length >= 3) score += 5;
+        if (aPhon < 2 || bPhon < 2) score -= 10;
+        score -= fuzzyPenalty; // Penalize vowel-substituted B matches
+        score -= fuzzyPenaltyA; // Penalize vowel-substituted A matches
+
+        // POS-based quality scoring for natural-sounding phrases
+        const aFiller = FILLER_WORDS.has(wordA);
+        const aWeak = WEAK_ANCHOR_WORDS.has(wordA);
+        const aFunc = FUNCTION_WORDS.has(wordA);
+        const bFiller = FILLER_WORDS.has(wordB);
+        const bWeak = WEAK_ANCHOR_WORDS.has(wordB);
+        const bFunc = FUNCTION_WORDS.has(wordB);
+
+        if (aFiller) score -= 20;       // "pah asked" → bad
+        else if (aWeak) score -= 15;    // "the drive" → weak
+        else if (aFunc) score -= 8;     // "me him" → mediocre
+        if (bFiller) score -= 15;       // rare but penalize
+        else if (bWeak) score -= 8;     // "kill am" → weak B
+
+        // Yoda filter: penalize back-to-back function/weak words
+        // "the of", "a is", "me he" → nonsensical pairs
+        if ((aWeak || aFunc) && (bWeak || bFunc)) score -= 15;
+        if ((aWeak || aFunc || aFiller) && (bWeak || bFunc || bFiller)) score -= 10;
+
+        if (STRONG_ANCHORS.has(wordA)) score += 5;       // "door hinge" → great
+        if (STRONG_ANCHORS.has(wordA) && STRONG_ANCHORS.has(wordB)) score += 3; // both vivid
+
+        score = Math.max(0, Math.min(100, score));
+
+        // Determine minimum looseness level needed for this match
+        const totalFuzzy = fuzzyPenalty + fuzzyPenaltyA;
+        let minLevel = 0;
+        if (totalFuzzy > 0) minLevel = 1; // needed vowel sub
+        if (fuzzyPenalty > 5 || fuzzyPenaltyA > 5) minLevel = 3; // consonant sub
+        if (Math.abs(compSyl - inputSyllables) > 1) minLevel = Math.max(minLevel, 3);
+        if (!aCommon && !bCommon) minLevel = Math.max(minLevel, 3);
+
+        // Stress pattern for compound phrase
+        const compStress = (STRESS_INDEX.get(wordA) || '') + (STRESS_INDEX.get(wordB) || '');
+        const rhythmDist = stressDistance(inputStress, compStress);
+
+        results.push({
+          word: wordA + ' ' + wordB,
+          words: [wordA, wordB],
+          score: score,
+          syllables: compSyl,
+          minLevel: minLevel,
+          stressDist: rhythmDist,
+          stress: compStress
+        });
+
+        if (results.length >= 800) break;
+      }
+      if (results.length >= 800) break;
+    }
+    if (results.length >= 800) break;
+  }
+
+  results.sort((a, b) => b.score - a.score || a.syllables - b.syllables || a.word.localeCompare(b.word));
+  return results.slice(0, 300);
+}
+
+// === THREE-WORD COMPOUND RHYME ENGINE ===
+function findCompound3Rhymes(inputWord, looseLevel) {
+  if (looseLevel === undefined) looseLevel = 2;
+  const profile = LOOSENESS_PROFILES[looseLevel] || LOOSENESS_PROFILES[2];
+  inputWord = inputWord.toLowerCase().trim();
+  const inputPhonemes = getWordPhonemes(inputWord);
+  const inputTail = getRhymeTail(inputPhonemes).map(stripStress);
+  const inputSyllables = inputPhonemes.filter(p => isVowel(p)).length;
+  const inputStress = getStressPattern(inputPhonemes);
+
+  if (inputTail.length < 4) return []; // need at least 4 phonemes for 3-word split
+
+  const results = [];
+  const seen = new Set();
+
+  // Helper: get candidates from suffix index with vowel+consonant subs
+  function getCandidates(seg, maxCands) {
+    const cands = new Map();
+    const segStr = seg.join(' ');
+    const exact = PHONEME_SUFFIX_INDEX.get(segStr);
+    if (exact) exact.forEach(w => cands.set(w, 0));
+    const exactF = FULL_PHONEME_INDEX.get(segStr);
+    if (exactF) exactF.forEach(w => { if (!cands.has(w)) cands.set(w, 0); });
+    // Vowel subs (with family-based reduced penalties)
+    if (profile.vowelSubPenalty < 999) {
+      for (let i = 0; i < seg.length; i++) {
+        if (VOWEL_SET.has(seg[i])) {
+          const orig = seg[i];
+          for (const alt of VOWELS_LIST) {
+            if (alt === orig) continue;
+            const variant = [...seg]; variant[i] = alt;
+            const vs = variant.join(' ');
+            const famPen = sameVowelFamily(orig, alt) ? Math.max(1, Math.floor(profile.vowelSubPenalty * 0.4)) : profile.vowelSubPenalty;
+            const vS = PHONEME_SUFFIX_INDEX.get(vs);
+            if (vS) vS.forEach(w => { if (!cands.has(w) || cands.get(w) > famPen) cands.set(w, famPen); });
+            const vF = FULL_PHONEME_INDEX.get(vs);
+            if (vF) vF.forEach(w => { if (!cands.has(w) || cands.get(w) > famPen) cands.set(w, famPen); });
+          }
+        }
+      }
+    }
+    // Consonant subs
+    if (profile.consonantSubAllowed) {
+      for (let ci = 0; ci < seg.length; ci++) {
+        if (!VOWEL_SET.has(seg[ci]) && CONSONANT_SUBS[seg[ci]]) {
+          for (const altC of CONSONANT_SUBS[seg[ci]]) {
+            const variant = [...seg]; variant[ci] = altC;
+            const cs = variant.join(' ');
+            const cS = PHONEME_SUFFIX_INDEX.get(cs);
+            if (cS) cS.forEach(w => { if (!cands.has(w) || cands.get(w) > 6) cands.set(w, 6); });
+          }
+        }
+      }
+    }
+    return [...cands.entries()]
+      .sort((a, b) => (COMMON_WORDS.has(b[0]) ? 1 : 0) - (COMMON_WORDS.has(a[0]) ? 1 : 0))
+      .slice(0, maxCands);
+  }
+
+  for (let split1 = 1; split1 < inputTail.length - 1; split1++) {
+    const segA = inputTail.slice(0, split1);
+    const rest = inputTail.slice(split1);
+    if (rest.length < 2) continue;
+
+    const candsA = getCandidates(segA, 100);
+    if (candsA.length === 0) continue;
+
+    let splitBudget = 200; // per outer-split budget to ensure all positions get a chance
+
+    for (let split2 = 1; split2 < rest.length; split2++) {
+      const segB1 = rest.slice(0, split2);
+      const segB2 = rest.slice(split2);
+      if (segB1.length < 1 || segB2.length < 1) continue;
+
+      const candsB1 = getCandidates(segB1, 80);
+      if (candsB1.length === 0) continue;
+
+      const candsB2 = getCandidates(segB2, 150);
+      if (candsB2.length === 0) continue;
+
+      let innerCount = 0;
+      for (const [wordA, penA] of candsA) {
+        if (wordA === inputWord) continue;
+        for (const [wordB1, penB1] of candsB1) {
+          if (wordB1 === inputWord || wordB1 === wordA) continue;
+          for (const [wordB2, penB2] of candsB2) {
+            if (wordB2 === inputWord || wordB2 === wordA || wordB2 === wordB1) continue;
+
+            const key = wordA + '|' + wordB1 + '|' + wordB2;
+            if (seen.has(key)) continue;
+            seen.add(key);
+
+            const aCommon = COMMON_WORDS.has(wordA);
+            const b1Common = COMMON_WORDS.has(wordB1);
+            const b2Common = COMMON_WORDS.has(wordB2);
+            if (profile.requireCommonWord && !aCommon && !b1Common && !b2Common) continue;
+
+            const dataA = WORD_DATA.get(wordA);
+            const dataB1 = WORD_DATA.get(wordB1);
+            const dataB2 = WORD_DATA.get(wordB2);
+            if (!dataA || !dataB1 || !dataB2) continue;
+
+            const compSyl = dataA.syllables + dataB1.syllables + dataB2.syllables;
+            if (Math.abs(compSyl - inputSyllables) > profile.syllableBudget) continue;
+
+            const aPhon = dataA.phonemes.length;
+            const b2Phon = dataB2.phonemes.length;
+            if (aPhon < 2 && !aCommon) continue;
+            if (b2Phon < 2 && !b2Common) continue;
+
+            let score = 75;
+            const commonCount = [aCommon, b1Common, b2Common].filter(x => x).length;
+            if (commonCount === 3) score += 12;
+            else if (commonCount === 2) score += 7;
+            else if (commonCount === 1) score += 3;
+
+            score -= Math.abs(compSyl - inputSyllables) * 5;
+            if (segA.length >= 3) score += 5;
+            if (aPhon < 2 || b2Phon < 2) score -= 10;
+            score -= penA; score -= penB1; score -= penB2;
+
+            // POS scoring
+            const aFiller = FILLER_WORDS.has(wordA);
+            const aWeak = WEAK_ANCHOR_WORDS.has(wordA);
+            const aFunc = FUNCTION_WORDS.has(wordA);
+            if (aFiller) score -= 20;
+            else if (aWeak) score -= 12;
+            else if (aFunc) score -= 6;
+            if (FILLER_WORDS.has(wordB1)) score -= 8;
+            else if (WEAK_ANCHOR_WORDS.has(wordB1)) score -= 4;
+            if (FILLER_WORDS.has(wordB2)) score -= 10;
+            else if (WEAK_ANCHOR_WORDS.has(wordB2)) score -= 5;
+            // Yoda on endpoints
+            if ((aWeak || aFunc) && (WEAK_ANCHOR_WORDS.has(wordB2) || FUNCTION_WORDS.has(wordB2))) score -= 8;
+            if (STRONG_ANCHORS.has(wordA)) score += 5;
+            if (STRONG_ANCHORS.has(wordB2)) score += 4;
+
+            score = Math.max(0, Math.min(100, score));
+
+            const totalFuzzy = penA + penB1 + penB2;
+            let minLevel = 0;
+            if (totalFuzzy > 0) minLevel = 1;
+            if (totalFuzzy > 10) minLevel = 3;
+            if (Math.abs(compSyl - inputSyllables) > 1) minLevel = Math.max(minLevel, 3);
+            if (!aCommon && !b1Common && !b2Common) minLevel = Math.max(minLevel, 3);
+
+            const compStress = (STRESS_INDEX.get(wordA) || '') + (STRESS_INDEX.get(wordB1) || '') + (STRESS_INDEX.get(wordB2) || '');
+            const rhythmDist = stressDistance(inputStress, compStress);
+
+            results.push({
+              word: wordA + ' ' + wordB1 + ' ' + wordB2,
+              words: [wordA, wordB1, wordB2],
+              score: score,
+              syllables: compSyl,
+              minLevel: minLevel,
+              stressDist: rhythmDist,
+              stress: compStress
+            });
+
+            innerCount++;
+            if (innerCount >= splitBudget) break;
+          }
+          if (innerCount >= splitBudget) break;
+        }
+        if (innerCount >= splitBudget) break;
+      }
+    }
+  }
+
+  results.sort((a, b) => b.score - a.score || a.syllables - b.syllables || a.word.localeCompare(b.word));
+  return results.slice(0, 100);
+}
+
+
+// ============ PHASE 4: CLICHÉ DATABASE ============
+const CLICHE_PAIRS = new Map();
+const clichePairsList = [
+  ['love','above'],['love','dove'],['love','shove'],
+  ['heart','start'],['heart','apart'],['heart','part'],
+  ['fire','desire'],['fire','higher'],
+  ['night','light'],['night','sight'],['night','bright'],
+  ['moon','june'],['moon','soon'],['moon','tune'],
+  ['rain','pain'],['rain','again'],['rain','vain'],
+  ['time','rhyme'],['time','crime'],['time','mine'],
+  ['eyes','skies'],['eyes','lies'],['eyes','cries'],['eyes','dies'],
+  ['day','way'],['day','say'],['day','play'],['day','away'],
+  ['feel','real'],['feel','steal'],['feel','heal'],
+  ['cry','sky'],['cry','fly'],['cry','die'],['cry','high'],
+  ['soul','whole'],['soul','control'],['soul','role'],
+  ['dream','seem'],['dream','stream'],['dream','gleam'],
+  ['blue','true'],['blue','you'],['blue','through'],
+  ['gold','hold'],['gold','old'],['gold','told'],['gold','cold'],
+  ['stay','day'],['stay','away'],['stay','way'],
+  ['kiss','miss'],['kiss','bliss'],['kiss','this'],
+  ['free','me'],['free','see'],['free','be'],
+  ['fall','all'],['fall','call'],['fall','wall'],
+  ['tears','fears'],['tears','years'],
+  ['mind','find'],['mind','behind'],['mind','kind'],['mind','blind'],
+  ['strong','wrong'],['strong','long'],['strong','song'],
+  ['world','girl'],
+  ['dance','chance'],['dance','romance'],
+  ['pain','vain'],['pain','again'],['pain','rain'],
+  ['home','alone'],['home','roam'],
+  ['break','take'],['break','make'],['break','sake'],
+  ['life','strife'],['life','knife'],['life','wife'],
+  ['deep','sleep'],['deep','keep'],['deep','weep'],
+  ['hand','sand'],['hand','land'],['hand','understand'],
+  ['sun','run'],['sun','one'],['sun','done'],['sun','fun'],
+  ['stone','alone'],['stone','bone'],['stone','own'],
+  ['rose','close'],['rose','knows'],
+  ['breath','death'],
+  ['sing','ring'],['sing','thing'],['sing','bring'],['sing','king'],
+  ['sea','free'],['sea','me'],
+  ['door','more'],['door','floor'],['door','before'],
+  ['name','fame'],['name','game'],['name','shame'],['name','flame'],
+  ['young','tongue'],
+  ['star','far'],['star','are'],
+  ['road','load'],
+  ['burn','turn'],['burn','learn'],
+  ['lost','cost'],
+  ['face','place'],['face','grace'],
+  ['word','heard'],
+  ['sky','high'],['sky','fly'],['sky','die'],['sky','eye'],
+];
+clichePairsList.forEach(([a,b]) => {
+  if (!CLICHE_PAIRS.has(a)) CLICHE_PAIRS.set(a, new Set());
+  CLICHE_PAIRS.get(a).add(b);
+  if (!CLICHE_PAIRS.has(b)) CLICHE_PAIRS.set(b, new Set());
+  CLICHE_PAIRS.get(b).add(a);
+});
+
+function isClichePair(searchWord, resultWord) {
+  const sw = searchWord.toLowerCase();
+  const rw = resultWord.toLowerCase();
+  const pairs = CLICHE_PAIRS.get(sw);
+  return pairs ? pairs.has(rw) : false;
+}
+
+// ============ STATE ============
+let favorites = new Set();
+let currentWord = '';
+let lastResults = null;
+let loosenessSetting = 2; // 0=strict, 1=tight, 2=standard, 3=loose, 4=slant
+let meterMatchEnabled = false;
+// v4.1 — "Match syllables" toggle: dim word chips whose syllable count
+// doesn't equal the input word's syllable count. inputSyllableCount === 0
+// means the input syllable count is unknown (compound, missing dict entry,
+// etc.) and the toggle becomes a silent no-op.
+let syllableMatchEnabled = false;
+let inputSyllableCount = 0;
+let vibeTheme = ''; // empty = no filter
+const MAX_DISPLAY = 80;
+let searchHistory = [];
+const MAX_HISTORY = 15;
+let syllableFilter = 'all';
+let sortMode = 'score'; // v4.2 — Best Match default (frequency-aware)
+
+// ============ DOM REFS ============
+const searchInput = document.getElementById('searchInput');
+const searchBtn = document.getElementById('searchBtn');
+const randomBtn = document.getElementById('randomBtn');
+const resultsDiv = document.getElementById('results');
+const emptyState = document.getElementById('emptyState');
+const statusBar = document.getElementById('statusBar');
+const tooltip = document.getElementById('tooltip');
+const guideBtn = document.getElementById('guideBtn');
+const guidePanel = document.getElementById('guidePanel');
+const guideOverlay = document.getElementById('guideOverlay');
+const guideClose = document.getElementById('guideClose');
+const guideContent = document.getElementById('guideContent');
+const favToggle = document.getElementById('favToggle');
+const favPanel = document.getElementById('favPanel');
+const favWords = document.getElementById('favWords');
+const favClear = document.getElementById('favClear');
+const historyBar = document.getElementById('historyBar');
+const controlsBar = document.getElementById('controlsBar');
+const exportBtn = document.getElementById('exportBtn');
+const favExportBtn = document.getElementById('favExportBtn');
+const toastEl = document.getElementById('toast');
+const wordCountBadge = document.getElementById('wordCountBadge');
+
+// Lyrics panel refs
+const lyricsPanel = document.getElementById('lyricsPanel');
+const lyricsToggle = document.getElementById('lyricsToggle');
+const lyricsClose = document.getElementById('lyricsClose');
+const lyricsOverlay = document.getElementById('lyricsOverlay');
+const lyricsTitle = document.getElementById('lyricsTitle');
+const scratchpad = document.getElementById('scratchpad');
+const poemtext = document.getElementById('poemtext');
+const lyricsSaveBtn = document.getElementById('lyricsSaveBtn');
+const lyricsLoadBtn = document.getElementById('lyricsLoadBtn');
+const lyricsPDFBtn = document.getElementById('lyricsPDFBtn');
+const lyricsNewBtn = document.getElementById('lyricsNewBtn');
+const searchSelBtn = document.getElementById('searchSelBtn');
+
+// ============ INIT ============
+guideContent.innerHTML = GUIDE_HTML;
+wordCountBadge.innerHTML = DICT_READY ? '<span class="num">' + WORDS.length.toLocaleString() + '</span> words with phonemes' : 'loading dictionary&hellip;';
+
+// ============ TOAST ============
+let toastTimer = null;
+function showToast(msg) {
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2000);
+}
+
+// ============ GUIDE ============
+guideBtn.addEventListener('click', () => { guidePanel.classList.add('open'); guideOverlay.classList.add('open'); });
+guideClose.addEventListener('click', closeGuide);
+guideOverlay.addEventListener('click', closeGuide);
+function closeGuide() { guidePanel.classList.remove('open'); guideOverlay.classList.remove('open'); }
+
+// ============ INFO MODAL ============
+const rfInfoOverlay = document.getElementById('rfInfoOverlay');
+const rfInfoCloseBtn = document.getElementById('rfInfoCloseBtn');
+const rfInfoGuideBtn = document.getElementById('rfInfoGuideBtn');
+const rfInfoBtn = document.getElementById('rfInfoBtn');
+
+function showRfInfo() { rfInfoOverlay.style.display = 'flex'; }
+function hideRfInfo() { rfInfoOverlay.style.display = 'none'; }
+
+rfInfoOverlay.addEventListener('click', hideRfInfo);
+rfInfoCloseBtn.addEventListener('click', hideRfInfo);
+rfInfoGuideBtn.addEventListener('click', function() {
+  hideRfInfo();
+  guidePanel.classList.add('open');
+  guideOverlay.classList.add('open');
+});
+if (rfInfoBtn) rfInfoBtn.addEventListener('click', showRfInfo);
+
+// First visit
+try {
+  if (!localStorage.getItem('rf-has-visited')) {
+    localStorage.setItem('rf-has-visited', '1');
+    setTimeout(showRfInfo, 600);
+  }
+} catch(e) {}
+
+// ============ FAVORITES ============
+favToggle.addEventListener('click', () => favPanel.classList.toggle('open'));
+favClear.addEventListener('click', () => { favorites.clear(); renderFavorites(); renderResults(); });
+
+function toggleFavorite(word) {
+  if (favorites.has(word)) favorites.delete(word); else favorites.add(word);
+  renderFavorites();
+  document.querySelectorAll('.fav-star').forEach(star => {
+    star.classList.toggle('active', favorites.has(star.dataset.word));
+    star.textContent = favorites.has(star.dataset.word) ? '\u2605' : '\u2606';
+  });
+}
+
+function renderFavorites() {
+  if (favorites.size === 0) {
+    favWords.innerHTML = '<span style="color:var(--text-muted);font-size:0.85rem">Click the star on any word to add it here.</span>';
+    return;
+  }
+  favWords.innerHTML = [...favorites].map(w =>
+    '<span class="fav-chip" data-word="'+w+'">'+w+'<span class="remove" data-word="'+w+'">&times;</span></span>'
+  ).join('');
+  favWords.querySelectorAll('.fav-chip').forEach(chip => {
+    chip.addEventListener('click', e => {
+      if (e.target.classList.contains('remove')) { favorites.delete(e.target.dataset.word); renderFavorites(); renderResults(); }
+      else doSearch(chip.dataset.word);
+    });
+  });
+}
+renderFavorites();
+
+// ============ EXPORT ============
+function exportFavorites() {
+  if (favorites.size === 0) { showToast('No words in shortlist'); return; }
+  const lines = ['RhymeForge Shortlist'];
+  if (currentWord) lines.push('Search: ' + currentWord);
+  lines.push('---');
+  lines.push([...favorites].join(', '));
+  const text = lines.join('\n');
+  navigator.clipboard.writeText(text).then(() => showToast('Shortlist copied to clipboard!')).catch(() => showToast('Copy failed'));
+}
+exportBtn.addEventListener('click', exportFavorites);
+favExportBtn.addEventListener('click', exportFavorites);
+
+// ============ SEARCH HISTORY ============
+function addToHistory(word) {
+  searchHistory = searchHistory.filter(w => w !== word);
+  searchHistory.unshift(word);
+  if (searchHistory.length > MAX_HISTORY) searchHistory.pop();
+  renderHistory();
+}
+
+function renderHistory() {
+  if (searchHistory.length === 0) { historyBar.innerHTML = ''; return; }
+  historyBar.innerHTML = searchHistory.map(w =>
+    '<span class="history-chip" data-word="'+w+'">'+w+'</span>'
+  ).join('');
+  historyBar.querySelectorAll('.history-chip').forEach(chip => {
+    chip.addEventListener('click', () => doSearch(chip.dataset.word));
+  });
+}
+
+// ============ FILTER & SORT CONTROLS ============
+controlsBar.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    controlsBar.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    syllableFilter = btn.dataset.syl;
+    renderResults();
+  });
+});
+
+controlsBar.querySelectorAll('.sort-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    controlsBar.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    sortMode = btn.dataset.sort;
+    renderResults();
+  });
+});
+
+// Looseness slider for compound rhymes
+const loosenessSlider = document.getElementById('loosenessSlider');
+const loosenessLabel = document.getElementById('loosenessLabel');
+const loosenessNames = ['Strict', 'Tight', 'Standard', 'Loose', 'Slant'];
+loosenessSlider.addEventListener('input', () => {
+  const newLevel = parseInt(loosenessSlider.value);
+  loosenessSetting = newLevel;
+  loosenessLabel.textContent = loosenessNames[newLevel];
+  if (lastResults && lastResults.compound_raw) {
+    lastResults.compound = filterCompounds(lastResults.compound_raw, newLevel);
+  }
+  if (lastResults && lastResults.compound3_raw) {
+    lastResults.compound3 = filterCompounds3(lastResults.compound3_raw, newLevel);
+  }
+  renderResults();
+});
+
+// Meter Match toggle
+const meterCheck = document.getElementById('meterCheck');
+const meterToggle = document.getElementById('meterToggle');
+meterCheck.addEventListener('change', () => {
+  meterMatchEnabled = meterCheck.checked;
+  meterToggle.classList.toggle('active', meterMatchEnabled);
+  renderResults();
+});
+
+// v4.1 — Match Syllables toggle
+const sylMatchCheck = document.getElementById('sylMatchCheck');
+const sylMatchToggle = document.getElementById('sylMatchToggle');
+function refreshSylMatchToggleState() {
+  // If the input word's syllable count is unknown, the toggle is a no-op.
+  // Visually mark it disabled and surface an explanatory tooltip on hover.
+  const known = (typeof inputSyllableCount === 'number' && inputSyllableCount > 0);
+  if (!known) {
+    sylMatchToggle.classList.add('disabled');
+    sylMatchToggle.title = "Syllable count not detected for the input word, so syllable matching is unavailable.";
+  } else {
+    sylMatchToggle.classList.remove('disabled');
+    sylMatchToggle.title = 'Dim rhymes whose syllable count does not match the input word (' + inputSyllableCount + ' syllable' + (inputSyllableCount === 1 ? '' : 's') + ').';
+  }
+}
+sylMatchCheck.addEventListener('change', () => {
+  // Silent no-op when the input syllable count is unknown.
+  if (!(typeof inputSyllableCount === 'number' && inputSyllableCount > 0)) {
+    sylMatchCheck.checked = false;
+    syllableMatchEnabled = false;
+    sylMatchToggle.classList.remove('active');
+    return;
+  }
+  syllableMatchEnabled = sylMatchCheck.checked;
+  sylMatchToggle.classList.toggle('active', syllableMatchEnabled);
+  renderResults();
+});
+refreshSylMatchToggleState();
+
+// Vibe / Theme selector
+const vibeSelect = document.getElementById('vibeSelect');
+vibeSelect.addEventListener('change', () => {
+  vibeTheme = vibeSelect.value;
+  renderResults();
+});
+
+// ============ COMPOUND FILTERING (CLIENT-SIDE) ============
+function filterCompounds(rawCompounds, level) {
+  if (!rawCompounds || rawCompounds.length === 0) return [];
+  return rawCompounds.filter(c => c.minLevel <= level)
+    .sort((a, b) => b.score - a.score || a.syllables - b.syllables || a.word.localeCompare(b.word))
+    .slice(0, 150);
+}
+
+function filterCompounds3(rawCompounds, level) {
+  if (!rawCompounds || rawCompounds.length === 0) return [];
+  return rawCompounds.filter(c => c.minLevel <= level)
+    .sort((a, b) => b.score - a.score || a.syllables - b.syllables || a.word.localeCompare(b.word))
+    .slice(0, 100);
+}
+
+// ============ SEARCH ============
+searchBtn.addEventListener('click', () => doSearch(searchInput.value));
+searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(searchInput.value); });
+randomBtn.addEventListener('click', () => {
+  if (!WORDS.length) return;
+  const word = WORDS[Math.floor(Math.random() * WORDS.length)];
+  searchInput.value = word;
+  doSearch(word);
+});
+
+function doSearch(word) {
+  word = word.toLowerCase().trim();
+  if (!word) return;
+  // v4.2 — phrases rhyme on their last word ("my heart" -> "heart")
+  // instead of falling through to the letter-level G2P estimator.
+  if (word.includes(' ')) {
+    const parts = word.split(/\s+/).filter(Boolean);
+    word = parts[parts.length - 1];
+  }
+  if (!DICT_READY) {
+    PENDING_SEARCH = word;
+    statusBar.innerHTML = 'Loading the 54,000-word dictionary&hellip; <span class="phoneme">your search for &ldquo;' + word.replace(/[<>&"]/g, '') + '&rdquo; will run automatically</span>';
+    return;
+  }
+  searchInput.value = word;
+  searchInput.classList.add('searching');
+  setTimeout(() => searchInput.classList.remove('searching'), 600);
+  currentWord = word;
+  addToHistory(word);
+
+  const phonemes = getWordPhonemes(word);
+  const phonemeStr = phonemes.map(stripStress).join(' ');
+  // v4.1 — capture the input word's syllable count for the Match Syllables toggle.
+  inputSyllableCount = (phonemes && phonemes.length) ? countSyllables(phonemes) : 0;
+  if (typeof refreshSylMatchToggleState === 'function') refreshSylMatchToggleState();
+  const t0 = performance.now();
+  const results = findRhymes(word);
+  // v4.0 Change 9 — morphological shadow search (S/Z/T/D inflections only)
+  results.morph = findMorphologicalRhymes(word);
+  // Run compound searches at loosest level, then filter client-side
+  results.compound_raw = findCompoundRhymes(word, 4);
+  results.compound = filterCompounds(results.compound_raw, loosenessSetting);
+  results.compound3_raw = findCompound3Rhymes(word, 4);
+  results.compound3 = filterCompounds3(results.compound3_raw, loosenessSetting);
+  const ms = (performance.now() - t0).toFixed(1);
+  const totalCount = Object.values(results).reduce((sum, arr) => sum + (Array.isArray(arr) ? arr.length : 0), 0);
+
+  let clicheCount = 0;
+  if (results.perfect) results.perfect.forEach(w => { if (isClichePair(word, w.word)) clicheCount++; });
+
+  let statusHtml = 'Showing rhymes for <span class="word">' + word + '</span> <span class="phoneme">/' + phonemeStr + '/</span> <span class="count">&mdash; ' + totalCount + ' matches in ' + ms + 'ms</span>';
+  if (clicheCount > 0) {
+    statusHtml += '<span class="stats-pill" style="border-color:rgba(224,107,94,0.3)"><span style="color:var(--additive)">' + clicheCount + '</span> cliché pair' + (clicheCount>1?'s':'') + ' flagged</span>';
+  }
+  statusBar.innerHTML = statusHtml;
+
+  lastResults = results;
+  controlsBar.style.display = 'flex';
+  renderResults();
+}
+
+// ============ RENDER ============
+function filterWords(words) {
+  if (syllableFilter === 'all') return words;
+  if (syllableFilter === '4') return words.filter(w => w.syllables >= 4);
+  const n = parseInt(syllableFilter);
+  return words.filter(w => w.syllables === n);
+}
+
+function sortWords(words) {
+  const sorted = [...words];
+  // Vibe theme boost: theme-matching words float to top within their sort group
+  const themeSet = (vibeTheme && SONG_THEMES[vibeTheme]) ? SONG_THEMES[vibeTheme] : null;
+  function vibeBoost(w) { return themeSet && themeSet.has(w.word) ? 1 : 0; }
+  if (sortMode === 'alpha') {
+    sorted.sort((a,b) => {
+      if (themeSet) { const d = vibeBoost(b) - vibeBoost(a); if (d) return d; }
+      return a.word.localeCompare(b.word);
+    });
+  } else if (sortMode === 'score') {
+    sorted.sort((a,b) => {
+      if (themeSet) { const d = vibeBoost(b) - vibeBoost(a); if (d) return d; }
+      return (b.score||0) - (a.score||0) || a.syllables - b.syllables || a.word.localeCompare(b.word);
+    });
+  } else {
+    sorted.sort((a,b) => {
+      if (themeSet) { const d = vibeBoost(b) - vibeBoost(a); if (d) return d; }
+      return a.syllables - b.syllables || a.word.localeCompare(b.word);
+    });
+  }
+  return sorted;
+}
+
+function buildWordChip(w) {
+  const isFav = favorites.has(w.word);
+  const cliche = isClichePair(currentWord, w.word);
+  // v4.0 Change 12 — render the rhyming tail visually distinct
+  const dt = w.displayTail || '';
+  let label = w.word;
+  if (dt && w.word.endsWith(dt) && dt.length < w.word.length) {
+    const head = w.word.slice(0, w.word.length - dt.length);
+    label = head + '<span class="rhyme-tail">' + dt + '</span>';
+  }
+  // v4.0 Change 7 — show score badge when sort-by-score is active
+  const showScore = (typeof sortMode !== 'undefined' && sortMode === 'score' && typeof w.score === 'number');
+  const scoreBadge = showScore ? ' <span class="score-badge" title="Quality score">' + w.score + '</span>' : '';
+  // v4.1 — per-chip syllable indicator (small dots, one per syllable).
+  const sylCount = (typeof w.syllables === 'number' && w.syllables > 0) ? w.syllables : 0;
+  let sylDots = '';
+  if (sylCount > 0) {
+    sylDots = ' <span class="syl-dots" aria-label="' + sylCount + ' syllable' + (sylCount === 1 ? '' : 's') + '" title="' + sylCount + ' syllable' + (sylCount === 1 ? '' : 's') + '">';
+    for (let i = 0; i < sylCount; i++) sylDots += '<span class="syl-dot"></span>';
+    sylDots += '</span>';
+  }
+  // v4.1 — syllable-match de-emphasis. Driven by the "Match syllables" toggle.
+  let sylClass = '';
+  if (syllableMatchEnabled && typeof inputSyllableCount === 'number' && inputSyllableCount > 0 && sylCount > 0) {
+    sylClass = (sylCount === inputSyllableCount) ? ' syl-match' : ' syl-mismatch';
+  }
+  // v4.0 Change 13 — <button> for keyboard / screen-reader accessibility
+  return '<button type="button" class="word-chip' + (cliche ? ' cliche' : '') + sylClass + '" data-word="'+w.word+'" data-phonemes="'+w.phonemes+'" data-syllables="'+sylCount+'" ' + (cliche ? 'title="Cliché pairing with ' + currentWord + ' — consider fresher alternatives"' : '') + '>'+label+scoreBadge+sylDots+' <span class="fav-star '+(isFav?'active':'')+'" data-word="'+w.word+'" role="button" aria-label="Toggle favorite">'+(isFav?'\u2605':'\u2606')+'</span></button>';
+}
+
+function buildCompoundChip(c) {
+  const phrase = c.words.join(' ');
+  const isFav = favorites.has(phrase);
+  let wordDisplay = c.words[0];
+  for (let i = 1; i < c.words.length; i++) {
+    wordDisplay += '<span class="compound-sep">\u00b7</span>' + c.words[i];
+  }
+  // Extra CSS classes for meter and theme
+  let extraClass = '';
+  if (meterMatchEnabled && c.stressDist !== undefined) {
+    if (c.stressDist === 0) extraClass += ' meter-match';
+    else if (c.stressDist > 4) extraClass += ' meter-clash';
+  }
+  // Theme match: check if any word is in the active vibe theme
+  let hasThemeMatch = false;
+  if (vibeTheme) {
+    const themeSet = SONG_THEMES[vibeTheme];
+    if (themeSet) hasThemeMatch = c.words.some(w => themeSet.has(w));
+    if (hasThemeMatch) extraClass += ' theme-match';
+  }
+  // Stress pattern display (e.g. "10" → "da-DUM")
+  const stressDisplay = c.stress ? c.stress.replace(/1/g, '\u25cf').replace(/0/g, '\u25cb').replace(/2/g, '\u25d1') : '';
+  return '<span class="compound-chip'+extraClass+'" data-word="'+phrase+'" data-words="'+c.words.join(',')+'" data-score="'+c.score+'" data-stress="'+(c.stress||'')+'" data-stressdist="'+(c.stressDist||0)+'" title="'+phrase+' (score: '+c.score+', meter: '+(c.stressDist===0?'perfect':c.stressDist<=2?'close':'loose')+')">' +
+    wordDisplay +
+    (stressDisplay ? '<span class="stress-indicator">'+stressDisplay+'</span>' : '') +
+    ' <span class="fav-star '+(isFav?'active':'')+'" data-word="'+phrase+'">'+(isFav?'\u2605':'\u2606')+'</span></span>';
+}
+
+function attachCompoundHandlers(container) {
+  container.querySelectorAll('.compound-chip').forEach(chip => {
+    chip.addEventListener('click', e => {
+      if (e.target.classList.contains('fav-star')) { e.stopPropagation(); toggleFavorite(e.target.dataset.word); return; }
+      const phrase = chip.dataset.word;
+      navigator.clipboard.writeText(phrase).then(() => {
+        showToast('Copied "' + phrase + '" to clipboard');
+      });
+    });
+    chip.addEventListener('mouseenter', () => {
+      tooltip.textContent = chip.dataset.word + ' (score: ' + chip.dataset.score + ')';
+      tooltip.classList.add('show');
+    });
+    chip.addEventListener('mousemove', e => { tooltip.style.left=(e.clientX+12)+'px'; tooltip.style.top=(e.clientY-30)+'px'; });
+    chip.addEventListener('mouseleave', () => tooltip.classList.remove('show'));
+  });
+}
+
+function attachChipHandlers(container) {
+  container.querySelectorAll('.word-chip').forEach(chip => {
+    chip.addEventListener('click', e => {
+      if (e.target.classList.contains('fav-star')) { e.stopPropagation(); toggleFavorite(e.target.dataset.word); return; }
+      doSearch(chip.dataset.word);
+      document.getElementById('mainContent').scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    chip.addEventListener('mouseenter', () => {
+      const ph = chip.dataset.phonemes;
+      let tipText = '/' + ph.split(' ').map(stripStress).join(' ') + '/';
+      if (chip.classList.contains('cliche')) tipText += '  ⚠ Cliché pairing';
+      tooltip.textContent = tipText;
+      tooltip.classList.add('show');
+    });
+    chip.addEventListener('mousemove', e => { tooltip.style.left=(e.clientX+12)+'px'; tooltip.style.top=(e.clientY-30)+'px'; });
+    chip.addEventListener('mouseleave', () => tooltip.classList.remove('show'));
+  });
+}
+
+function renderWordGroup(words, maxDisplay) {
+  let html = '';
+  let displayed = 0;
+
+  if (sortMode === 'syllables') {
+    const groups = {};
+    words.forEach(w => { if (!groups[w.syllables]) groups[w.syllables] = []; groups[w.syllables].push(w); });
+    for (const [syl, grp] of Object.entries(groups).sort((a,b) => a[0]-b[0])) {
+      if (displayed >= maxDisplay) break;
+      html += '<div class="syllable-group"><div class="syllable-label">'+syl+' syllable'+(syl>1?'s':'')+'</div><div class="words-grid">';
+      for (const w of grp) {
+        if (displayed >= maxDisplay) break;
+        html += buildWordChip(w);
+        displayed++;
+      }
+      html += '</div></div>';
+    }
+  } else {
+    html += '<div class="words-grid">';
+    for (const w of words) {
+      if (displayed >= maxDisplay) break;
+      html += buildWordChip(w);
+      displayed++;
+    }
+    html += '</div>';
+  }
+  return { html, displayed };
+}
+
+function renderResults() {
+  if (!lastResults) return;
+  const results = lastResults;
+  emptyState.style.display = 'none';
+  let html = '';
+
+  for (const type of RHYME_TYPES) {
+    let words;
+    if (type.combineWith) {
+      words = [...(results[type.key]||[]), ...(results[type.combineWith]||[])];
+    } else {
+      words = results[type.key] || [];
+    }
+
+    // v4.0 — pull sub-tier (perfectNear / vowelSlant) for combined header count
+    let subTierWords = [];
+    if (type.subTier) {
+      subTierWords = filterWords(sortWords(results[type.subTier.key] || []));
+    }
+
+    words = filterWords(words);
+    words = sortWords(words);
+
+    let clicheInSection = 0;
+    if (type.key === 'perfect') {
+      words.forEach(w => { if (isClichePair(currentWord, w.word)) clicheInSection++; });
+    }
+
+    const mainCount = words.length;
+    const subCount = subTierWords.length;
+    const totalCount = mainCount + subCount;
+    const isOpen = totalCount > 0;
+    const headerCountLabel = subCount > 0
+      ? totalCount + ' <span style="opacity:0.7;font-weight:400">(incl. ' + subCount + ' ' + type.subTier.title.replace(' Rhymes','').replace(/ /g,'-') + ')</span>'
+      : String(totalCount);
+
+    html += '<div class="result-section '+type.cssClass+(isOpen?' open':'')+'" data-type="'+type.key+'">';
+    html += '<div class="section-header" onclick="this.parentElement.classList.toggle(\'open\')"><div class="section-header-left"><div class="section-dot"></div><span class="section-title">'+(type.combineWith ? 'Additive & Subtractive' : type.title)+'</span><span class="section-subtitle">'+(type.combineWith ? 'Extra consonants added or dropped' : type.subtitle)+'</span></div><div style="display:flex;align-items:center;gap:0.5rem"><span class="section-badge">'+headerCountLabel+'</span><span class="section-chevron">&#9660;</span></div></div>';
+    html += '<div class="section-content"><div class="section-inner">';
+
+    if (totalCount === 0) {
+      html += '<p style="color:var(--text-muted);font-size:0.85rem;font-style:italic">No matches' + (syllableFilter !== 'all' ? ' for this syllable filter' : '') + '.</p>';
+    } else {
+      if (clicheInSection > 0) {
+        html += '<div class="cliche-note">⚠ ' + clicheInSection + ' overused pairing' + (clicheInSection>1?'s':'') + ' flagged — consider fresher alternatives</div>';
+      }
+
+      // v4.0 — Vowel-Slant pinned to TOP of Assonance; Voice-Pair stays below Perfect main.
+      const subPinTop = type.subTier && type.subTier.pinTop;
+
+      function renderSubTier() {
+        if (!type.subTier || subTierWords.length === 0) return '';
+        let s = '<div class="' + (type.key === 'perfect' ? 'voice-pair-block' : 'vowel-slant-block') + '">';
+        s += '<div class="sub-tier-divider"><span class="sub-tier-name">' + type.subTier.title + '</span><span class="sub-tier-subtitle">' + type.subTier.subtitle + '</span><span class="sub-tier-count">' + subTierWords.length + '</span></div>';
+        const sub = renderWordGroup(subTierWords, MAX_DISPLAY);
+        s += sub.html;
+        s += '</div>';
+        return s;
+      }
+
+      if (subPinTop) {
+        html += renderSubTier();
+      }
+
+      const { html: groupHtml, displayed } = renderWordGroup(words, MAX_DISPLAY);
+      html += groupHtml;
+
+      if (mainCount > MAX_DISPLAY) {
+        html += '<div style="text-align:center;padding:0.5rem 0"><button class="btn btn-secondary show-more-btn" data-type="'+type.key+'" style="padding:0.4rem 1rem;font-size:0.8rem">Show all '+mainCount+' results</button></div>';
+      }
+
+      if (!subPinTop) {
+        html += renderSubTier();
+      }
+    }
+    html += '</div></div></div>';
+  }
+
+  // v4.0 Change 9 — morphological shadow section ("Rhymes for <root>")
+  if (results.morph && results.morph.results) {
+    const m = results.morph;
+    const sumCount = ['perfect','perfectNear','family','additive','subtractive','assonance','vowelSlant','consonance','ending']
+      .reduce((s, k) => s + (m.results[k] ? m.results[k].length : 0), 0);
+    if (sumCount > 5) {
+      html += '<div class="morph-section">';
+      html += '<div class="morph-header">Also try rhymes for the root word: <em>' + m.root + '</em></div>';
+      // Inline a compact preview of the top perfect/family/voice-pair matches.
+      const previewTypes = ['perfect','perfectNear','family'];
+      let previewWords = [];
+      for (const k of previewTypes) {
+        if (m.results[k]) previewWords = previewWords.concat(m.results[k].slice(0, 8));
+      }
+      previewWords = previewWords.slice(0, 24);
+      html += '<div class="words-grid">';
+      for (const w of previewWords) html += buildWordChip(w);
+      html += '</div>';
+      html += '<div style="text-align:center;padding:0.6rem 0 0;"><button class="btn btn-secondary morph-jump-btn" data-word="' + m.root + '" style="padding:0.4rem 1rem;font-size:0.8rem">Search "' + m.root + '" instead</button></div>';
+      html += '</div>';
+    }
+  }
+
+  // === COMPOUND RHYMES SECTION (2-word) ===
+  // Apply meter filter and vibe sort boost
+  let compoundWords = results.compound || [];
+  if (meterMatchEnabled) {
+    compoundWords = compoundWords.filter(c => (c.stressDist || 0) <= 4);
+  }
+  if (vibeTheme && SONG_THEMES[vibeTheme]) {
+    const themeSet = SONG_THEMES[vibeTheme];
+    compoundWords = [...compoundWords].sort((a, b) => {
+      const aTheme = a.words.some(w => themeSet.has(w)) ? 1 : 0;
+      const bTheme = b.words.some(w => themeSet.has(w)) ? 1 : 0;
+      if (aTheme !== bTheme) return bTheme - aTheme;
+      return b.score - a.score;
+    });
+  }
+  const compoundCount = compoundWords.length;
+  const compoundOpen = compoundCount > 0;
+  html += '<div class="result-section type-compound'+(compoundOpen?' open':'')+'" data-type="compound">';
+  html += '<div class="section-header" onclick="this.parentElement.classList.toggle(\'open\')"><div class="section-header-left"><div class="section-dot"></div><span class="section-title">Compound Rhymes</span><span class="section-subtitle">Two-word mosaic matches</span></div><div style="display:flex;align-items:center;gap:0.5rem"><span class="section-badge">'+compoundCount+'</span><span class="section-chevron">&#9660;</span></div></div>';
+  html += '<div class="section-content"><div class="section-inner">';
+  if (compoundCount === 0) {
+    html += '<p style="color:var(--text-muted);font-size:0.85rem;font-style:italic">No compound rhymes found.</p>';
+  } else {
+    const MAX_COMPOUND = 80;
+    html += '<div class="words-grid">';
+    const showCount = Math.min(compoundCount, MAX_COMPOUND);
+    for (let i = 0; i < showCount; i++) {
+      html += buildCompoundChip(compoundWords[i]);
+    }
+    html += '</div>';
+    if (compoundCount > MAX_COMPOUND) {
+      html += '<div style="text-align:center;padding:0.5rem 0"><button class="btn btn-secondary show-more-compound" style="padding:0.4rem 1rem;font-size:0.8rem">Show all '+compoundCount+' results</button></div>';
+    }
+  }
+  html += '</div></div></div>';
+
+  // === THREE-WORD COMPOUND RHYMES SECTION ===
+  let compound3Words = results.compound3 || [];
+  if (meterMatchEnabled) {
+    compound3Words = compound3Words.filter(c => (c.stressDist || 0) <= 4);
+  }
+  if (vibeTheme && SONG_THEMES[vibeTheme]) {
+    const themeSet = SONG_THEMES[vibeTheme];
+    compound3Words = [...compound3Words].sort((a, b) => {
+      const aTheme = a.words.some(w => themeSet.has(w)) ? 1 : 0;
+      const bTheme = b.words.some(w => themeSet.has(w)) ? 1 : 0;
+      if (aTheme !== bTheme) return bTheme - aTheme;
+      return b.score - a.score;
+    });
+  }
+  const compound3Count = compound3Words.length;
+  const compound3Open = compound3Count > 0;
+  html += '<div class="result-section type-compound3'+(compound3Open?' open':'')+'" data-type="compound3">';
+  html += '<div class="section-header" onclick="this.parentElement.classList.toggle(\'open\')"><div class="section-header-left"><div class="section-dot"></div><span class="section-title">Three-Word Compounds</span><span class="section-subtitle">Mosaic phrases with three words</span></div><div style="display:flex;align-items:center;gap:0.5rem"><span class="section-badge">'+compound3Count+'</span><span class="section-chevron">&#9660;</span></div></div>';
+  html += '<div class="section-content"><div class="section-inner">';
+  if (compound3Count === 0) {
+    html += '<p style="color:var(--text-muted);font-size:0.85rem;font-style:italic">No three-word compounds found.</p>';
+  } else {
+    const MAX_COMPOUND3 = 50;
+    html += '<div class="words-grid">';
+    const show3Count = Math.min(compound3Count, MAX_COMPOUND3);
+    for (let i = 0; i < show3Count; i++) {
+      html += buildCompoundChip(compound3Words[i]);
+    }
+    html += '</div>';
+    if (compound3Count > MAX_COMPOUND3) {
+      html += '<div style="text-align:center;padding:0.5rem 0"><button class="btn btn-secondary show-more-compound3" style="padding:0.4rem 1rem;font-size:0.8rem">Show all '+compound3Count+' results</button></div>';
+    }
+  }
+  html += '</div></div></div>';
+
+  // Show/hide looseness slider based on compound results
+  const compoundLooseGroup = document.getElementById('compoundLooseGroup');
+  if (compoundCount > 0 || compound3Count > 0) {
+    compoundLooseGroup.style.display = 'flex';
+  } else {
+    compoundLooseGroup.style.display = 'none';
+  }
+
+  resultsDiv.innerHTML = html;
+  attachChipHandlers(resultsDiv);
+  attachCompoundHandlers(resultsDiv);
+
+  // "Show more" for 2-word compound section
+  const showMoreCompound = resultsDiv.querySelector('.show-more-compound');
+  if (showMoreCompound) {
+    showMoreCompound.addEventListener('click', e => {
+      e.stopPropagation();
+      const cWords = lastResults.compound || [];
+      let innerHtml = '<div class="words-grid">';
+      cWords.forEach(c => { innerHtml += buildCompoundChip(c); });
+      innerHtml += '</div>';
+      const inner = showMoreCompound.closest('.result-section').querySelector('.section-inner');
+      if (inner) { inner.innerHTML = innerHtml; attachCompoundHandlers(inner); }
+    });
+  }
+
+  // "Show more" for 3-word compound section
+  const showMoreCompound3 = resultsDiv.querySelector('.show-more-compound3');
+  if (showMoreCompound3) {
+    showMoreCompound3.addEventListener('click', e => {
+      e.stopPropagation();
+      const cWords = lastResults.compound3 || [];
+      let innerHtml = '<div class="words-grid">';
+      cWords.forEach(c => { innerHtml += buildCompoundChip(c); });
+      innerHtml += '</div>';
+      const inner = showMoreCompound3.closest('.result-section').querySelector('.section-inner');
+      if (inner) { inner.innerHTML = innerHtml; attachCompoundHandlers(inner); }
+    });
+  }
+
+  resultsDiv.querySelectorAll('.show-more-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const typeKey = btn.dataset.type;
+      let words;
+      if (typeKey === 'additive') words = [...(lastResults.additive||[]),...(lastResults.subtractive||[])];
+      else words = lastResults[typeKey] || [];
+      words = filterWords(words);
+      words = sortWords(words);
+      const { html: innerHtml } = renderWordGroup(words, Infinity);
+      const inner = btn.closest('.result-section').querySelector('.section-inner');
+      if (inner) { inner.innerHTML = innerHtml; attachChipHandlers(inner); }
+    });
+  });
+
+  // v4.0 Change 9 — morphological "search root instead" button
+  resultsDiv.querySelectorAll('.morph-jump-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const w = btn.dataset.word;
+      if (w) doSearch(w);
+    });
+  });
+}
+
+// ============ PHASE 5: LYRICS PANEL ============
+
+// --- Lyrics state (in-memory only, no browser cache) ---
+let lyricsState = { title: '', scratch: '', poem: '' };
+
+// Track state on input (in-memory only)
+lyricsTitle.addEventListener('input', () => { lyricsState.title = lyricsTitle.value; });
+scratchpad.addEventListener('input', () => { lyricsState.scratch = scratchpad.value; });
+poemtext.addEventListener('input', () => { lyricsState.poem = poemtext.value; });
+
+// --- Panel toggle ---
+function openLyricsPanel() {
+  lyricsPanel.classList.add('open');
+  lyricsOverlay.classList.add('open');
+  lyricsToggle.classList.add('active');
+}
+function closeLyricsPanel() {
+  lyricsPanel.classList.remove('open');
+  lyricsOverlay.classList.remove('open');
+  lyricsToggle.classList.remove('active');
+}
+
+lyricsToggle.addEventListener('click', () => {
+  if (lyricsPanel.classList.contains('open')) closeLyricsPanel();
+  else openLyricsPanel();
+});
+lyricsClose.addEventListener('click', closeLyricsPanel);
+lyricsOverlay.addEventListener('click', closeLyricsPanel);
+
+// --- Save (native Save As dialog) ---
+lyricsSaveBtn.addEventListener('click', async () => {
+  const data = {
+    rhymeforge: true,
+    version: 1,
+    title: lyricsState.title || 'Untitled',
+    scratch: lyricsState.scratch,
+    poem: lyricsState.poem,
+    savedAt: new Date().toISOString()
+  };
+  const json = JSON.stringify(data, null, 2);
+  const filename = (lyricsState.title || 'untitled').replace(/[^a-zA-Z0-9_\- ]/g, '').trim().replace(/\s+/g, '_') + '.rhymeforge.json';
+
+  // Try native File System Access API (Chrome/Edge on Mac/Win)
+  if (window.showSaveFilePicker) {
+    try {
+      const handle = await window.showSaveFilePicker({
+        suggestedName: filename,
+        types: [{
+          description: 'RhymeForge Project',
+          accept: { 'application/json': ['.json'] }
+        }]
+      });
+      const writable = await handle.createWritable();
+      await writable.write(json);
+      await writable.close();
+      showToast('Saved: ' + handle.name);
+      return;
+    } catch (e) {
+      if (e.name === 'AbortError') return; // user cancelled
+    }
+  }
+
+  // Fallback: download via blob link
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Downloaded ' + filename);
+});
+
+// --- Open (native Open dialog) ---
+lyricsLoadBtn.addEventListener('click', async () => {
+  // Try native File System Access API
+  if (window.showOpenFilePicker) {
+    try {
+      const [handle] = await window.showOpenFilePicker({
+        types: [{
+          description: 'RhymeForge Project',
+          accept: { 'application/json': ['.json'] }
+        }],
+        multiple: false
+      });
+      const file = await handle.getFile();
+      const text = await file.text();
+      const data = JSON.parse(text);
+      if (!data.rhymeforge) {
+        showToast('Not a RhymeForge file');
+        return;
+      }
+      lyricsState.title = data.title || '';
+      lyricsState.scratch = data.scratch || '';
+      lyricsState.poem = data.poem || '';
+      lyricsTitle.value = lyricsState.title;
+      scratchpad.value = lyricsState.scratch;
+      poemtext.value = lyricsState.poem;
+      showToast('Opened: ' + handle.name);
+      return;
+    } catch (e) {
+      if (e.name === 'AbortError') return; // user cancelled
+      // Fall through to input fallback
+    }
+  }
+
+  // Fallback: hidden file input
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.addEventListener('change', async () => {
+    const file = input.files[0];
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const data = JSON.parse(text);
+      if (!data.rhymeforge) {
+        showToast('Not a RhymeForge file');
+        return;
+      }
+      lyricsState.title = data.title || '';
+      lyricsState.scratch = data.scratch || '';
+      lyricsState.poem = data.poem || '';
+      lyricsTitle.value = lyricsState.title;
+      scratchpad.value = lyricsState.scratch;
+      poemtext.value = lyricsState.poem;
+      showToast('Opened: ' + file.name);
+    } catch (e) {
+      showToast('Could not read file');
+    }
+  });
+  input.click();
+});
+
+// --- New ---
+lyricsNewBtn.addEventListener('click', () => {
+  if ((lyricsState.title || lyricsState.scratch || lyricsState.poem) &&
+      !confirm('Start fresh? (Unsaved changes will be lost)')) return;
+  lyricsState.title = '';
+  lyricsState.scratch = '';
+  lyricsState.poem = '';
+  lyricsTitle.value = '';
+  scratchpad.value = '';
+  poemtext.value = '';
+  showToast('New blank page');
+});
+
+// --- PDF Export ---
+lyricsPDFBtn.addEventListener('click', () => {
+  const title = lyricsState.title || 'Untitled';
+  const poem = poemtext.value || '';
+  const scratch = scratchpad.value || '';
+  const dateStr = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+
+  const printHtml = '<!DOCTYPE html><html><head><title>' + title + '</title>' +
+    '<style>' +
+    'body{font-family:Georgia,serif;margin:1.5in 1.2in;color:#222;line-height:1.6}' +
+    'h1{font-size:26px;margin-bottom:0.3in;border-bottom:2px solid #d4a853;padding-bottom:0.15in;color:#333}' +
+    '.poem{white-space:pre-wrap;font-size:14px;line-height:1.8;margin-bottom:0.5in}' +
+    '.notes-section{margin-top:0.5in;padding-top:0.3in;border-top:1px solid #ccc}' +
+    '.notes-section h2{font-size:16px;color:#666;margin-bottom:0.15in}' +
+    '.notes{white-space:pre-wrap;font-size:12px;color:#555;font-family:Courier,monospace}' +
+    '.footer{margin-top:0.5in;font-size:11px;color:#999;text-align:center}' +
+    '@media print{body{margin:0.8in}}' +
+    '</style></head><body>' +
+    '<h1>' + title.replace(/</g,'&lt;') + '</h1>' +
+    '<div class="poem">' + poem.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</div>' +
+    (scratch ? '<div class="notes-section"><h2>Notes</h2><div class="notes">' + scratch.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</div></div>' : '') +
+    '<div class="footer">' + dateStr + ' &mdash; Created with RhymeForge</div>' +
+    '</body></html>';
+
+  const w = window.open('', '_blank', 'width=800,height=700');
+  w.document.write(printHtml);
+  w.document.close();
+  setTimeout(() => w.print(), 300);
+});
+
+// --- Highlight-to-search ---
+let selectionWord = '';
+
+function handleTextSelection(e) {
+  const textarea = e.target;
+  const start = textarea.selectionStart;
+  const end = textarea.selectionEnd;
+  if (start === end) { searchSelBtn.style.display = 'none'; return; }
+
+  const selected = textarea.value.substring(start, end).trim();
+  // Only trigger for single words or short phrases
+  if (!selected || selected.length > 40) { searchSelBtn.style.display = 'none'; return; }
+
+  // Get just the last word if multi-word
+  const words = selected.split(/\s+/);
+  selectionWord = words.length === 1 ? words[0] : selected;
+
+  const label = selectionWord.length > 18 ? selectionWord.substring(0, 15) + '...' : selectionWord;
+  searchSelBtn.textContent = 'Rhyme: ' + label;
+  searchSelBtn.style.display = 'block';
+
+  // Position near cursor
+  const rect = textarea.getBoundingClientRect();
+  searchSelBtn.style.left = (e.clientX || (rect.left + rect.width / 2)) + 'px';
+  searchSelBtn.style.top = (e.clientY ? e.clientY - 40 : rect.top) + 'px';
+}
+
+scratchpad.addEventListener('mouseup', handleTextSelection);
+poemtext.addEventListener('mouseup', handleTextSelection);
+
+searchSelBtn.addEventListener('mousedown', e => {
+  e.preventDefault(); // prevent losing textarea selection
+});
+searchSelBtn.addEventListener('click', () => {
+  if (selectionWord) {
+    doSearch(selectionWord);
+    searchSelBtn.style.display = 'none';
+  }
+});
+
+// Hide search button when clicking elsewhere
+document.addEventListener('mousedown', e => {
+  if (e.target !== searchSelBtn && e.target !== scratchpad && e.target !== poemtext) {
+    searchSelBtn.style.display = 'none';
+  }
+});
+
+// ============ KEYBOARD SHORTCUTS ============
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); searchInput.focus(); searchInput.select(); }
+  if (e.key === 'Escape') {
+    closeGuide();
+    favPanel.classList.remove('open');
+    closeLyricsPanel();
+    searchSelBtn.style.display = 'none';
+  }
+});
+
+// Auto-search from URL param ?q=word and embed mode ?embed=1
+// (both used by the lyrics panel in the chord builder).
+(function() {
+    const params = new URLSearchParams(window.location.search);
+    const isEmbed = params.get('embed') === '1';
+    if (isEmbed) {
+        document.body.classList.add('uz-embed');
+        // v4.0 — show the "Import to UZ" button only inside the UZ embed.
+        const importBtn = document.getElementById('lyricsImportToUZBtn');
+        if (importBtn) importBtn.style.display = '';
+    }
+    const q = params.get('q');
+    if (q) {
+        searchInput.value = q;
+        doSearch(q);
+    } else {
+        searchInput.focus();
+    }
+})();
+
+// Listen for postMessage from parent to trigger search (for already-loaded iframe)
+window.addEventListener('message', e => {
+    if (e.data && e.data.type === 'rhymeSearch' && e.data.word) {
+        searchInput.value = e.data.word;
+        doSearch(e.data.word);
+    }
+});
+
+// ============================================================
+// v4.0 — IMPORT TO UNDERCOVER ZEST (embed-only)
+// ============================================================
+// Lets the user open a .rhymeforge.json file inside the embedded rhymeforge
+// (the iframe shown inside UZ's lyrics panel) and ship its text content back
+// to the host UZ frame, where it gets appended to state.lyrics.freeText.
+// Standalone rhymeforge never wires this up because the button stays hidden.
+(function() {
+    const importBtn = document.getElementById('lyricsImportToUZBtn');
+    if (!importBtn) return;
+
+    function openModal(parsed) {
+        // Build the field-picker modal once, lazily.
+        let modal = document.getElementById('uzImportModal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'uzImportModal';
+            modal.className = 'rf-info-overlay uz-import-overlay';
+            modal.style.display = 'none';
+            modal.innerHTML = `
+              <div class="rf-info-modal uz-import-modal" onclick="event.stopPropagation()">
+                <h3>Import lyrics into Undercover Zest</h3>
+                <div class="uz-import-meta"></div>
+                <p class="uz-import-help">Choose what to send across. The text will be appended below any lyrics already in your UZ freewrite area.</p>
+                <div class="uz-import-choices">
+                  <label><input type="radio" name="uzImportField" value="poem" checked> <strong>Polished poem only</strong> <span class="muted">— the contents of "Your Poem / Lyrics"</span></label>
+                  <label><input type="radio" name="uzImportField" value="scratch"> <strong>Scratch only</strong> <span class="muted">— raw scratchpad ideas</span></label>
+                  <label><input type="radio" name="uzImportField" value="both"> <strong>Both, stitched</strong> <span class="muted">— scratch above poem with a divider</span></label>
+                </div>
+                <div class="uz-import-actions">
+                  <button type="button" class="lyrics-btn" id="uzImportCancel">Cancel</button>
+                  <button type="button" class="lyrics-btn primary" id="uzImportConfirm">Send to UZ</button>
+                </div>
+              </div>
+            `;
+            modal.addEventListener('click', () => { modal.style.display = 'none'; });
+            document.body.appendChild(modal);
+        }
+        // Populate the meta line with the file's title + savedAt.
+        const meta = modal.querySelector('.uz-import-meta');
+        const savedDate = parsed.savedAt ? new Date(parsed.savedAt).toLocaleString() : '';
+        meta.innerHTML = '<strong>' + (parsed.title ? escapeForAttr(parsed.title) : '<em>Untitled</em>') + '</strong>'
+                       + (savedDate ? ' <span class="muted">— saved ' + savedDate + '</span>' : '');
+
+        const cancelBtn = modal.querySelector('#uzImportCancel');
+        const confirmBtn = modal.querySelector('#uzImportConfirm');
+        const cancel = () => { modal.style.display = 'none'; };
+        const confirm = () => {
+            const field = (modal.querySelector('input[name="uzImportField"]:checked') || {}).value || 'poem';
+            const poem = (parsed.poem || '').trim();
+            const scratch = (parsed.scratch || '').trim();
+            let text;
+            if (field === 'poem') text = poem;
+            else if (field === 'scratch') text = scratch;
+            else text = (scratch ? '--- scratch notes ---\n' + scratch + '\n\n' : '') + poem;
+
+            if (!text) {
+                showToast('Nothing to import — the chosen field was empty.');
+                cancel();
+                return;
+            }
+
+            // Send to parent UZ frame. The host listens for this exact message type.
+            try {
+                window.parent.postMessage({
+                    type: 'rhymeforge-import-to-uz',
+                    payload: {
+                        title: parsed.title || '',
+                        text: text,
+                        field: field,
+                        savedAt: parsed.savedAt || null
+                    }
+                }, '*');
+                showToast('Sent to Undercover Zest.');
+            } catch (e) {
+                showToast('Could not reach Undercover Zest.');
+            }
+            cancel();
+        };
+
+        // Wire up handlers each time (replacing prior handlers via cloneNode).
+        const newCancel = cancelBtn.cloneNode(true);
+        cancelBtn.parentNode.replaceChild(newCancel, cancelBtn);
+        newCancel.addEventListener('click', e => { e.stopPropagation(); cancel(); });
+        const newConfirm = confirmBtn.cloneNode(true);
+        confirmBtn.parentNode.replaceChild(newConfirm, confirmBtn);
+        newConfirm.addEventListener('click', e => { e.stopPropagation(); confirm(); });
+
+        modal.style.display = '';
+    }
+
+    function escapeForAttr(s) {
+        return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    async function readFileAndShow(file) {
+        try {
+            const text = await file.text();
+            const parsed = JSON.parse(text);
+            if (!parsed || parsed.rhymeforge !== true) {
+                showToast('Not a RhymeForge file.');
+                return;
+            }
+            openModal(parsed);
+        } catch (e) {
+            showToast('Could not read the file.');
+        }
+    }
+
+    importBtn.addEventListener('click', async () => {
+        // Try modern File System Access API first.
+        if (window.showOpenFilePicker) {
+            try {
+                const [handle] = await window.showOpenFilePicker({
+                    types: [{ description: 'RhymeForge Project', accept: { 'application/json': ['.json'] } }],
+                    multiple: false
+                });
+                const file = await handle.getFile();
+                await readFileAndShow(file);
+                return;
+            } catch (e) {
+                if (e.name === 'AbortError') return;
+                // fall through to input fallback
+            }
+        }
+        // Fallback: hidden file input
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        input.addEventListener('change', async () => {
+            const file = input.files[0];
+            if (!file) return;
+            await readFileAndShow(file);
+        });
+        input.click();
+    });
+})();
+
+</script>
+<script src="uz-nav.js"></script>
+<script src="uz-footer.js"></script>
+</body>
+</html>

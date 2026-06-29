@@ -1,0 +1,492 @@
+/* Undercover Zest — mobile view (breakpoint-mounted alternate UI of the same site).
+   Stage 1: shell frame + theme tokens + a read render of the shared v2 song on one bar ruler.
+   Theme is driven by the key's mode (major ⇒ Bright, minor ⇒ Shadow), not a manual toggle.
+   All UI lives under #app-mobile so it never collides with the (hidden) desktop styles. */
+
+/* ── theme tokens (brief §4.1) ───────────────────────────────────────────── */
+#app-mobile.uz-bright {
+  --bg:#fbf7ee; --panel:#fffdf8; --panel2:#ffffff; --line:#e7e0d2; --line2:#ece3cf;
+  --ink:#2b2b2b; --muted:#6f685a; --faint:#8a8378; --gold:#c8a04a; --goldDeep:#a98432;
+  --goldSoft:#faf3e2; --grid:#ece3cf; --red:#c0392b; --selBg:#fdf3df; --barline:#cfc6ae;
+}
+#app-mobile.uz-shadow {
+  --bg:#1f222b; --panel:#20232c; --panel2:#232732; --line:#343845; --line2:#3a3f4c;
+  --ink:#f0ece2; --muted:#a59e90; --faint:#8a8378; --gold:#c8a04a; --goldDeep:#e0c878;
+  --goldSoft:#2a2d1f; --grid:#2a2d36; --red:#e06b5e; --selBg:#2c2a22; --barline:#4a4f5e;
+}
+
+/* ── frame ───────────────────────────────────────────────────────────────── */
+#app-mobile {
+  font-family:'Inter','Outfit',system-ui,-apple-system,sans-serif;
+  background:var(--bg); color:var(--ink);
+  -webkit-text-size-adjust:100%; box-sizing:border-box;
+  display:flex; flex-direction:column; min-height:100%;
+}
+#app-mobile *, #app-mobile *::before, #app-mobile *::after { box-sizing:border-box; }
+#app-mobile button { font:inherit; color:inherit; border:none; cursor:pointer; -webkit-appearance:none; appearance:none; }
+
+/* ── top bar ─────────────────────────────────────────────────────────────── */
+.m-topbar { position:sticky; top:0; z-index:5; display:flex; align-items:center; gap:10px;
+  padding:10px 12px; background:var(--panel); border-bottom:1px solid var(--line); }
+.m-mark { font-size:20px; line-height:1; }
+.m-title { flex:1; min-width:0; font-weight:700; font-size:15px; overflow:hidden;
+  text-overflow:ellipsis; white-space:nowrap; }
+.m-keypill { display:inline-flex; align-items:center; gap:6px; min-height:36px; padding:6px 12px;
+  border:1px solid var(--line); border-radius:13px; background:var(--panel2); font-weight:700;
+  font-size:13px; color:var(--gold); }
+.m-keypill .m-mode { color:var(--muted); font-weight:600; font-size:11px; }
+
+/* ── section chips ───────────────────────────────────────────────────────── */
+.m-sections { display:flex; gap:7px; padding:9px 12px; overflow-x:auto; background:var(--panel);
+  border-bottom:1px solid var(--line); -webkit-overflow-scrolling:touch; }
+.m-chip { flex:none; min-height:34px; padding:7px 13px; border-radius:13px; border:1px solid var(--line);
+  background:var(--panel2); color:var(--muted); font-size:13px; font-weight:600; white-space:nowrap; }
+.m-chip.active { background:var(--ink); color:var(--panel); border-color:var(--ink); font-weight:700; }
+.m-chip.m-add { color:var(--gold); border-style:dashed; }
+
+/* ── canvas / chords lane on the shared bar ruler ────────────────────────── */
+.m-canvas { flex:1; padding:14px 12px 24px; }
+.m-lane-label { font-size:11px; font-weight:700; letter-spacing:.08em; color:var(--faint);
+  text-transform:uppercase; margin:0 0 7px 2px; }
+.m-ruler { position:relative; }
+.m-bars { display:grid; gap:0; height:96px; border-radius:9px; overflow:hidden; }
+.m-bar { position:relative; border:1px solid var(--grid); border-left:none; background:var(--panel2); }
+.m-bar:first-child { border-left:1px solid var(--grid); }
+.m-barnum { position:absolute; top:4px; left:6px; font:700 9px ui-monospace,Menlo,monospace;
+  letter-spacing:.06em; color:var(--faint); }
+.m-chips-abs { position:absolute; left:0; right:0; top:0; height:96px; }
+.m-chordpos { position:absolute; top:16px; bottom:8px; padding:0 3px; }
+.m-chord { width:100%; height:100%; border-radius:9px; border:1px solid var(--line);
+  background:var(--panel); display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:1px; overflow:hidden; box-shadow:0 1px 2px rgba(80,65,30,.06); }
+.m-chord.ook { border-color:var(--gold); }
+.m-chord .m-cn { font-weight:700; font-size:15px; color:var(--gold); line-height:1; }
+.m-chord .m-rm { font-size:10px; color:var(--muted); font-weight:600; }
+.m-chord .m-len { position:absolute; bottom:3px; right:5px; font:700 8px ui-monospace,Menlo,monospace;
+  color:var(--faint); }
+.m-chord .m-ook { position:absolute; top:3px; right:5px; color:var(--gold); font-size:11px; }
+.m-empty { color:var(--faint); font-size:13px; font-style:italic; padding:30px 0; text-align:center; }
+
+/* ── transport / status strip (Stage 1: read + save proof) ───────────────── */
+.m-status { display:flex; align-items:center; gap:10px; padding:10px 12px;
+  border-top:1px solid var(--line); background:var(--panel); font-size:12px; color:var(--muted); }
+.m-status .m-bpm { font-weight:700; color:var(--ink); }
+.m-status .m-spacer { flex:1; }
+.m-savedot { width:8px; height:8px; border-radius:50%; background:#5ec269; }
+
+/* ── Stage 2: lane toolbar ────────────────────────────────────────────────── */
+.m-lanebar { display:flex; align-items:center; gap:9px; padding:9px 12px; background:var(--panel);
+  border-bottom:1px solid var(--line); }
+.m-lanetag { font:700 11px/1 'Inter','Outfit',sans-serif; letter-spacing:.08em; text-transform:uppercase; color:var(--faint); }
+.m-spacer { flex:1; }
+.m-metchip { min-height:32px; padding:5px 10px; border:1px solid var(--line); border-radius:8px;
+  background:var(--panel2); font:700 12px ui-monospace,Menlo,monospace; color:var(--muted); }
+.m-btn { min-height:38px; padding:9px 15px; border:1px solid var(--line); border-radius:13px;
+  background:var(--panel2); color:var(--ink); font-weight:600; font-size:13px; }
+.m-btn.m-addchord { color:var(--gold); border-color:var(--gold); }
+.m-btn.m-primary { background:var(--gold); color:#fff; border-color:var(--gold); font-weight:700; }
+.m-btn.m-danger { color:var(--red); border-color:var(--red); }
+
+/* chord chip states */
+.m-chord { position:relative; cursor:grab; touch-action:none; }
+.m-chord:active { cursor:grabbing; }
+.m-chord.sel { border-color:var(--gold); box-shadow:0 0 0 2px var(--gold), 0 2px 8px rgba(200,160,74,.3); background:var(--selBg); }
+.m-chord .m-acc { position:absolute; top:3px; left:5px; font-size:10px; color:var(--gold); }
+
+/* ── bottom sheets ────────────────────────────────────────────────────────── */
+.m-scrim { position:fixed; inset:0; z-index:40; background:rgba(0,0,0,.38); }
+.m-sheet { position:fixed; left:0; right:0; bottom:0; z-index:50; background:var(--bg);
+  border-top:1px solid var(--line); border-radius:18px 18px 0 0; box-shadow:0 -6px 22px rgba(40,30,10,.28);
+  max-height:82%; display:flex; flex-direction:column; }
+.m-grab { flex:none; width:40px; height:4px; border-radius:2px; background:var(--line); margin:9px auto 4px; }
+.m-sheet-hd { flex:none; display:flex; align-items:center; gap:10px; padding:4px 18px 12px; border-bottom:1px solid var(--line2); }
+.m-sheet-title { font-weight:800; font-size:17px; color:var(--ink); }
+.m-x { margin-left:auto; width:32px; height:32px; border-radius:50%; background:var(--panel2);
+  border:1px solid var(--line); font-weight:700; color:var(--faint); font-size:15px; }
+.m-sheet-body { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:14px 18px; display:flex; flex-direction:column; gap:14px; }
+.m-sheet-ft { flex:none; display:flex; align-items:center; gap:11px; padding:12px 18px calc(18px + env(safe-area-inset-bottom,0px)); border-top:1px solid var(--line2); background:var(--panel); }
+
+/* editor sheet */
+.m-ed-name { display:flex; align-items:baseline; gap:8px; }
+.m-ed-name .m-cn { font-weight:800; font-size:26px; color:var(--gold); }
+.m-ed-name .m-rm { font-size:13px; color:var(--muted); font-weight:600; }
+.m-ed-row { display:flex; align-items:center; gap:12px; }
+.m-ed-lbl { font-size:12px; font-weight:600; color:var(--muted); min-width:56px; }
+.m-seg-group, .m-nudge { display:flex; gap:6px; align-items:center; flex:1; }
+.m-seg { min-height:40px; min-width:44px; padding:9px 14px; border:1px solid var(--line); border-radius:11px;
+  background:var(--panel2); color:var(--ink); font-weight:600; font-size:13px; }
+.m-seg.on { background:var(--ink); color:var(--panel); border-color:var(--ink); }
+.m-nudval { font:600 12px 'Inter',sans-serif; color:var(--ink); min-width:64px; text-align:center; }
+
+/* palette sheet */
+.m-pick { display:flex; flex-direction:row; gap:16px; align-items:flex-start; }
+.m-pick-roots { flex:none; width:172px; }
+.m-pick-lbl { font:700 10px 'Inter','Outfit',sans-serif; letter-spacing:.12em; color:var(--faint); margin:0 0 8px; }
+.m-pick-qe { flex:1; display:flex; flex-direction:column; gap:13px; }
+.m-root-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+.m-pk { min-height:40px; border:1px solid var(--line); border-radius:9px; background:var(--panel2);
+  font:700 13px ui-monospace,Menlo,monospace; color:var(--ink); }
+.m-pk.on { background:var(--gold); color:#fff; border-color:var(--gold); }
+.m-pillrow { display:flex; gap:7px; flex-wrap:wrap; }
+.m-pill { min-height:38px; padding:9px 13px; border:1px solid var(--line); border-radius:11px;
+  background:var(--panel2); color:var(--ink); font-weight:600; font-size:13px; }
+.m-pill.on { background:var(--ink); color:var(--panel); border-color:var(--ink); }
+.m-pick-result { font-weight:800; font-size:24px; color:var(--goldDeep); }
+.m-pick-result small { font-size:13px; color:var(--muted); font-weight:600; }
+
+/* ── Stage 3: shape pip + mini diagram on chips ───────────────────────────── */
+.m-shapepip { position:absolute; bottom:3px; left:5px; font-size:11px; color:var(--gold); opacity:.75; cursor:pointer; padding:2px; touch-action:none; }
+.m-mini { position:absolute; top:3px; left:0; right:0; height:13px; }
+.m-md { position:absolute; transform:translateX(-50%); font:700 7px ui-monospace,Menlo,monospace; color:var(--muted); }
+.m-md.x { color:var(--faint); } .m-md.o { color:var(--muted); } .m-md.d { color:var(--gold); }
+
+/* ── Stage 3: shape editor sheet ──────────────────────────────────────────── */
+.m-sh-nav { display:flex; align-items:center; gap:9px; }
+.m-sh-winlbl { font-weight:700; font-size:13px; color:var(--ink); }
+.m-sh-type { display:flex; align-items:center; gap:10px; background:var(--panel2); border:1px solid var(--line); border-radius:9px; padding:9px 12px; }
+.m-sh-typestr { flex:1; font:700 18px ui-monospace,Menlo,monospace; letter-spacing:.16em; color:var(--ink); }
+.m-sh-typehint { font-size:9px; color:var(--faint); }
+.m-sh-fb { border:1px solid var(--line); border-radius:10px; padding:6px 8px; background:var(--panel2); }
+.m-sh-row { display:flex; align-items:center; gap:6px; position:relative; min-height:34px; }
+.m-sh-slbl { width:16px; flex:none; text-align:center; font:700 12px 'Inter',sans-serif; color:var(--ink); }
+.m-sh-val { width:34px; flex:none; min-height:30px; border:1px solid var(--line); border-radius:7px; background:var(--bg); font:700 13px ui-monospace,Menlo,monospace; color:var(--ink); }
+.m-sh-val.muted { color:var(--faint); }
+.m-sh-cols { flex:1; display:flex; }
+.m-sh-col { flex:1; text-align:center; font:700 11px 'Inter',sans-serif; color:var(--faint); }
+.m-sh-cell { flex:1; min-height:30px; margin:2px; border-radius:6px; border:1px dashed transparent; }
+.m-sh-cell:active { background:var(--selBg); }
+.m-sh-cell.on { background:var(--gold); border-color:var(--goldDeep); box-shadow:inset 0 0 0 2px var(--bg); }
+.m-sh-pickpop { position:absolute; top:34px; left:22px; z-index:60; background:var(--panel2); border:1px solid var(--line); border-radius:10px; box-shadow:0 8px 22px rgba(30,26,15,.3); padding:7px; display:grid; grid-template-columns:repeat(7,30px); gap:4px; }
+.m-sh-pk { width:30px; height:30px; border-radius:6px; border:1px solid var(--line); background:var(--bg); font:700 12px ui-monospace,Menlo,monospace; color:var(--ink); }
+.m-sh-info { background:var(--panel2); border:1px solid var(--line); border-radius:11px; padding:12px 14px; display:flex; flex-direction:column; gap:10px; }
+.m-sh-check { display:flex; align-items:center; gap:10px; }
+.m-sh-ok { font:700 12px 'Inter',sans-serif; color:#2f8a4c; background:rgba(111,207,134,.2); border-radius:8px; padding:5px 10px; }
+.m-sh-mism { font:700 11px 'Inter',sans-serif; color:#fff; background:#d98a3a; border-radius:8px; padding:5px 9px; }
+.m-faint { color:var(--faint); }
+.m-sh-chips { display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
+.m-sh-note, .m-sh-alt { display:inline-flex; align-items:baseline; gap:3px; font:700 12px 'Inter',sans-serif; color:var(--ink); border:1px solid var(--line); border-radius:8px; padding:4px 8px; }
+.m-sh-alt { color:var(--muted); border-radius:13px; }
+.m-sh-note small, .m-sh-alt small { font:700 8px ui-monospace,Menlo,monospace; color:var(--goldDeep); }
+
+/* ── Stage 4: 3-lane accordion (Chords/Tab/Melody on one shared ruler) ──────── */
+#app-mobile { --gut: 30px; }
+.m-lanehint { font-size:11px; color:var(--faint); font-style:italic; }
+.m-accordion { display:flex; flex-direction:column; flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+.m-lane { border-bottom:1px solid var(--line); }
+.m-lane-body { position:relative; padding:8px 10px; }
+/* peek strip (collapsed lane) */
+.m-peek { display:flex; align-items:center; gap:8px; width:100%; height:46px; padding:0 14px; background:var(--panel); border-bottom:1px solid var(--line); }
+.m-peek-lbl { font:700 12px 'Inter',sans-serif; letter-spacing:.06em; color:var(--muted); }
+.m-peek-cv { margin-left:auto; color:var(--faint); }
+
+/* chords lane inside the accordion — align beat content to --gut */
+.m-lane-chords .m-bars { margin-left:var(--gut); }
+.m-lane-chords .m-chips-abs { left:var(--gut); right:0; }
+.m-lane-chords .m-lane-body { min-height:112px; }
+
+/* tab lane */
+.m-tgrid { position:relative; }
+.m-trow { display:flex; align-items:center; height:30px; }
+.m-tlbl { width:var(--gut); flex:none; text-align:center; font:700 12px 'Inter',sans-serif; color:var(--muted); }
+.m-tcells { flex:1; display:flex; position:relative; height:100%; background:linear-gradient(180deg,transparent calc(50% - 0.5px),var(--barline) calc(50% - 0.5px),var(--barline) calc(50% + 0.5px),transparent calc(50% + 0.5px)); }
+.m-tcell { flex:1; border-left:1px solid transparent; }
+.m-tcell.barstart { border-left:1px solid var(--grid); }
+.m-tcell:active { background:var(--selBg); }
+.m-tmarks { position:absolute; left:var(--gut); right:0; top:0; bottom:0; pointer-events:none; }
+.m-tmark { position:absolute; transform:translate(-50%,-50%); min-width:20px; height:20px; border-radius:5px; background:var(--panel); border:1px solid var(--gold); font:700 11px ui-monospace,Menlo,monospace; color:var(--ink); }
+
+/* melody lane */
+.m-mgrid { position:relative; }
+.m-mrow { display:flex; align-items:stretch; min-height:14px; }
+.m-mlbl { width:var(--gut); flex:none; display:flex; align-items:center; justify-content:center; font:700 9px ui-monospace,Menlo,monospace; color:var(--faint); border-top:1px solid var(--line2); }
+.m-mcells { flex:1; display:flex; border-top:1px solid var(--line2); }
+.m-mcell { flex:1; border-left:1px solid transparent; }
+.m-mcell.barstart { border-left:1px solid var(--grid); }
+.m-mcell:active { background:var(--selBg); }
+.m-mnotes { position:absolute; left:var(--gut); right:0; top:0; bottom:0; pointer-events:none; }
+.m-mnote { position:absolute; border-radius:4px; font:700 9px 'Inter',sans-serif; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+.m-mnote.off { opacity:.5; }
+
+/* fret keypad sheet */
+.m-fk-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+.m-fk { min-height:44px; border:1px solid var(--line); border-radius:9px; background:var(--panel2); font:700 16px ui-monospace,Menlo,monospace; color:var(--ink); }
+.m-fk:active { background:var(--gold); color:#fff; }
+.m-fk-row { display:flex; align-items:center; gap:10px; }
+
+/* bottom lane tab bar */
+.m-bottombar { position:sticky; bottom:0; display:flex; background:var(--panel); border-top:1px solid var(--line); padding:env(safe-area-inset-bottom,0px) 0 0; }
+.m-tabbtn { flex:1; min-height:48px; font:700 12px 'Inter',sans-serif; color:var(--muted); border-top:2px solid transparent; }
+.m-tabbtn.on { color:var(--gold); border-top-color:var(--gold); }
+
+/* ── Stage 5: transport + playhead ────────────────────────────────────────── */
+.m-transport { display:flex; align-items:center; gap:9px; padding:9px 12px; background:var(--panel); border-top:1px solid var(--line); }
+.m-play { min-height:40px; padding:9px 18px; border-radius:13px; background:var(--gold); color:#fff; font-weight:800; font-size:14px; }
+.m-play.on { background:var(--red); }
+.m-tchip { min-width:38px; min-height:36px; padding:6px 10px; border:1px solid var(--line); border-radius:9px; background:var(--panel2); color:var(--muted); font-weight:700; font-size:14px; }
+.m-tchip.on { color:var(--gold); border-color:var(--gold); }
+.m-bpmctl { display:inline-flex; align-items:center; gap:6px; }
+.m-bpmctl b { min-width:34px; text-align:center; font:700 14px ui-monospace,Menlo,monospace; color:var(--ink); }
+.m-pos { font:700 13px ui-monospace,Menlo,monospace; color:var(--muted); }
+.m-chord.playing { background:var(--goldSoft); border-color:var(--gold); box-shadow:0 0 14px rgba(200,160,74,.55); }
+.m-playhead { position:absolute; top:-2px; bottom:-2px; width:2px; background:var(--red); box-shadow:0 0 8px rgba(192,57,43,.5); z-index:6; pointer-events:none; }
+
+/* ── Stage 5b: piano dock + REC ───────────────────────────────────────────── */
+.m-piano { display:flex; flex-direction:column; background:#2b2b2b; }
+.m-piano-ctl { display:flex; align-items:center; gap:8px; padding:8px 12px; background:var(--panel); border-top:1px solid var(--line); }
+.m-recbtn { min-height:34px; padding:7px 12px; border-radius:13px; color:#fff; background:#5a3a37; font-weight:700; font-size:11px; }
+.m-recbtn.on { background:#c0392b; animation:m-recblink 1.1s infinite; }
+@keyframes m-recblink { 50% { opacity:.55; } }
+.m-curchord { display:flex; align-items:center; gap:6px; background:var(--goldSoft); border:1px solid var(--line); border-radius:9px; padding:4px 8px; }
+.m-curchord b { font:800 15px 'Inter',sans-serif; color:var(--goldDeep); }
+.m-ptones { display:flex; gap:3px; }
+.m-ptone { font:700 8px ui-monospace,Menlo,monospace; color:#fff; background:#6fcf86; border-radius:3px; padding:1px 4px; }
+.m-octctl { display:inline-flex; align-items:center; border:1px solid var(--line); border-radius:13px; overflow:hidden; }
+.m-octlbl { font:700 10px 'Inter',sans-serif; color:var(--faint); padding:0 6px; }
+.m-keys { height:150px; position:relative; padding:9px 8px 10px; }
+.m-keys-inner { position:relative; height:100%; display:flex; gap:3px; }
+.m-pkey { flex:1; position:relative; background:#f3efe6; border-radius:0 0 6px 6px; box-shadow:0 2px 3px rgba(0,0,0,.28); display:flex; flex-direction:column; justify-content:flex-end; align-items:center; padding-bottom:7px; gap:3px; }
+.m-pkey.dis, .m-pkeyb.dis { opacity:.32; }
+.m-pkeyb { position:absolute; top:0; width:7.2%; height:62%; background:linear-gradient(#3a3a3a,#1a1a1a); border-radius:0 0 4px 4px; box-shadow:0 3px 4px rgba(0,0,0,.5); display:flex; flex-direction:column; justify-content:flex-end; align-items:center; padding-bottom:4px; }
+.m-pdot { width:8px; height:8px; border-radius:50%; }
+.m-pkeyb .m-pdot { width:5px; height:5px; }
+.m-plabel { font:700 10px 'Inter',sans-serif; color:#2b2b2b; }
+.m-piano-ft { display:flex; align-items:center; gap:8px; padding:8px 12px calc(14px + env(safe-area-inset-bottom,0px)); background:#2b2b2b; }
+.m-leg { font:600 10px 'Inter',sans-serif; } .m-leg.c { color:#7fd894; } .m-leg.s { color:#edc56a; } .m-leg.o { color:#e8917f; }
+.m-piano-ft .m-btn { background:transparent; color:#cfc7b5; border-color:#4a4a44; }
+.m-piano-ft .m-keep { background:#6fcf86; color:#1f1f1f; border-color:#6fcf86; font-weight:700; }
+
+/* ── Stage 6: Song view (full-screen arrange) ─────────────────────────────── */
+.m-songbtn { flex:none; min-height:36px; padding:6px 11px; border:1px solid var(--line); border-radius:13px;
+  background:var(--panel2); color:var(--ink); font-weight:700; font-size:12px; white-space:nowrap; }
+.m-song { position:fixed; inset:0; z-index:30; display:flex; flex-direction:column;
+  background:var(--bg); color:var(--ink); }
+.m-song-hd { position:sticky; top:0; display:flex; align-items:center; gap:8px;
+  padding:calc(10px + env(safe-area-inset-top,0px)) 12px 10px; background:var(--panel); border-bottom:1px solid var(--line); }
+.m-song-back { min-height:40px; padding:8px 13px; border:1px solid var(--line); border-radius:12px;
+  background:var(--panel2); color:var(--ink); font-weight:700; font-size:13px; white-space:nowrap; }
+.m-song-name { font-weight:700; font-size:15px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:30vw; }
+.m-song-tg { flex:none; min-height:40px; padding:8px 11px; border:1px solid var(--line); border-radius:12px;
+  background:var(--goldSoft); color:var(--goldDeep); font-weight:700; font-size:12px; white-space:nowrap; }
+.m-song-tg.on { background:var(--gold); color:#fff; border-color:var(--gold); }
+.m-song-list { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:12px;
+  display:flex; flex-direction:column; gap:10px; }
+.m-songrow { background:var(--panel2); border:1px solid var(--line); border-radius:14px;
+  padding:10px 12px 12px; display:flex; flex-direction:column; gap:9px; }
+.m-songrow.active { background:var(--goldSoft); border:1.5px solid var(--gold); }
+.m-songrow.dragging { box-shadow:0 12px 28px rgba(30,26,15,.28); opacity:.92; }
+.m-songrow-hd { display:flex; align-items:center; gap:9px; }
+.m-songhandle { flex:none; min-width:30px; min-height:44px; display:flex; align-items:center; justify-content:center;
+  color:var(--faint); font-size:18px; cursor:grab; touch-action:none; margin:-6px 0; }
+.m-songhandle:active { cursor:grabbing; }
+.m-songname { flex:0 1 auto; min-width:0; font-weight:700; font-size:15px; color:var(--ink); background:transparent;
+  padding:0; text-align:left; min-height:44px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.m-songmeta { flex:none; font-size:11px; color:var(--muted); white-space:nowrap; }
+.m-songopen { flex:none; min-height:40px; padding:7px 12px; border:1px solid var(--line); border-radius:11px;
+  background:var(--panel); color:var(--gold); font-weight:700; font-size:12px; white-space:nowrap; }
+.m-songchips { display:flex; gap:5px; align-items:stretch; min-height:50px; }
+.m-songchip { position:relative; flex:1 1 0; min-width:0; display:flex; flex-direction:column; align-items:center;
+  justify-content:center; gap:2px; padding:6px 4px; border:1px solid var(--line); border-radius:9px;
+  background:var(--panel); cursor:grab; touch-action:none; overflow:hidden; }
+.m-songchip:active { cursor:grabbing; }
+.m-songchip.ook { border:1.5px solid #d98a3a; }
+.m-songcn { font-weight:700; font-size:14px; color:var(--gold); line-height:1.05; }
+.m-songrm { font-size:9px; color:var(--muted); font-weight:600; line-height:1; }
+.m-songbang { position:absolute; top:-1px; right:-1px; width:15px; height:15px; border-radius:50%;
+  background:#d98a3a; color:#fff; font:700 10px/15px 'Inter',sans-serif; text-align:center; }
+.m-songdia { position:relative; width:100%; height:16px; margin-top:1px; }
+.m-songdia-none { display:flex; align-items:center; justify-content:center; height:13px; color:var(--faint); font-size:10px; }
+.m-songly { max-width:100%; font-size:10px; font-weight:600; color:var(--line2);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.m-songly.has { color:#5ec269; }
+.m-songnochords { color:var(--faint); font-size:12px; font-style:italic; padding:13px 2px; }
+.m-song-ft { padding:10px 12px calc(12px + env(safe-area-inset-bottom,0px)); background:var(--panel); border-top:1px solid var(--line); }
+.m-song-add { width:100%; border-style:dashed; color:var(--gold); border-color:var(--gold); }
+
+/* ── Stage 7: Lyrics / RhymeForge (ALWAYS dark, independent of the app key-mode theme) ──────── */
+.m-lyrbtn { color:#d4a853; }
+.m-lyr { position:fixed; inset:0; z-index:31; display:flex; flex-direction:column;
+  background:#0e0e14; color:#ebe8e2; font-family:'Inter','Outfit',sans-serif; }
+.m-lyr-hd { display:flex; align-items:center; gap:8px;
+  padding:calc(10px + env(safe-area-inset-top,0px)) 14px 10px; background:#14141e; border-bottom:1px solid #252530; }
+.m-lyr-mark { font-family:'Playfair Display',serif; font-size:16px; font-weight:700; color:#d4a853; letter-spacing:.03em; }
+.m-lyr-back { min-height:40px; padding:8px 13px; border:1px solid #2c2c38; border-radius:11px;
+  background:#1b1b26; color:#ebe8e2; font-weight:700; font-size:13px; white-space:nowrap; }
+.m-lyr-tabs { display:flex; gap:4px; padding:0 12px; background:#14141e; border-bottom:1px solid #252530; }
+.m-lyr-tab { min-height:46px; padding:12px 18px; background:transparent; color:#606068; font-weight:700; font-size:13px;
+  text-transform:uppercase; letter-spacing:.05em; border-bottom:2px solid transparent; }
+.m-lyr-tab.on { color:#d4a853; border-bottom-color:#d4a853; }
+.m-lyr-views { display:flex; gap:8px; padding:10px 14px; background:#0e0e14; }
+.m-lyr-vw { flex:1; min-height:44px; padding:10px 12px; border:1px solid #2c2c38; border-radius:11px;
+  background:#14141e; color:#a0a0a8; font-weight:700; font-size:12px; }
+.m-lyr-vw.on { background:rgba(212,168,83,.16); color:#e4bc6c; border-color:#d4a853; }
+.m-lyr-body { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:4px 14px calc(20px + env(safe-area-inset-bottom,0px)); }
+.m-lyr-rhymeslot { flex:1; }   /* the persistent iframe (in document.body) overlays this area */
+/* free-write */
+.m-lyr-secbtns { display:flex; flex-wrap:wrap; gap:7px; align-items:center; padding:8px 0; }
+.m-lyr-il { font-size:11px; color:#a0a0a8; font-weight:600; }
+.m-lyr-secbtn { min-height:38px; padding:8px 13px; border:1px solid #2c2c38; border-radius:13px;
+  background:#1b1b26; color:#d4a853; font-weight:700; font-size:12px; white-space:nowrap; }
+.m-lyr-ta { width:100%; min-height:300px; resize:vertical; padding:12px; border:1px solid #252530; border-radius:10px;
+  background:#12121c; color:#ebe8e2; font-family:'JetBrains Mono',ui-monospace,Menlo,monospace; font-size:13px; line-height:1.7; }
+.m-lyr-ta:focus { outline:none; border-color:#d4a853; }
+.m-lyr-hint { font-size:11px; color:#606068; padding:9px 2px 12px; line-height:1.5; }
+.m-lyr-parse { width:100%; background:#d4a853; color:#1a1505; border-color:#d4a853; font-weight:800; }
+.m-lyr-howtohd { display:block; width:100%; text-align:left; margin-top:16px; padding:10px 2px;
+  background:transparent; color:#a0a0a8; font-weight:700; font-size:12px; }
+.m-lyr-howto { margin:0 0 6px; padding:6px 6px 6px 26px; color:#a0a0a8; font-size:12px; line-height:1.7; }
+.m-lyr-howto li { margin-bottom:5px; }
+.m-lyr-howto b { color:#e4bc6c; }
+/* structured */
+.m-lyr-empty { color:#606068; font-size:13px; text-align:center; padding:40px 14px; line-height:1.8; }
+.m-lyr-empty b { color:#d4a853; }
+.m-lyr-sec { background:#14141e; border:1px solid #252530; border-radius:8px; margin:10px 0; overflow:hidden; }
+.m-lyr-sechd { display:flex; align-items:center; gap:8px; padding:9px 12px; background:#1a1a28; }
+.m-lyr-seclbl { font-weight:700; font-size:12px; color:#d4a853; letter-spacing:.03em; }
+.m-lyr-linked { font-size:11px; color:#5ec269; font-weight:600; }
+.m-lyr-unlinked { font-size:11px; color:#606068; font-style:italic; }
+.m-lyr-line { display:flex; flex-wrap:wrap; align-items:stretch; padding:6px 10px; }
+.m-lyr-stack { display:inline-flex; flex-direction:column; align-items:stretch; }
+.m-lyr-stack.m-lyr-sp { pointer-events:none; }
+.m-lyr-ch { min-height:16px; text-align:center; font-family:'JetBrains Mono',ui-monospace,monospace; font-size:11px; color:#5ec269; line-height:1.3; }
+.m-lyr-w { min-height:30px; padding:2px 1px; background:transparent; color:#ebe8e2;
+  font-family:'JetBrains Mono',ui-monospace,monospace; font-size:14px; line-height:1.5; white-space:pre; }
+.m-lyr-w.has { color:#d4a853; font-weight:700; }
+.m-lyr-sp .m-lyr-w { color:transparent; }
+/* chord-pick bottom sheet */
+.m-lyr-pscrim { position:fixed; inset:0; z-index:34; background:rgba(0,0,0,.55); }
+.m-lyr-psheet { position:fixed; left:0; right:0; bottom:0; z-index:35; background:#14141e; border-top:2px solid #d4a853;
+  border-radius:16px 16px 0 0; padding:8px 16px calc(18px + env(safe-area-inset-bottom,0px)); }
+.m-lyr-psheet .m-grab { width:36px; height:4px; border-radius:2px; background:#3a3a46; margin:2px auto 10px; }
+.m-lyr-pshd { display:flex; align-items:center; justify-content:space-between; font-weight:700; font-size:14px; color:#ebe8e2; margin-bottom:12px; }
+.m-lyr-pshd .m-x { background:transparent; color:#a0a0a8; font-size:22px; min-width:36px; min-height:36px; }
+.m-lyr-pchips { display:flex; flex-wrap:wrap; gap:8px; }
+.m-lyr-pickchip { min-height:44px; padding:11px 16px; border:1px solid #2c2c38; border-radius:12px;
+  background:#1b1b26; color:#ebe8e2; font-family:'JetBrains Mono',ui-monospace,monospace; font-size:14px; font-weight:700; }
+.m-lyr-pickchip.on { border-color:#d4a853; color:#d4a853; background:rgba(212,168,83,.14); }
+.m-lyr-pickempty { color:#a0a0a8; font-size:12px; line-height:1.6; padding:4px 2px; }
+.m-lyr-psft { margin-top:12px; }
+.m-lyr-pickrm { min-height:44px; padding:11px 16px; border:1px solid #e06b5e; border-radius:12px; background:transparent; color:#e06b5e; font-weight:700; font-size:13px; }
+
+/* ── Stage 8: Tools (More menu + Chord Picker / Key Finder / Progression Analysis / Show Scale) ── */
+/* More menu (bottom sheet list) */
+.m-toollist { display:flex; flex-direction:column; gap:8px; }
+.m-toolrow { display:flex; align-items:center; gap:12px; width:100%; text-align:left; min-height:60px; padding:11px 12px;
+  border:1px solid var(--line); border-radius:13px; background:var(--panel2); }
+.m-toolico { flex:none; width:40px; height:40px; display:flex; align-items:center; justify-content:center;
+  border-radius:11px; background:var(--goldSoft); font-size:20px; }
+.m-toolmeta { flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+.m-toolname { font-weight:700; font-size:14px; color:var(--ink); }
+.m-tooldesc { font-size:12px; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.m-toolarr { flex:none; color:var(--faint); font-size:20px; }
+/* full-screen tool frame */
+.m-tool { position:fixed; inset:0; z-index:31; display:flex; flex-direction:column; background:var(--bg); color:var(--ink); }
+.m-tool-hd { display:flex; align-items:center; gap:8px; padding:calc(10px + env(safe-area-inset-top,0px)) 14px 10px;
+  background:var(--panel); border-bottom:1px solid var(--line); }
+.m-tool-title { font-weight:700; font-size:15px; }
+.m-tool-back { min-height:40px; padding:8px 13px; border:1px solid var(--line); border-radius:12px;
+  background:var(--panel2); color:var(--ink); font-weight:700; font-size:13px; white-space:nowrap; }
+.m-tool-body { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:12px 14px calc(20px + env(safe-area-inset-bottom,0px)); }
+.m-tool-body .m-pick-lbl { font-size:11px; font-weight:700; letter-spacing:.06em; color:var(--faint); text-transform:uppercase; margin:14px 0 7px; }
+/* Key Finder */
+.m-kfroots { display:grid; grid-template-columns:repeat(6,1fr); gap:6px; }
+.m-kfroot { min-height:44px; border:1px solid var(--line); border-radius:10px; background:var(--panel2); color:var(--ink); font-weight:700; font-size:13px; }
+.m-kfroot.on { background:var(--gold); color:#fff; border-color:var(--gold); }
+.m-kfquals { display:flex; flex-wrap:wrap; gap:6px; }
+.m-kfqual { min-height:44px; padding:9px 14px; border:1px solid var(--line); border-radius:11px; background:var(--panel2); color:var(--muted); font-weight:700; font-size:13px; }
+.m-kfqual.on { background:var(--ink); color:var(--panel); border-color:var(--ink); }
+.m-kf-addrow { display:flex; align-items:center; gap:10px; margin-top:12px; }
+.m-kf-prev { flex:1; font-weight:800; font-size:18px; color:var(--gold); }
+.m-kfchips { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:10px; min-height:30px; }
+.m-kfchip { display:inline-flex; align-items:center; gap:5px; padding:6px 6px 6px 11px; border:1px solid var(--line); border-radius:12px; background:var(--selBg); font-weight:700; font-size:13px; }
+.m-kfx { width:24px; height:24px; border-radius:50%; background:var(--line); color:var(--ink); font-size:13px; line-height:1; }
+.m-kfsep { color:var(--faint); font-size:13px; }
+.m-kf-empty, .m-kf-none { color:var(--faint); font-size:12px; font-style:italic; padding:4px 2px; }
+.m-kfkey { border:1px solid var(--line); border-radius:12px; background:var(--panel2); padding:10px 11px; margin-bottom:9px; }
+.m-kfkey.sel { border:1.5px solid var(--gold); background:var(--goldSoft); }
+.m-kfkeyhd { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.m-kfkeyname { font-weight:800; font-size:15px; text-transform:capitalize; }
+.m-kfselbtn { min-height:38px; padding:7px 13px; font-size:12px; }
+.m-kfdias { display:flex; flex-wrap:wrap; gap:5px; }
+.m-kfdia { display:inline-flex; flex-direction:column; align-items:center; gap:1px; min-width:42px; padding:5px 7px; border:1px solid var(--line); border-radius:8px; background:var(--panel); color:var(--muted); font-size:12px; font-weight:600; }
+.m-kfdia.matched { border-color:var(--gold); color:var(--gold); background:var(--selBg); font-weight:800; }
+.m-kfrm { font:700 9px ui-monospace,Menlo,monospace; color:var(--faint); }
+.m-kfdia.matched .m-kfrm { color:var(--goldDeep); }
+.m-kf-foot { display:flex; align-items:center; gap:10px; margin-top:16px; }
+/* Progression Analysis */
+.m-an-empty { color:var(--faint); font-size:13px; text-align:center; padding:40px 14px; line-height:1.7; }
+.m-an-key { font-weight:800; font-size:18px; color:var(--gold); }
+.m-an-char { font-size:13px; color:var(--ink); font-weight:600; margin-top:2px; }
+.m-an-roman { font:700 14px ui-monospace,Menlo,monospace; color:var(--muted); margin-top:10px; word-spacing:2px; }
+.m-an-arc { display:flex; align-items:flex-end; gap:6px; height:80px; margin:14px 0 4px; padding:8px; border:1px solid var(--line); border-radius:10px; background:var(--panel2); }
+.m-an-bar { flex:1; min-width:6px; border-radius:4px 4px 0 0; }
+.m-an-narr { font-size:12px; color:var(--muted); line-height:1.6; margin-top:4px; }
+.m-an-sec { margin-top:16px; }
+.m-an-lbl { font:700 11px 'Inter',sans-serif; letter-spacing:.06em; text-transform:uppercase; color:var(--faint); margin-bottom:7px; }
+.m-an-pills { display:flex; flex-wrap:wrap; gap:6px; }
+.m-an-pill.out { padding:6px 11px; border-radius:11px; border:1px solid #d98a3a; color:#c0742a; background:var(--panel2); font-weight:700; font-size:13px; }
+.m-an-row { padding:9px 11px; border:1px solid var(--line); border-radius:10px; background:var(--panel2); margin-bottom:7px; font-size:13px; }
+.m-an-row b { color:var(--ink); }
+.m-an-strength { float:right; font-size:11px; color:var(--gold); font-weight:700; text-transform:capitalize; }
+.m-an-tip { font-size:12px; color:var(--muted); margin-top:3px; line-height:1.5; }
+.m-an-vl { font-size:12px; color:var(--goldDeep); margin-top:3px; }
+/* Show Scale */
+.m-sc-chips { display:flex; flex-wrap:wrap; gap:7px; }
+.m-sc-chip { min-height:44px; padding:9px 14px; border:1px solid var(--line); border-radius:12px; background:var(--panel2); color:var(--muted); font-weight:700; font-size:13px; }
+.m-sc-chip.on { background:var(--gold); color:#fff; border-color:var(--gold); }
+.m-sc-head { font-weight:800; font-size:17px; color:var(--gold); margin:16px 0 12px; }
+.m-sc-head small { color:var(--muted); font-weight:600; font-size:13px; }
+.m-sc-tiles { display:flex; flex-wrap:wrap; gap:8px; }
+.m-sc-tile { display:flex; flex-direction:column; align-items:center; gap:3px; min-width:54px; padding:11px 8px; border:1px solid var(--line2); border-radius:11px; background:var(--panel2); }
+.m-sc-tile.chord { border-color:#5bbf72; background:rgba(111,207,134,.14); }
+.m-sc-tile.blue { border-style:dashed; }
+.m-sc-note { font-weight:800; font-size:17px; color:var(--ink); }
+.m-sc-tile.chord .m-sc-note { color:#3a9c54; }
+.m-sc-deg { font:700 10px ui-monospace,Menlo,monospace; color:var(--faint); }
+.m-sc-legend { display:flex; gap:16px; margin-top:18px; font-size:12px; }
+.m-sc-leg.chord { color:#5bbf72; } .m-sc-leg.scale { color:var(--gold); }
+/* Arpeggiator (fretboard visualizer) */
+.m-arproots { display:grid; grid-template-columns:repeat(6,1fr); gap:6px; }
+.m-arproot { min-height:44px; border:1px solid var(--line); border-radius:10px; background:var(--panel2); color:var(--ink); font-weight:700; font-size:13px; }
+.m-arproot.on { background:var(--gold); color:#fff; border-color:var(--gold); }
+.m-arpquals { display:flex; flex-wrap:wrap; gap:6px; }
+.m-arpqual { min-height:44px; padding:9px 13px; border:1px solid var(--line); border-radius:11px; background:var(--panel2); color:var(--muted); font-weight:700; font-size:13px; }
+.m-arpqual.on { background:var(--ink); color:var(--panel); border-color:var(--ink); }
+.m-arp-result { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin-top:14px; }
+.m-arp-name { font-weight:800; font-size:18px; color:var(--gold); }
+.m-arp-chips { display:flex; flex-wrap:wrap; gap:5px; flex:1; }
+.m-arpchip { display:inline-flex; align-items:baseline; gap:3px; padding:4px 9px; border-radius:11px; color:#fff; font-weight:700; font-size:12px; text-shadow:0 1px 1px rgba(0,0,0,.35); }
+.m-arpchip small { font-size:9px; opacity:.9; }
+.m-arp-play { flex:none; }
+.m-arp-neck { overflow-x:auto; -webkit-overflow-scrolling:touch; border:1px solid var(--line); border-radius:10px; background:var(--panel2); padding:8px 6px; }
+.m-arp-row { display:flex; align-items:center; gap:0; }
+.m-arp-slbl { flex:none; width:20px; font:700 11px ui-monospace,Menlo,monospace; color:var(--faint); text-align:center; }
+.m-arp-fnum { flex:none; width:30px; text-align:center; font:700 9px ui-monospace,Menlo,monospace; color:var(--faint); }
+.m-arp-fnum.mk { color:var(--gold); }
+.m-arp-cell { flex:none; width:30px; height:30px; display:flex; align-items:center; justify-content:center; border-left:1px solid var(--grid); }
+.m-arp-cell.mk { background:rgba(200,160,74,.08); }
+.m-arp-head .m-arp-fnum { height:18px; }
+.m-arp-dot { width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font:800 10px 'Inter',sans-serif; color:#fff; text-shadow:0 1px 1px rgba(0,0,0,.4); }
+.m-arp-dot.root { box-shadow:0 0 0 2px var(--ink); }
+/* Tuner */
+.m-tun { display:flex; flex-direction:column; align-items:center; gap:12px; padding-top:8px; }
+.m-tun-err { width:100%; padding:10px 12px; border:1px solid var(--red); border-radius:10px; background:var(--selBg); color:var(--red); font-size:13px; text-align:center; }
+.m-tun-readout { display:flex; flex-direction:column; align-items:center; gap:2px; margin-top:6px; }
+.m-tun-note { font-weight:800; font-size:64px; line-height:1; color:var(--muted); }
+.m-tun-note small { font-size:24px; vertical-align:super; opacity:.7; }
+.m-tun-cents { font:700 18px ui-monospace,Menlo,monospace; color:var(--muted); }
+.m-tun-meter { position:relative; width:100%; height:44px; border:1px solid var(--line); border-radius:10px; background:var(--panel2); overflow:hidden; }
+.m-tun-zone { position:absolute; top:0; bottom:0; left:46%; width:8%; background:rgba(76,175,80,.16); }
+.m-tun-mid { position:absolute; top:0; bottom:0; left:50%; width:2px; transform:translateX(-50%); background:var(--line2); }
+.m-tun-needle { position:absolute; top:4px; bottom:4px; left:50%; width:4px; transform:translateX(-50%); border-radius:2px; background:var(--gold); transition:left .08s linear; }
+.m-tun-scale { display:flex; width:100%; font-size:11px; color:var(--faint); }
+.m-tun-status { font-weight:700; font-size:15px; color:var(--muted); min-height:20px; }
+.m-tun-det { font:600 11px ui-monospace,Menlo,monospace; color:var(--faint); min-height:14px; }
+.m-tun-level { width:100%; height:6px; border-radius:3px; background:var(--line); overflow:hidden; }
+.m-tun-levelbar { display:block; height:100%; width:0%; background:var(--gold); transition:width .06s linear; }
+.m-tun-strings { display:flex; gap:8px; }
+.m-tun-str { min-width:46px; min-height:46px; border:1px solid var(--line); border-radius:11px; background:var(--panel2); color:var(--muted); font-weight:700; font-size:15px; }
+.m-tun-str small { font-size:9px; vertical-align:super; }
+.m-tun-str.on { background:var(--gold); color:#fff; border-color:var(--gold); }
+.m-tun-toggle { width:100%; margin-top:4px; }
+.m-tun-foot { font-size:11px; color:var(--faint); text-align:center; line-height:1.5; padding:0 8px; }
