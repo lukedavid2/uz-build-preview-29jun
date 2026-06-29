@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:#e4e0d8}
+  @keyframes recblink{0%,100%{opacity:1}50%{opacity:.35}}
+  .nsel{-webkit-user-select:none;user-select:none}
+</style>
+</helmet>
+<div class="nsel" style="min-height:100vh;background:#e4e0d8;background-image:radial-gradient(circle, rgba(120,110,90,.08) 1px, transparent 1px);background-size:26px 26px;display:flex;justify-content:center;align-items:flex-start;gap:40px;padding:44px 40px;font-family:Outfit,system-ui,sans-serif">
+  <div style="flex:none;width:416px;padding:12px;background:#1d1b1a;border-radius:48px;box-shadow:0 40px 70px -30px rgba(30,26,15,.55)">
+    <div style="{{ p.screenStyle }}">
+      <div style="height:42px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 26px;font:700 14px Outfit;color:var(--ink)"><span>9:41</span><span style="display:flex;align-items:center;gap:5px"><span style="width:16px;height:9px;border:1.5px solid var(--ink);border-radius:2px;display:inline-block"></span></span></div>
+      <div style="flex:none;position:relative;display:flex;align-items:center;gap:10px;padding:6px 16px 10px;background:var(--panel);border-bottom:1px solid var(--line)"><span style="display:flex;align-items:center"><span style="font-size:22px;line-height:1">🍋</span></span><span onClick="{{ p.onRename }}" style="cursor:pointer;display:flex;align-items:center;gap:6px;flex:1;min-width:0"><span style="font:600 13px Outfit;color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.songTitle }}</span><span style="flex:none;width:22px;height:22px;border-radius:50%;background:var(--rail);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--faint)">✎</span></span><span onClick="{{ p.onToggleSongView }}" style="cursor:pointer;flex:none;display:flex;align-items:center;gap:5px;font:700 11px Outfit;color:var(--goldDeep);background:var(--goldSoft);border:1px solid var(--line);border-radius:13px;padding:6px 9px">▦ Song</span><span style="display:flex;align-items:center;border:1px solid var(--line);border-radius:13px;overflow:hidden;background:var(--goldSoft)"><span onClick="{{ p.onCycleKeyRoot }}" style="cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:4px;font:700 12px Outfit;color:var(--goldDeep);padding:6px 9px">{{ p.keyLabel }}<span style="font-size:8px;opacity:.7">▾</span></span><span onClick="{{ p.onToggleKey }}" style="{{ p.modeChipStyle }}">{{ p.modeLabel }}</span></span><sc-if value="{{ p.keyMenuOpen }}" hint-placeholder-val="{{ false }}"><div onClick="{{ p.onCycleKeyRoot }}" style="position:absolute;inset:0;z-index:65"></div><div style="position:absolute;right:16px;top:46px;z-index:70;width:184px;background:var(--panel2);border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 30px rgba(30,26,15,.28);padding:12px"><div style="font:700 9px Outfit;letter-spacing:.12em;color:var(--faint);margin-bottom:8px">KEY ROOT</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px"><sc-for list="{{ p.keyOptions }}" as="ko" hint-placeholder-count="12"><span onClick="{{ ko.onTap }}" style="{{ ko.style }}">{{ ko.name }}</span></sc-for></div></div></sc-if></div>
+      <div style="flex:none;display:flex;gap:7px;padding:9px 16px;background:var(--bg);border-bottom:1px solid var(--line2);overflow-x:auto"><sc-for list="{{ p.chips }}" as="ch" hint-placeholder-count="3"><span onClick="{{ ch.onTap }}" style="{{ ch.style }}">{{ ch.name }}</span></sc-for><span onClick="{{ p.onAddSection }}" style="flex:none;cursor:pointer;font:700 13px Outfit;color:var(--goldDeep);background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:7px 12px">+</span></div>
+      <div style="flex:none;display:flex;align-items:center;gap:7px;padding:9px 14px;background:var(--panel2);border-bottom:1px solid var(--line)"><span style="font:700 11px Outfit;letter-spacing:.14em;color:var(--goldDeep)">{{ p.laneLabel }}</span><span style="width:7px;height:7px;border-radius:50%;background:var(--gold)"></span><span style="flex:1"></span><sc-if value="{{ p.isChords }}" hint-placeholder-val="{{ true }}"><span onClick="{{ p.onOpenPalette }}" style="cursor:pointer;font:600 12px Outfit;color:var(--muted);border:1px solid var(--line);background:var(--panel);border-radius:13px;padding:6px 11px">+ Chord</span></sc-if><span onClick="{{ p.onToggleSelect }}" style="{{ p.selectBtnStyle }}">Select</span></div>
+      <div style="flex:1;position:relative;background:var(--bg);overflow:hidden;display:flex;flex-direction:column;min-height:0">
+  <div style="flex:none;display:flex;height:26px;border-bottom:2px solid var(--barline)"><div style="width:44px;flex:none;border-right:1px solid var(--line);background:var(--rail)"></div><div style="flex:1;display:flex"><sc-for list="{{ p.rulerBars }}" as="b" hint-placeholder-count="4"><span style="flex:1;border-left:1px solid var(--barline);font:700 11px Outfit;color:var(--faint);padding:4px 0 0 7px">{{ b.n }}</span></sc-for></div></div>
+
+  <sc-if value="{{ p.chordsActive }}" hint-placeholder-val="{{ true }}">
+  <div style="flex:1;display:flex;align-items:stretch;min-height:0;position:relative">
+    <div style="width:44px;flex:none;border-right:1px solid var(--line);background:var(--rail);display:flex;align-items:center;justify-content:center"><span style="font:700 9px Outfit;letter-spacing:.14em;color:var(--faint);writing-mode:vertical-rl;transform:rotate(180deg)">CHORDS</span></div>
+    <div data-chordlane="1" style="flex:1;position:relative;min-width:0">
+      <div style="position:absolute;inset:0;pointer-events:none"><sc-for list="{{ p.gridLines }}" as="gl" hint-placeholder-count="15"><div style="{{ gl.style }}"></div></sc-for></div>
+      <sc-for list="{{ p.chordGaps }}" as="gp" hint-placeholder-count="0"><div onClick="{{ gp.onTap }}" style="{{ gp.style }}"><div style="{{ gp.inner }}">+</div></div></sc-for>
+      <sc-for list="{{ p.chordItems }}" as="c" hint-placeholder-count="4"><div style="{{ c.pos }}"><div onPointerDown="{{ c.onDown }}" style="{{ c.card }}"><span style="{{ c.nameStyle }}">{{ c.name }}</span><sc-if value="{{ c.showRoman }}" hint-placeholder-val="{{ true }}"><span style="font:600 10px Outfit;color:var(--faint)">{{ c.roman }}</span></sc-if><sc-if value="{{ c.showDiag }}" hint-placeholder-val="{{ false }}"><div style="position:relative;width:34px;height:40px;margin-top:2px"><div style="position:absolute;top:8px;left:0;right:0;bottom:2px;border:1px solid var(--chordBorder);border-top:2px solid var(--faint);border-radius:0 0 2px 2px"></div><div style="position:absolute;top:8px;left:20%;width:1px;bottom:2px;background:var(--chordBorder)"></div><div style="position:absolute;top:8px;left:40%;width:1px;bottom:2px;background:var(--chordBorder)"></div><div style="position:absolute;top:8px;left:60%;width:1px;bottom:2px;background:var(--chordBorder)"></div><div style="position:absolute;top:8px;left:80%;width:1px;bottom:2px;background:var(--chordBorder)"></div><div style="position:absolute;top:32%;left:0;right:0;height:1px;background:var(--chordBorder)"></div><div style="position:absolute;top:57%;left:0;right:0;height:1px;background:var(--chordBorder)"></div><sc-for list="{{ c.diagMarkers }}" as="mk" hint-placeholder-count="6"><span style="position:absolute;top:0;left:{{ mk.left }}%;transform:translateX(-50%);font:700 6px Outfit;color:var(--faint)">{{ mk.m }}</span></sc-for><sc-for list="{{ c.diagDots }}" as="dt" hint-placeholder-count="3"><span style="position:absolute;left:{{ dt.left }}%;top:{{ dt.top }}%;width:7px;height:7px;margin-left:-3.5px;margin-top:1px;border-radius:50%;background:var(--goldDeep)"></span></sc-for></div></sc-if><sc-if value="{{ c.showBadge }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;bottom:3px;left:5px;font:700 8px 'JetBrains Mono',monospace;color:var(--goldDeep);background:var(--goldSoft);border-radius:5px;padding:1px 4px">{{ c.badge }}</span></sc-if><sc-if value="{{ c.outOfKey }}" hint-placeholder-val="{{ false }}"><span title="{{ c.ookTitle }}" style="position:absolute;top:3px;right:4px;width:14px;height:14px;border-radius:50%;background:#d98a3a;color:#fff;font:700 10px/14px Outfit;text-align:center">!</span></sc-if><span onPointerDown="{{ c.onShape }}" onClick="{{ c.onShape }}" style="position:absolute;bottom:3px;right:4px;cursor:pointer;font-size:13px;line-height:1;color:var(--goldDeep)">♦</span></div></div></sc-for>
+      <div style="{{ p.phStyle }}"></div>
+    </div>
+  </div>
+  </sc-if>
+  <sc-if value="{{ p.chordsCollapsed }}" hint-placeholder-val="{{ false }}"><div onClick="{{ p.peekChords.onTap }}" style="flex:none;height:46px;display:flex;align-items:stretch;border-top:1px solid var(--line2);background:var(--panel);cursor:pointer"><div style="width:44px;flex:none;border-right:1px solid var(--line);background:var(--rail);display:flex;align-items:center;justify-content:space-between;padding:0 5px 0 0"><span style="font:700 8px Outfit;letter-spacing:.08em;color:var(--faint);writing-mode:vertical-rl;transform:rotate(180deg);margin-left:5px">CHORDS</span><span style="font:700 11px Outfit;color:var(--faint)">⌄</span></div><div style="flex:1;position:relative"><div style="position:absolute;inset:0;display:flex;pointer-events:none"><span style="flex:1;border-right:1px solid var(--grid)"></span><span style="flex:1;border-right:1px solid var(--grid)"></span><span style="flex:1;border-right:1px solid var(--grid)"></span><span style="flex:1"></span></div><sc-for list="{{ p.peekChords.items }}" as="it" hint-placeholder-count="4"><div style="{{ it.style }}">{{ it.text }}</div></sc-for></div></div></sc-if>
+
+  <sc-if value="{{ p.tabActive }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:none;height:172px;display:flex;align-items:stretch;position:relative;border-top:1px solid var(--line2)">
+    <div style="width:44px;flex:none;border-right:1px solid var(--line);background:var(--rail);display:flex;flex-direction:column;padding:0"><sc-for list="{{ p.tabGrid }}" as="row" hint-placeholder-count="6"><div style="flex:1;display:flex;align-items:center;justify-content:flex-end;gap:5px;padding-right:6px;border-bottom:1px solid var(--line2)"><span style="{{ row.gaugeStyle }}"></span><span style="font:700 11px 'JetBrains Mono',monospace;color:var(--faint);width:11px;text-align:center">{{ row.label }}</span></div></sc-for></div>
+    <div onPointerDown="{{ p.onTabPointerDown }}" style="flex:1;position:relative;min-width:0;touch-action:none">
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column"><sc-for list="{{ p.tabGrid }}" as="row" hint-placeholder-count="6"><div style="flex:1;display:flex;align-items:stretch;border-bottom:1px solid var(--line2)"><sc-for list="{{ row.cells }}" as="cell" hint-placeholder-count="16"><div onClick="{{ cell.onTap }}" style="{{ cell.style }}"><span style="{{ cell.fretStyle }}">{{ cell.fret }}</span></div></sc-for></div></sc-for></div>
+      <sc-if value="{{ p.hasMarquee }}" hint-placeholder-val="{{ false }}"><div style="{{ p.marqueeStyle }}"></div></sc-if>
+      <sc-if value="{{ p.hasTabSel }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;left:8px;right:8px;top:8px;z-index:8;display:flex;align-items:center;gap:8px;background:#4a6fa5;border-radius:11px;padding:7px 11px;box-shadow:0 4px 12px rgba(40,60,100,.35)"><span style="font:700 12px Outfit;color:#fff">{{ p.tabSelCount }} selected</span><span style="flex:1"></span><span onClick="{{ p.onBulkRemoveTab }}" style="cursor:pointer;font:700 11px Outfit;color:#fff;background:rgba(255,255,255,.18);border-radius:9px;padding:6px 11px">× Remove</span><span onClick="{{ p.onClearTabSel }}" style="cursor:pointer;font:700 11px Outfit;color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:9px;padding:6px 11px">Clear</span></div></sc-if>
+      <div style="{{ p.phStyle }}"></div>
+    </div>
+  </div>
+  </sc-if>
+  <sc-if value="{{ p.tabCollapsed }}" hint-placeholder-val="{{ true }}"><div onClick="{{ p.peekTab.onTap }}" style="flex:none;height:46px;display:flex;align-items:stretch;border-top:1px solid var(--line2);background:var(--panel);cursor:pointer"><div style="width:44px;flex:none;border-right:1px solid var(--line);background:var(--rail);display:flex;align-items:center;justify-content:space-between;padding:0 5px 0 0"><span style="font:700 8px Outfit;letter-spacing:.08em;color:var(--faint);writing-mode:vertical-rl;transform:rotate(180deg);margin-left:5px">TAB</span><span style="font:700 11px Outfit;color:var(--faint)">⌄</span></div><div style="flex:1;position:relative"><div style="position:absolute;inset:0;display:flex;pointer-events:none"><span style="flex:1;border-right:1px solid var(--grid)"></span><span style="flex:1;border-right:1px solid var(--grid)"></span><span style="flex:1;border-right:1px solid var(--grid)"></span><span style="flex:1"></span></div><sc-for list="{{ p.peekTab.strings }}" as="ln" hint-placeholder-count="6"><div style="{{ ln.style }}"></div></sc-for><sc-for list="{{ p.peekTab.items }}" as="it" hint-placeholder-count="4"><div style="{{ it.style }}">{{ it.text }}</div></sc-for></div></div></sc-if>
+
+  <sc-if value="{{ p.melodyActive }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:none;height:188px;display:flex;align-items:stretch;position:relative;border-top:1px solid var(--line2)">
+    <div style="width:44px;flex:none;border-right:1px solid var(--line);background:var(--rail);display:flex;flex-direction:column;justify-content:space-around;align-items:center;padding:2px 0"><sc-for list="{{ p.melodyAxis }}" as="r" hint-placeholder-count="7"><span style="font:700 9px 'JetBrains Mono',monospace;color:var(--faint)">{{ r.name }}</span></sc-for></div>
+    <div style="flex:1;position:relative;min-width:0">
+      <div style="position:absolute;inset:0;pointer-events:none"><sc-for list="{{ p.gridLines }}" as="gl" hint-placeholder-count="15"><div style="{{ gl.style }}"></div></sc-for></div>
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-around;padding:0;pointer-events:none"><sc-for list="{{ p.melodyAxis }}" as="r" hint-placeholder-count="7"><span style="flex:1;border-bottom:1px solid var(--grid)"></span></sc-for></div>
+      <sc-for list="{{ p.melodyItems }}" as="m" hint-placeholder-count="4"><div onClick="{{ m.onTap }}" style="{{ m.style }}">{{ m.label }}</div></sc-for>
+      <div style="{{ p.phStyle }}"></div>
+    </div>
+  </div>
+  </sc-if>
+  <sc-if value="{{ p.melodyCollapsed }}" hint-placeholder-val="{{ true }}"><div onClick="{{ p.peekMelody.onTap }}" style="flex:none;height:46px;display:flex;align-items:stretch;border-top:1px solid var(--line2);background:var(--panel);cursor:pointer"><div style="width:44px;flex:none;border-right:1px solid var(--line);background:var(--rail);display:flex;align-items:center;justify-content:space-between;padding:0 5px 0 0"><span style="font:700 8px Outfit;letter-spacing:.08em;color:var(--faint);writing-mode:vertical-rl;transform:rotate(180deg);margin-left:5px">MELODY</span><span style="font:700 11px Outfit;color:var(--faint)">⌄</span></div><div style="flex:1;position:relative"><div style="position:absolute;inset:0;display:flex;pointer-events:none"><span style="flex:1;border-right:1px solid var(--grid)"></span><span style="flex:1;border-right:1px solid var(--grid)"></span><span style="flex:1;border-right:1px solid var(--grid)"></span><span style="flex:1"></span></div><sc-for list="{{ p.peekMelody.items }}" as="it" hint-placeholder-count="4"><div style="{{ it.style }}">{{ it.text }}</div></sc-for></div></div></sc-if>
+</div>
+      <sc-if value="{{ p.songView }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0;z-index:38;background:var(--bg);display:flex;flex-direction:column">
+  <div style="height:42px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 26px;font:700 14px Outfit;color:var(--ink)"><span>9:41</span><span style="width:16px;height:9px;border:1.5px solid var(--ink);border-radius:2px"></span></div>
+  <div style="flex:none;display:flex;align-items:center;gap:10px;padding:6px 16px 10px;background:var(--panel);border-bottom:1px solid var(--line)"><span style="display:flex;align-items:center;gap:5px"><span style="font-size:22px;line-height:1">🍋</span></span><span style="font:700 14px Outfit;color:var(--goldDeep)">Song view</span><span style="flex:1"></span><span onClick="{{ p.onToggleSongLyrics }}" style="{{ p.songLyricsBtnStyle }}">{{ p.songLyricsLabel }}</span><span onClick="{{ p.onToggleSongShapes }}" style="{{ p.songShapesBtnStyle }}">{{ p.songShapesLabel }}</span><span onClick="{{ p.onCloseSongView }}" style="cursor:pointer;font:700 12px Outfit;color:var(--muted);border:1px solid var(--line);background:var(--bg);border-radius:13px;padding:7px 12px">✕ Builder</span></div>
+  <div style="flex:none;padding:10px 16px 4px;font:600 12px Outfit;color:var(--faint)">Drag <span style="color:var(--ink);font-weight:700">⠿</span> to reorder sections · drag a chord to reorder it within a section · tap a section to edit</div>
+  <div data-songlist="1" style="flex:1;overflow-y:auto;padding:8px 16px 20px;display:flex;flex-direction:column;gap:11px">
+    <sc-for list="{{ p.songRows }}" as="row" hint-placeholder-count="3"><div data-songrow="1" style="{{ row.rowStyle }}">
+      <div style="display:flex;align-items:center;gap:10px"><span onPointerDown="{{ row.onHandleDown }}" style="cursor:grab;touch-action:none;font:700 16px Outfit;color:var(--faint);padding:2px 4px">⠿</span><span onClick="{{ row.onOpen }}" style="cursor:pointer;font:700 16px Outfit;color:var(--ink)">{{ row.name }}</span><span style="font:600 11px Outfit;color:var(--faint)">{{ row.meta }}</span><span style="flex:1"></span><span onClick="{{ row.onOpen }}" style="cursor:pointer;font:700 11px Outfit;color:var(--goldDeep);border:1px solid var(--line);border-radius:10px;padding:5px 9px">Edit →</span></div>
+      <div data-songchords="1" style="display:flex;align-items:stretch;min-height:48px"><sc-for list="{{ row.chips }}" as="ch" hint-placeholder-count="4"><div onPointerDown="{{ ch.onDown }}" style="{{ ch.style }}"><span style="font:700 16px Outfit;color:var(--goldDeep)">{{ ch.name }}</span><span style="font:600 9px Outfit;color:var(--faint)">{{ ch.roman }}</span><sc-if value="{{ ch.showDiag }}" hint-placeholder-val="{{ false }}"><div style="position:relative;width:30px;height:34px;margin-top:1px"><div style="position:absolute;top:7px;left:0;right:0;bottom:1px;border:1px solid var(--chordBorder);border-top:2px solid var(--faint);border-radius:0 0 2px 2px"></div><div style="position:absolute;top:7px;left:20%;width:1px;bottom:1px;background:var(--chordBorder)"></div><div style="position:absolute;top:7px;left:40%;width:1px;bottom:1px;background:var(--chordBorder)"></div><div style="position:absolute;top:7px;left:60%;width:1px;bottom:1px;background:var(--chordBorder)"></div><div style="position:absolute;top:7px;left:80%;width:1px;bottom:1px;background:var(--chordBorder)"></div><sc-for list="{{ ch.diagMarkers }}" as="mk" hint-placeholder-count="6"><span style="position:absolute;top:0;left:{{ mk.left }}%;transform:translateX(-50%);font:700 6px Outfit;color:var(--faint)">{{ mk.m }}</span></sc-for><sc-for list="{{ ch.diagDots }}" as="dt" hint-placeholder-count="3"><span style="position:absolute;left:{{ dt.left }}%;top:{{ dt.top }}%;width:6px;height:6px;margin-left:-3px;margin-top:1px;border-radius:50%;background:var(--goldDeep)"></span></sc-for></div></sc-if><sc-if value="{{ ch.showLyric }}" hint-placeholder-val="{{ false }}"><span style="{{ ch.lyStyle }}">{{ ch.lyWord }}</span></sc-if><sc-if value="{{ ch.ook }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:3px;right:4px;width:13px;height:13px;border-radius:50%;background:#d98a3a;color:#fff;font:700 9px/13px Outfit;text-align:center">!</span></sc-if></div></sc-for></div>
+    </div></sc-for>
+    <div onClick="{{ p.onAddSection }}" style="cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;border:1.5px dashed var(--gold);border-radius:14px;padding:14px 0"><span style="font:700 16px Outfit;color:var(--goldDeep)">+</span><span style="font:700 13px Outfit;color:var(--goldDeep)">Add section</span></div>
+  </div>
+</div></sc-if>
+      <sc-if value="{{ p.auxActive }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0;z-index:35;background:var(--bg);display:flex;flex-direction:column">
+  <div style="height:42px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 26px;font:700 14px Outfit;color:var(--ink)"><span>9:41</span><span style="width:16px;height:9px;border:1.5px solid var(--ink);border-radius:2px"></span></div>
+  <div style="flex:none;display:flex;align-items:center;gap:10px;padding:6px 16px 10px;background:var(--panel);border-bottom:1px solid var(--line)"><span style="display:flex;align-items:center;gap:5px"><span style="font-size:18px;line-height:1">🍋</span><span style="font:700 19px/1 'Playfair Display',serif;color:var(--ink)">Zest</span></span><span style="font:700 14px Outfit;color:var(--goldDeep)">{{ p.toolTitle }}</span><span style="flex:1"></span><span onClick="{{ p.onBackToBuilder }}" style="cursor:pointer;font:700 12px Outfit;color:var(--muted);border:1px solid var(--line);background:var(--bg);border-radius:13px;padding:7px 12px">✕ Builder</span></div>
+  <div style="flex:1;overflow-y:auto;padding:18px 16px 24px">
+    <sc-if value="{{ p.isTuner }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:18px">
+      <div style="text-align:center"><div style="font:800 66px/1 Outfit;color:var(--ink)">{{ p.tunerTarget }}</div><div style="font:700 14px Outfit;color:#2f8a4c">{{ p.tunerCents }} · in tune</div></div>
+      <div style="position:relative;height:56px;border:1px solid var(--line);border-radius:12px;background:var(--panel)"><div style="position:absolute;left:50%;top:6px;bottom:6px;width:2px;background:#2f8a4c;transform:translateX(-50%)"></div><div style="position:absolute;left:57%;top:9px;bottom:9px;width:3px;background:var(--gold);border-radius:2px"></div><span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font:600 11px Outfit;color:var(--faint)">♭ flat</span><span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);font:600 11px Outfit;color:var(--faint)">sharp ♯</span></div>
+      <div style="display:flex;gap:8px;justify-content:center"><sc-for list="{{ p.tStrings }}" as="ts" hint-placeholder-count="6"><span onClick="{{ ts.onTap }}" style="{{ ts.style }}">{{ ts.name }}</span></sc-for></div>
+      <div style="text-align:center;font:600 12px Outfit;color:var(--faint)">🎙 Listening — pluck the selected string</div>
+    </div></sc-if>
+    <sc-if value="{{ p.isArp }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:15px">
+      <div style="display:flex;align-items:center;gap:9px"><span style="font:700 13px Outfit;color:var(--ink)">Source chord</span><span style="font:800 19px Outfit;color:var(--goldDeep)">{{ p.curChordName }}</span><span style="flex:1"></span><span onClick="{{ p.onToggleArp }}" style="{{ p.arpToggleStyle }}">{{ p.arpToggleLabel }}</span></div>
+      <div style="display:flex;gap:6px"><sc-for list="{{ p.arpToneChips }}" as="tc" hint-placeholder-count="3"><span style="font:700 12px Outfit;color:#fff;background:#6fcf86;border-radius:8px;padding:6px 11px">{{ tc.name }}</span></sc-for></div>
+      <div><div style="font:700 10px Outfit;letter-spacing:.12em;color:var(--faint);margin-bottom:8px">PATTERN</div><div style="display:flex;gap:7px;flex-wrap:wrap"><sc-for list="{{ p.arpPats }}" as="ap" hint-placeholder-count="4"><span onClick="{{ ap.onTap }}" style="{{ ap.style }}">{{ ap.label }}</span></sc-for></div></div>
+      <div><div style="font:700 10px Outfit;letter-spacing:.12em;color:var(--faint);margin-bottom:8px">RATE</div><div style="display:flex;gap:7px"><sc-for list="{{ p.arpRates }}" as="ar" hint-placeholder-count="3"><span onClick="{{ ar.onTap }}" style="{{ ar.style }}">{{ ar.r }}</span></sc-for></div></div>
+      <div style="display:flex;align-items:center;gap:9px"><span style="font:700 10px Outfit;letter-spacing:.12em;color:var(--faint)">OCTAVES</span><span onClick="{{ p.onArpOctMinus }}" style="cursor:pointer;width:32px;height:32px;border-radius:9px;border:1px solid var(--line);background:var(--panel);display:flex;align-items:center;justify-content:center;font:700 16px Outfit;color:var(--muted)">−</span><span style="font:700 14px Outfit;color:var(--ink);min-width:28px;text-align:center">{{ p.arpOctLabel }}</span><span onClick="{{ p.onArpOctPlus }}" style="cursor:pointer;width:32px;height:32px;border-radius:9px;border:1px solid var(--line);background:var(--panel);display:flex;align-items:center;justify-content:center;font:700 16px Outfit;color:var(--muted)">+</span></div>
+      <div><div style="font:700 10px Outfit;letter-spacing:.12em;color:var(--faint);margin-bottom:8px">PREVIEW (plays with the loop)</div><div style="display:flex;gap:5px"><sc-for list="{{ p.arpSteps }}" as="stp" hint-placeholder-count="8"><span style="{{ stp.style }}">{{ stp.name }}</span></sc-for></div></div>
+    </div></sc-if>
+    <sc-if value="{{ p.isScales }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:15px">
+      <div><div style="font:700 10px Outfit;letter-spacing:.12em;color:var(--faint);margin-bottom:8px">SCALE</div><div style="display:flex;gap:7px;flex-wrap:wrap"><sc-for list="{{ p.scaleNames }}" as="sn" hint-placeholder-count="6"><span onClick="{{ sn.onTap }}" style="{{ sn.style }}">{{ sn.name }}</span></sc-for></div></div>
+      <div style="display:flex;align-items:center;gap:9px"><span style="font:800 16px Outfit;color:var(--ink)">G {{ p.scaleSel }}</span><span style="flex:1"></span><span style="font:600 11px Outfit;color:var(--faint)">over {{ p.curChordName }}</span></div>
+      <div style="display:flex;gap:7px;flex-wrap:wrap"><sc-for list="{{ p.scaleNotes }}" as="sN" hint-placeholder-count="7"><span style="{{ sN.style }}"><span style="font:700 14px Outfit">{{ sN.name }}</span><span style="font:600 9px Outfit;opacity:.8">deg {{ sN.deg }}</span></span></sc-for></div>
+      <div style="display:flex;gap:16px"><span style="display:flex;align-items:center;gap:5px;font:600 11px Outfit;color:#2f8a4c">● chord tone</span><span style="display:flex;align-items:center;gap:5px;font:600 11px Outfit;color:#b3892a">● scale tone</span></div>
+    </div></sc-if>
+  </div>
+</div></sc-if>
+
+<sc-if value="{{ p.railShow }}" hint-placeholder-val="{{ false }}"><div style="{{ p.railWrapStyle }}"><div onPointerDown="{{ p.onRailDown }}" style="{{ p.railHandleStyle }}"><span style="width:16px;height:3px;border-radius:2px;background:var(--faint)"></span></div><sc-for list="{{ p.railItems }}" as="r" hint-placeholder-count="2"><div onClick="{{ r.onSwitch }}" style="{{ r.tabStyle }}"><span style="{{ r.iconStyle }}">{{ r.icon }}</span><span style="{{ r.nameStyle }}">{{ r.name }}</span><sc-if value="{{ r.closable }}" hint-placeholder-val="{{ false }}"><span onClick="{{ r.onClose }}" style="{{ r.closeStyle }}">✕</span></sc-if></div></sc-for></div></sc-if>
+
+<sc-if value="{{ p.sheetMore }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;left:0;right:0;bottom:0;z-index:50;background:var(--bg);border-top:1px solid var(--line);border-radius:18px 18px 0 0;box-shadow:0 -6px 20px rgba(80,65,30,.18);max-height:64%;display:flex;flex-direction:column">
+  <div style="flex:none;padding:9px 0 4px;display:flex;justify-content:center"><span style="width:40px;height:4px;border-radius:2px;background:var(--line)"></span></div>
+  <div style="flex:none;display:flex;align-items:center;gap:10px;padding:4px 18px 12px;border-bottom:1px solid var(--line2)"><span style="font:700 18px Outfit;color:var(--ink)">More tools</span><span style="flex:1"></span><span onClick="{{ p.onCloseSheet }}" style="cursor:pointer;width:30px;height:30px;border-radius:50%;background:var(--rail);display:flex;align-items:center;justify-content:center;font:700 14px Outfit;color:var(--faint)">×</span></div>
+  <div style="flex:1;overflow-y:auto;padding:12px 18px 20px;display:flex;flex-direction:column;gap:9px">
+    <div onClick="{{ p.onManageSections }}" style="cursor:pointer;display:flex;align-items:center;gap:12px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:13px 14px"><span style="width:38px;height:38px;border-radius:10px;background:var(--rail);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--muted)">⠿</span><span style="font:700 15px Outfit;color:var(--ink)">Manage song order</span></div>
+    <sc-for list="{{ p.moreTools }}" as="mt" hint-placeholder-count="3"><div onClick="{{ mt.onOpen }}" style="cursor:pointer;display:flex;align-items:center;gap:12px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:13px 14px"><span style="width:38px;height:38px;border-radius:10px;background:var(--goldSoft);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--goldDeep)">{{ mt.icon }}</span><span style="display:flex;flex-direction:column;gap:2px"><span style="font:700 15px Outfit;color:var(--ink)">{{ mt.name }}</span><span style="font:400 12px Outfit;color:var(--faint)">{{ mt.desc }}</span></span><span style="flex:1"></span><span style="font:700 10px Outfit;color:#2f8a4c">{{ mt.badge }}</span></div></sc-for>
+  </div>
+</div></sc-if>
+
+<sc-if value="{{ p.sheetPicker }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;left:0;right:0;bottom:0;z-index:50;background:var(--bg);border-top:1px solid var(--line);border-radius:18px 18px 0 0;box-shadow:0 -6px 20px rgba(80,65,30,.18);max-height:74%;display:flex;flex-direction:column">
+  <div style="flex:none;padding:9px 0 4px;display:flex;justify-content:center"><span style="width:40px;height:4px;border-radius:2px;background:var(--line)"></span></div>
+  <div style="flex:none;display:flex;align-items:center;gap:10px;padding:4px 18px 12px;border-bottom:1px solid var(--line2)"><span style="font:700 18px Outfit;color:var(--ink)">🎹 Chord Picker</span><span style="flex:1"></span><span onClick="{{ p.onCloseSheet }}" style="cursor:pointer;width:30px;height:30px;border-radius:50%;background:var(--rail);display:flex;align-items:center;justify-content:center;font:700 14px Outfit;color:var(--faint)">×</span></div>
+  <div style="flex:1;overflow-y:auto;padding:14px 18px 8px;display:flex;flex-direction:row;gap:18px;align-items:flex-start">
+    <div style="flex:none;width:188px"><div style="font:700 10px Outfit;letter-spacing:.12em;color:var(--faint);margin-bottom:8px">ROOT</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px"><sc-for list="{{ p.pickerRoots }}" as="pr" hint-placeholder-count="12"><span onClick="{{ pr.onTap }}" style="{{ pr.style }}">{{ pr.name }}</span></sc-for></div></div>
+    <div style="flex:1;display:flex;flex-direction:column;gap:15px"><div><div style="font:700 10px Outfit;letter-spacing:.12em;color:var(--faint);margin-bottom:8px">TYPE</div><div style="display:flex;gap:7px;flex-wrap:wrap"><sc-for list="{{ p.pickerQuals }}" as="pq" hint-placeholder-count="6"><span onClick="{{ pq.onTap }}" style="{{ pq.style }}">{{ pq.label }}</span></sc-for></div></div>
+    <div><div style="font:700 10px Outfit;letter-spacing:.12em;color:var(--faint);margin-bottom:8px">EXTENSIONS</div><div style="display:flex;gap:7px;flex-wrap:wrap"><sc-for list="{{ p.pickerExts }}" as="pe" hint-placeholder-count="6"><span onClick="{{ pe.onTap }}" style="{{ pe.style }}">{{ pe.label }}</span></sc-for></div></div></div>
+  </div>
+  <div style="flex:none;display:flex;align-items:center;gap:11px;padding:12px 18px 22px;border-top:1px solid var(--line2);background:var(--panel)"><span style="font:600 11px Outfit;color:var(--faint)">Result</span><span style="font:800 26px Outfit;color:var(--goldDeep)">{{ p.pickerResult }}</span><span style="flex:1"></span><span onClick="{{ p.onAddPicked }}" style="cursor:pointer;font:700 13px Outfit;color:#fff;background:var(--gold);border-radius:14px;padding:11px 20px;box-shadow:0 2px 6px rgba(200,160,74,.4)">Add to progression</span></div>
+</div></sc-if>
+
+<sc-if value="{{ p.sheetShapeEditor }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;left:0;right:0;bottom:0;z-index:50;background:var(--bg);border-top:1px solid var(--line);border-radius:18px 18px 0 0;box-shadow:0 -6px 20px rgba(80,65,30,.18);max-height:80%;display:flex;flex-direction:column">
+  <div style="flex:none;padding:9px 0 4px;display:flex;justify-content:center"><span style="width:40px;height:4px;border-radius:2px;background:var(--line)"></span></div>
+  <div style="flex:none;display:flex;align-items:center;gap:10px;padding:4px 18px 12px;border-bottom:1px solid var(--line2)"><span style="font:700 17px Outfit;color:var(--ink)">Chord Shape: <span style="color:var(--goldDeep)">{{ p.shTitle }}</span></span><span style="flex:1"></span><span onClick="{{ p.onCloseSheet }}" style="cursor:pointer;width:30px;height:30px;border-radius:50%;background:var(--rail);display:flex;align-items:center;justify-content:center;font:700 14px Outfit;color:var(--faint)">×</span></div>
+  <div style="flex:1;overflow-y:auto;padding:14px 16px 8px;display:flex;flex-direction:column;gap:14px">
+    <div style="display:flex;align-items:center;gap:10px"><span onClick="{{ p.onShWinDown }}" style="cursor:pointer;width:34px;height:32px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);display:flex;align-items:center;justify-content:center;font:700 14px Outfit;color:var(--goldDeep)">◀</span><span style="font:700 13px Outfit;color:var(--ink)">{{ p.shWindowLabel }}</span><span onClick="{{ p.onShWinUp }}" style="cursor:pointer;width:34px;height:32px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);display:flex;align-items:center;justify-content:center;font:700 14px Outfit;color:var(--goldDeep)">▶</span><span style="flex:1"></span><span style="font:600 10px Outfit;color:var(--faint)">Shift:</span><span onClick="{{ p.onShShiftDown }}" style="cursor:pointer;font:700 11px Outfit;color:var(--goldDeep);border:1px solid var(--line);background:var(--panel2);border-radius:8px;padding:7px 9px">↓1</span><span onClick="{{ p.onShShiftUp }}" style="cursor:pointer;font:700 11px Outfit;color:var(--goldDeep);border:1px solid var(--line);background:var(--panel2);border-radius:8px;padding:7px 9px">↑1</span></div>
+
+    <div style="display:flex;align-items:center;gap:9px;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:9px 12px"><span style="font:700 10px Outfit;letter-spacing:.1em;color:var(--faint)">TYPE</span><span style="flex:1;font:700 18px 'JetBrains Mono',monospace;color:var(--ink);letter-spacing:.18em">{{ p.shTypeStr }}</span><span style="font:600 9px Outfit;color:var(--faint)">low E → high e</span></div>
+
+    <div>
+      <div style="display:flex;align-items:center;margin-bottom:3px"><span style="width:60px;flex:none"></span><sc-for list="{{ p.shFretCols }}" as="fc" hint-placeholder-count="5"><span style="flex:1;text-align:center;font:700 11px Outfit;color:var(--faint)">{{ fc.fret }}</span></sc-for></div>
+      <div style="border:1px solid var(--line);border-radius:9px;overflow:visible;background:var(--bg);padding:3px 4px"><sc-for list="{{ p.shStringRows }}" as="sr" hint-placeholder-count="6"><div style="display:flex;align-items:center;position:relative"><span style="width:18px;flex:none;text-align:center;font:700 12px Outfit;color:var(--ink)">{{ sr.label }}</span><span onClick="{{ sr.onPick }}" style="{{ sr.valStyle }}">{{ sr.val }}</span><sc-if value="{{ sr.pickOpen }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;top:34px;left:24px;z-index:60;background:var(--panel2);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 22px rgba(30,26,15,.3);padding:7px;display:grid;grid-template-columns:repeat(7,30px);gap:4px"><sc-for list="{{ sr.pickKeys }}" as="pk" hint-placeholder-count="14"><span onClick="{{ pk.onTap }}" style="cursor:pointer;width:30px;height:28px;border-radius:6px;border:1px solid var(--line);background:var(--bg);display:flex;align-items:center;justify-content:center;font:700 12px 'JetBrains Mono',monospace;color:var(--ink)">{{ pk.n }}</span></sc-for></div></sc-if><div style="flex:1;display:flex"><sc-for list="{{ sr.cells }}" as="gc" hint-placeholder-count="5"><div onClick="{{ gc.onTap }}" style="{{ gc.style }}"><span style="{{ gc.dotStyle }}"></span></div></sc-for></div></div></sc-for></div>
+    </div>
+
+    <div style="background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:12px 14px;display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="font:700 10px Outfit;letter-spacing:.1em;color:var(--faint)">CHORD CHECK</span><sc-if value="{{ p.shCheckOk }}" hint-placeholder-val="{{ false }}"><span style="font:700 12px Outfit;color:#2f8a4c;background:#e8f3ea;border-radius:8px;padding:5px 10px">{{ p.shDetectedFull }} ✓</span></sc-if><sc-if value="{{ p.shMismatch }}" hint-placeholder-val="{{ false }}"><span style="font:700 11px Outfit;color:#fff;background:#d98a3a;border-radius:8px;padding:5px 9px">⚠ ≠ {{ p.shName }}</span></sc-if></div>
+      <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap"><span style="font:700 9px Outfit;letter-spacing:.08em;color:var(--faint)">NOTES</span><sc-for list="{{ p.shNotes }}" as="nt" hint-placeholder-count="4"><span style="display:flex;align-items:baseline;gap:2px;font:700 12px Outfit;color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:4px 7px">{{ nt.note }}<span style="font:700 8px Outfit;color:var(--goldDeep)">{{ nt.iv }}</span></span></sc-for></div>
+      <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap"><span style="font:700 9px Outfit;letter-spacing:.08em;color:var(--faint)">ALSO</span><sc-for list="{{ p.shAlts }}" as="al" hint-placeholder-count="5"><span style="display:flex;align-items:baseline;gap:3px;font:700 12px Outfit;color:var(--muted);border:1px solid var(--line);border-radius:13px;padding:4px 9px">{{ al.name }}<span style="font:600 8px 'JetBrains Mono',monospace;color:var(--faint)">{{ al.ratio }}</span></span></sc-for></div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:10px;border:1.5px dashed var(--line);border-radius:11px;padding:11px 13px"><span style="font:600 12px Outfit;color:var(--muted)">Not sure of the shape?</span><span style="flex:1"></span><span onClick="{{ p.onPickByName }}" style="cursor:pointer;font:700 11px Outfit;color:var(--goldDeep);background:var(--goldSoft);border:1px solid var(--line);border-radius:9px;padding:7px 11px">Pick a chord by name →</span></div>
+  </div>
+  <div style="flex:none;display:flex;align-items:center;gap:9px;padding:11px 16px 22px;border-top:1px solid var(--line2);background:var(--panel)"><span onClick="{{ p.onShClear }}" style="cursor:pointer;font:600 12px Outfit;color:var(--muted);border:1px solid var(--line);border-radius:11px;padding:10px 16px">Clear</span><span style="flex:1"></span><span onClick="{{ p.onSaveShape }}" style="cursor:pointer;font:700 13px Outfit;color:#fff;background:var(--gold);border-radius:13px;padding:11px 22px;box-shadow:0 2px 6px rgba(200,160,74,.4)">Save Shape</span></div>
+</div></sc-if>
+
+<sc-if value="{{ p.sheetAnalysis }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;left:0;right:0;bottom:0;z-index:50;background:var(--bg);border-top:1px solid var(--line);border-radius:18px 18px 0 0;box-shadow:0 -6px 20px rgba(80,65,30,.18);max-height:74%;display:flex;flex-direction:column">
+  <div style="flex:none;display:flex;align-items:center;gap:10px;padding:4px 18px 12px;border-bottom:1px solid var(--line2)"><span style="font:700 18px Outfit;color:var(--ink)">📊 Progression Analysis</span><span style="flex:1"></span><span onClick="{{ p.onCloseSheet }}" style="cursor:pointer;width:30px;height:30px;border-radius:50%;background:var(--rail);display:flex;align-items:center;justify-content:center;font:700 14px Outfit;color:var(--faint)">×</span></div>
+  <div style="flex:1;overflow-y:auto;padding:14px 18px 18px;display:flex;flex-direction:column;gap:14px">
+    <div style="display:flex;align-items:center;gap:10px;background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:11px 14px"><span style="font:700 11px Outfit;letter-spacing:.1em;color:var(--faint)">KEY</span><span style="font:800 16px Outfit;color:var(--goldDeep)">{{ p.analysisKey }}</span><span style="flex:1"></span><span style="font:600 11px Outfit;color:var(--muted)">{{ p.analysisInKeyCount }} / {{ p.analysisTotal }} in key</span></div>
+    <div><div style="font:700 10px Outfit;letter-spacing:.12em;color:var(--faint);margin-bottom:7px">ROMAN NUMERAL ANALYSIS</div><div style="font:700 15px 'JetBrains Mono',monospace;color:var(--ink);background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:11px 13px;text-align:center">{{ p.analysisRomanLine }}</div></div>
+    <div style="display:flex;flex-direction:column;gap:6px"><sc-for list="{{ p.analysisRows }}" as="ar" hint-placeholder-count="4"><div style="display:flex;align-items:center;gap:11px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px 13px"><span style="font:800 16px Outfit;color:var(--goldDeep);min-width:38px">{{ ar.name }}</span><span style="font:700 13px 'JetBrains Mono',monospace;color:var(--muted);min-width:34px">{{ ar.roman }}</span><span style="flex:1"></span><span style="{{ ar.badgeStyle }}">{{ ar.badge }}</span></div></sc-for></div>
+    <div style="display:flex;gap:7px;align-items:flex-start;background:var(--goldSoft);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:9px;padding:11px 13px"><span style="font:700 13px Outfit;color:var(--goldDeep)">ℹ</span><span style="font:400 12.5px/1.5 Outfit;color:var(--muted)">Chords flagged <b style="color:#a8702a">borrowed</b> or <b style="color:#a8702a">chromatic</b> sit outside the diatonic set — intentional colour, or a key to reconsider. Use Key Finder to test a better fit.</span></div>
+  </div>
+</div></sc-if>
+
+<sc-if value="{{ p.sheetLyrics }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0;z-index:55;background:#0e0e14;display:flex;flex-direction:column;font-family:Inter,Outfit,sans-serif">
+  <div style="height:42px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:#14141e"><span style="font:700 9px Outfit;color:#ebe8e2">9:41</span><span style="width:16px;height:9px;border:1.5px solid #ebe8e2;border-radius:2px"></span></div>
+  <div style="flex:none;display:flex;align-items:center;gap:10px;padding:8px 16px;border-bottom:1px solid #252530;background:#14141e"><span style="font:700 15px 'Playfair Display',serif;color:#d4a853;letter-spacing:.04em">♫ RhymeForge</span><span style="flex:1"></span><span onClick="{{ p.onCloseSheet }}" style="cursor:pointer;font:700 12px Outfit;color:#a0a0a8;border:1px solid #252530;border-radius:11px;padding:6px 11px">✕ Builder</span></div>
+  <div style="flex:none;display:flex;align-items:center;border-bottom:1px solid #252530;background:#14141e"><span onClick="{{ p.onLyTabLyrics }}" style="{{ p.lyTabLyricsStyle }}">Lyrics</span><span onClick="{{ p.onLyTabRhymes }}" style="{{ p.lyTabRhymesStyle }}">Rhymes</span></div>
+
+  <sc-if value="{{ p.lyIsLyrics }}" hint-placeholder-val="{{ true }}"><div style="flex:1;min-height:0;display:flex;flex-direction:column">
+    <div style="flex:none;display:flex;gap:4px;padding:10px 16px;border-bottom:1px solid #1a1a28"><span onClick="{{ p.onLyFree }}" style="{{ p.lyFreeBtnStyle }}">Free Write</span><span onClick="{{ p.onLyStructured }}" style="{{ p.lyStructBtnStyle }}">Structured / Chords</span></div>
+
+    <sc-if value="{{ p.lyIsFree }}" hint-placeholder-val="{{ true }}"><div style="flex:1;min-height:0;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column">
+      <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px"><span style="font:600 10px Outfit;color:#606068;letter-spacing:.04em;text-transform:uppercase;margin-right:4px">Insert section:</span><sc-for list="{{ p.lyInsertBtns }}" as="ib" hint-placeholder-count="3"><span onClick="{{ ib.onTap }}" style="cursor:pointer;padding:7px 12px;background:#14141e;border:1px solid #252530;border-radius:5px;color:#d4a853;font:600 11px Outfit">{{ ib.name }}</span></sc-for></div>
+      <textarea value="{{ p.lyricsText }}" onInput="{{ p.onLyricsInput }}" placeholder="Write your lyrics here then tap a section button above to insert a marker...&#10;&#10;Example:&#10;[Verse]&#10;Walking down the street today&#10;Feeling all the words to say&#10;&#10;[Chorus]&#10;This is where the song begins" style="min-height:240px;background:#12121c;border:1px solid #252530;border-radius:6px;color:#ebe8e2;font:500 13px/1.7 'JetBrains Mono',monospace;padding:16px;resize:none;outline:none"></textarea>
+      <div style="font:400 10px/1.5 Outfit;color:#606068;margin-top:8px">Tap a section button to insert a [Section] marker at the cursor. Sections auto-link to their matching progression line.</div>
+      <span onClick="{{ p.onParseLyrics }}" style="cursor:pointer;align-self:flex-start;margin-top:10px;padding:9px 16px;background:rgba(212,168,83,.15);border:1px solid #d4a853;color:#d4a853;font:600 11px Outfit;border-radius:5px">Parse Sections →</span>
+      <div style="margin-top:18px;padding:14px 16px;border:1px solid rgba(212,168,83,.18);border-radius:8px;background:rgba(212,168,83,.04)">
+        <div onClick="{{ p.onToggleHowto }}" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between"><span style="font:700 10px Outfit;color:#d4a853;letter-spacing:.1em;text-transform:uppercase">How it works</span><span style="font:700 11px Outfit;color:#d4a853">{{ p.howtoChevron }}</span></div>
+        <sc-if value="{{ p.howtoOpen }}" hint-placeholder-val="{{ true }}"><div style="margin-top:10px"><ol style="margin:0;padding-left:20px;color:#b8b3a8;font:400 12px/1.55 Outfit"><li style="margin:6px 0"><b style="color:#d4a853">Name your progression lines first.</b> Give each line a name like <em style="color:#c8c2b3;font-style:normal;font-weight:600">Verse</em>, <em style="color:#c8c2b3;font-style:normal;font-weight:600">Chorus</em>. The buttons above pick up those names.</li><li style="margin:6px 0"><b style="color:#d4a853">Tap a section button</b> to drop a <span style="font-family:'JetBrains Mono',monospace;background:rgba(212,168,83,.12);color:#d4a853;padding:0 4px;border-radius:3px">[Section]</span> marker at the cursor.</li><li style="margin:6px 0"><b style="color:#d4a853">Write your lyrics</b> under each marker.</li><li style="margin:6px 0"><b style="color:#d4a853">Switch to Structured / Chords</b> to place chords above the words.</li></ol><div style="margin-top:10px;padding-top:8px;border-top:1px dashed rgba(212,168,83,.15);font:600 11px Outfit;font-style:italic;color:#8a8480">Tip: long-press any word to look it up in the Rhymes tab.</div></div></sc-if>
+      </div>
+    </div></sc-if>
+
+    <sc-if value="{{ p.lyIsStructured }}" hint-placeholder-val="{{ false }}"><div style="flex:1;min-height:0;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:16px">
+      <sc-if value="{{ p.lyHasSections }}" hint-placeholder-val="{{ false }}"><sc-for list="{{ p.lySections }}" as="sec" hint-placeholder-count="2"><div style="background:#14141e;border:1px solid #252530;border-radius:8px;overflow:hidden">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#1a1a28;border-bottom:1px solid #252530"><span style="font:700 12px Outfit;color:#d4a853;letter-spacing:.04em">{{ sec.label }}</span><sc-if value="{{ sec.linked }}" hint-placeholder-val="{{ true }}"><span style="font:600 10px Outfit;color:#5ec269">{{ sec.linkText }}</span></sc-if><sc-if value="{{ sec.unlinked }}" hint-placeholder-val="{{ false }}"><span style="font:600 10px Outfit;font-style:italic;color:#606068">Not linked</span></sc-if></div>
+        <sc-for list="{{ sec.lines }}" as="ln" hint-placeholder-count="2"><div style="display:flex;flex-wrap:wrap;align-items:stretch;padding:6px 12px;border-bottom:1px solid #1a1a28"><sc-for list="{{ ln.stacks }}" as="wd" hint-placeholder-count="6"><sc-if value="{{ wd.space }}" hint-placeholder-val="{{ false }}"><span style="white-space:pre">{{ wd.word }}</span></sc-if><sc-if value="{{ wd.real }}" hint-placeholder-val="{{ true }}"><div onClick="{{ wd.onTap }}" style="display:inline-flex;flex-direction:column;align-items:stretch"><span style="{{ wd.chStyle }}">{{ wd.ch }}</span><span style="{{ wd.wordStyle }}">{{ wd.word }}</span></div></sc-if></sc-for></div></sc-for>
+      </div></sc-for></sc-if>
+      <sc-if value="{{ p.lyNoSections }}" hint-placeholder-val="{{ true }}"><div style="text-align:center;color:#606068;font:400 12px/1.6 Outfit;padding:40px 20px">No sections yet.<br><span style="color:#a0a0a8">Switch to Free Write and use [Verse], [Chorus] markers,</span><br>then tap Parse Sections.</div></sc-if>
+    </div></sc-if>
+  </div></sc-if>
+
+  <sc-if value="{{ p.lyIsRhymes }}" hint-placeholder-val="{{ false }}"><div style="flex:1;min-height:0;display:flex;flex-direction:column;padding:14px 16px;gap:12px">
+    <input value="{{ p.rhymeWord }}" onInput="{{ p.onRhymeInput }}" placeholder="Search a word to rhyme…" style="flex:none;background:#12121c;border:1px solid #252530;border-radius:6px;color:#ebe8e2;font:600 15px Outfit;padding:13px 14px;outline:none">
+    <sc-if value="{{ p.rhymeHasResults }}" hint-placeholder-val="{{ false }}"><div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start"><sc-for list="{{ p.rhymeResults }}" as="rr" hint-placeholder-count="8"><span style="font:600 14px 'JetBrains Mono',monospace;color:#ebe8e2;background:#1a1a28;border:1px solid #252530;border-radius:6px;padding:8px 13px">{{ rr.w }}</span></sc-for></div></sc-if>
+    <sc-if value="{{ p.rhymeEmpty }}" hint-placeholder-val="{{ true }}"><div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#606068;text-align:center;padding:30px"><span style="font-size:30px">🔤</span><span style="font:400 12px/1.6 Outfit">Type a word above to find rhymes.<br>In the full app this is the embedded <b style="color:#a0a0a8">RhymeForge</b> dictionary.</span></div></sc-if>
+  </div></sc-if>
+
+  <sc-if value="{{ p.lyPickOpen }}" hint-placeholder-val="{{ false }}"><div onClick="{{ p.onLyPickClose }}" style="position:absolute;inset:0;z-index:60;background:rgba(0,0,0,.5)"></div><div style="position:absolute;left:0;right:0;bottom:0;z-index:61;background:#14141e;border-top:1px solid #d4a853;border-radius:16px 16px 0 0;padding:10px 16px 22px;display:flex;flex-direction:column;gap:10px">
+    <div style="width:38px;height:4px;border-radius:2px;background:#252530;align-self:center"></div>
+    <div style="display:flex;align-items:center;gap:8px"><span style="font:700 13px Outfit;color:#d4a853">Place a chord</span><span style="flex:1"></span><span onClick="{{ p.onLyPickClose }}" style="cursor:pointer;width:28px;height:28px;border-radius:50%;background:#1a1a28;display:flex;align-items:center;justify-content:center;font:700 13px Outfit;color:#606068">×</span></div>
+    <sc-if value="{{ p.lyPickEmpty }}" hint-placeholder-val="{{ false }}"><div style="font:400 12px/1.5 Outfit;color:#606068;padding:6px 0">This section isn't linked to a progression line with chords, so there's nothing to place. Name the section to match a line first.</div></sc-if>
+    <div style="display:flex;flex-wrap:wrap;gap:7px"><sc-for list="{{ p.lyPickChords }}" as="pc" hint-placeholder-count="3"><span onClick="{{ pc.onTap }}" style="cursor:pointer;font:600 13px 'JetBrains Mono',monospace;color:#ebe8e2;background:#1a1a28;border:1px solid #252530;border-radius:5px;padding:9px 14px">{{ pc.name }}</span></sc-for><sc-if value="{{ p.lyPickHasCurrent }}" hint-placeholder-val="{{ false }}"><span onClick="{{ p.onLyPickRemove }}" style="cursor:pointer;font:600 13px Outfit;color:#e06b5e;border:1px solid rgba(224,107,94,.3);border-radius:5px;padding:9px 14px">× Remove</span></sc-if></div>
+  </div></sc-if>
+</div></sc-if>
+
+<sc-if value="{{ p.sheetTutorial }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;left:0;right:0;bottom:0;z-index:50;background:var(--bg);border-top:1px solid var(--line);border-radius:18px 18px 0 0;box-shadow:0 -6px 20px rgba(80,65,30,.18);max-height:74%;display:flex;flex-direction:column">
+  <div style="flex:none;padding:9px 0 4px;display:flex;justify-content:center"><span style="width:40px;height:4px;border-radius:2px;background:var(--line)"></span></div>
+  <div style="flex:none;display:flex;align-items:center;gap:10px;padding:4px 18px 12px;border-bottom:1px solid var(--line2)"><span style="font:700 19px/1 'Playfair Display',serif;color:var(--ink)">🍋 Undercover Zest</span><span style="flex:1"></span><span onClick="{{ p.onCloseSheet }}" style="cursor:pointer;width:30px;height:30px;border-radius:50%;background:var(--rail);display:flex;align-items:center;justify-content:center;font:700 14px Outfit;color:var(--faint)">×</span></div>
+  <div style="flex:1;overflow-y:auto;padding:14px 18px 8px;display:flex;flex-direction:column;gap:14px">
+    <p style="margin:0;font:400 14px/1.55 Outfit;color:var(--muted)">A guitar songwriting suite — build chord progressions, layer tab &amp; melody on one ruler, and hear it loop back.</p>
+    <div><div style="font:700 10px Outfit;letter-spacing:.12em;color:var(--goldDeep);margin-bottom:8px">QUICK START</div><div style="display:flex;flex-direction:column;gap:9px"><div style="display:flex;gap:10px"><span style="flex:none;width:22px;height:22px;border-radius:50%;background:var(--gold);color:#fff;font:700 11px/22px Outfit;text-align:center">1</span><span style="font:400 13.5px/1.4 Outfit;color:var(--muted)">Pick a key at the top</span></div><div style="display:flex;gap:10px"><span style="flex:none;width:22px;height:22px;border-radius:50%;background:var(--gold);color:#fff;font:700 11px/22px Outfit;text-align:center">2</span><span style="font:400 13.5px/1.4 Outfit;color:var(--muted)">Tap a chord to select &amp; edit, or + Chord to add</span></div><div style="display:flex;gap:10px"><span style="flex:none;width:22px;height:22px;border-radius:50%;background:var(--gold);color:#fff;font:700 11px/22px Outfit;text-align:center">3</span><span style="font:400 13.5px/1.4 Outfit;color:var(--muted)">Hit ▶ Play to hear it loop</span></div><div style="display:flex;gap:10px"><span style="flex:none;width:22px;height:22px;border-radius:50%;background:var(--gold);color:#fff;font:700 11px/22px Outfit;text-align:center">4</span><span style="font:400 13.5px/1.4 Outfit;color:var(--muted)">Switch to Tab or Melody, or open More for tools</span></div></div></div>
+  </div>
+  <div style="flex:none;display:flex;justify-content:flex-end;padding:12px 18px 22px;border-top:1px solid var(--line2);background:var(--panel)"><span onClick="{{ p.onCloseSheet }}" style="cursor:pointer;font:700 13px Outfit;color:#fff;background:var(--gold);border-radius:14px;padding:11px 24px">Got it!</span></div>
+</div></sc-if>
+
+<sc-if value="{{ p.anySheet }}" hint-placeholder-val="{{ false }}"><div onClick="{{ p.onCloseSheet }}" style="position:absolute;inset:0;background:rgba(20,18,16,.42);z-index:40"></div></sc-if>
+
+<sc-if value="{{ p.sheetEditor }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;left:0;right:0;bottom:0;z-index:50;background:var(--panel2);border-top:1px solid var(--line);border-radius:18px 18px 0 0;box-shadow:0 -6px 20px rgba(80,65,30,.18);padding:8px 16px 18px;display:flex;flex-direction:column;gap:11px">
+  <div style="width:38px;height:4px;border-radius:2px;background:var(--line);align-self:center"></div>
+  <div style="display:flex;align-items:center;gap:9px"><span style="font:700 20px Outfit;color:var(--goldDeep)">{{ p.editor.name }}</span><span style="font:600 11px Outfit;color:var(--faint)">{{ p.editor.roman }} · chord</span><span style="flex:1"></span><span onClick="{{ p.onCloseSheet }}" style="cursor:pointer;width:30px;height:30px;border-radius:50%;background:var(--rail);display:flex;align-items:center;justify-content:center;font:700 14px Outfit;color:var(--faint)">×</span></div>
+  <div style="display:flex;align-items:center;gap:8px"><span style="font:600 11.5px Outfit;color:var(--faint);width:50px">Length</span><span style="font:700 13px Outfit;color:var(--ink);min-width:50px;text-align:center">{{ p.editor.lenLabel }}</span><span style="flex:1"></span><span onClick="{{ p.editor.onHalf }}" style="{{ p.editor.halfStyle }}">½</span><span onClick="{{ p.editor.onOne }}" style="{{ p.editor.oneStyle }}">1</span><span onClick="{{ p.editor.onTwo }}" style="{{ p.editor.twoStyle }}">2 bars</span></div>
+  <div style="display:flex;align-items:center;gap:8px"><span style="font:600 11.5px Outfit;color:var(--faint);width:50px">Start</span><span onClick="{{ p.editor.onLeft }}" style="cursor:pointer;width:32px;height:32px;border-radius:9px;border:1px solid var(--line);background:var(--panel);display:flex;align-items:center;justify-content:center;font:700 16px Outfit;color:var(--muted)">‹</span><span style="font:700 13px Outfit;color:var(--ink);min-width:60px;text-align:center">{{ p.editor.startLabel }}</span><span onClick="{{ p.editor.onRight }}" style="cursor:pointer;width:32px;height:32px;border-radius:9px;border:1px solid var(--line);background:var(--panel);display:flex;align-items:center;justify-content:center;font:700 16px Outfit;color:var(--muted)">›</span></div>
+  <div style="display:flex;gap:8px"><span onClick="{{ p.editor.onDup }}" style="cursor:pointer;flex:1;text-align:center;font:600 12px Outfit;color:var(--ink);border:1px solid var(--line);background:var(--panel);border-radius:13px;padding:9px 0">＋ Duplicate</span><span onClick="{{ p.editor.onRemove }}" style="cursor:pointer;flex:1;text-align:center;font:600 12px Outfit;color:#a04030;border:1px solid #ecd9d2;background:#faf1ee;border-radius:13px;padding:9px 0">× Remove</span></div>
+</div></sc-if>
+
+<sc-if value="{{ p.sheetPalette }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;left:0;right:0;bottom:0;z-index:50;background:var(--bg);border-top:1px solid var(--line);border-radius:18px 18px 0 0;box-shadow:0 -6px 20px rgba(80,65,30,.18);max-height:62%;display:flex;flex-direction:column">
+  <div style="flex:none;padding:9px 0 4px;display:flex;justify-content:center"><span style="width:40px;height:4px;border-radius:2px;background:var(--line)"></span></div>
+  <div style="flex:none;display:flex;align-items:center;gap:10px;padding:4px 18px 12px;border-bottom:1px solid var(--line2)"><span style="font:700 18px Outfit;color:var(--ink)">Add a chord</span><span style="flex:1"></span><span style="font:700 11px Outfit;color:var(--goldDeep);background:var(--goldSoft);border:1px solid var(--line);border-radius:11px;padding:4px 9px">KEY G</span><span onClick="{{ p.onCloseSheet }}" style="cursor:pointer;width:30px;height:30px;border-radius:50%;background:var(--rail);display:flex;align-items:center;justify-content:center;font:700 14px Outfit;color:var(--faint)">×</span></div>
+  <div style="flex:1;overflow-y:auto;padding:12px 18px 18px"><div style="font:700 10px Outfit;letter-spacing:.12em;color:var(--faint);margin-bottom:9px">DIATONIC · KEY OF G</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:9px"><sc-for list="{{ p.palette }}" as="pal" hint-placeholder-count="6"><span onClick="{{ pal.onAdd }}" style="cursor:pointer;border:1px solid var(--line);background:var(--panel2);border-radius:10px;padding:9px 11px;display:flex;align-items:center;gap:8px;box-shadow:0 1px 2px rgba(80,65,30,.06)"><span style="display:flex;flex-direction:column;line-height:1.1"><span style="font:700 15px Outfit;color:var(--goldDeep)">{{ pal.name }}</span><span style="font:600 9px Outfit;color:var(--faint)">{{ pal.roman }}</span></span><span style="flex:1"></span><span style="display:flex;gap:3px"><span style="font:700 8px Outfit;color:#fff;background:#6fcf86;border-radius:3px;padding:1px 4px">R</span><span style="font:700 8px Outfit;color:#fff;background:#6fcf86;border-radius:3px;padding:1px 4px">3</span><span style="font:700 8px Outfit;color:#fff;background:#6fcf86;border-radius:3px;padding:1px 4px">5</span></span></span></sc-for></div></div>
+</div></sc-if>
+
+<sc-if value="{{ p.sheetFret }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;left:0;right:0;bottom:0;z-index:50;background:var(--panel2);border-top:1px solid var(--line);border-radius:18px 18px 0 0;box-shadow:0 -6px 20px rgba(80,65,30,.18);padding:8px 14px 18px;display:flex;flex-direction:column;gap:10px">
+  <div style="width:38px;height:4px;border-radius:2px;background:var(--line);align-self:center"></div>
+  <div style="display:flex;align-items:center;gap:8px"><span style="font:700 13px Outfit;color:var(--ink)">{{ p.fretTitle }}</span><span style="flex:1"></span><span onClick="{{ p.onCloseSheet }}" style="cursor:pointer;width:28px;height:28px;border-radius:50%;background:var(--rail);display:flex;align-items:center;justify-content:center;font:700 13px Outfit;color:var(--faint)">×</span></div>
+  <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px"><sc-for list="{{ p.fretKeys }}" as="fk" hint-placeholder-count="13"><span onClick="{{ fk.onTap }}" style="cursor:pointer;height:40px;border-radius:9px;border:1px solid var(--line);background:var(--panel);display:flex;align-items:center;justify-content:center;font:700 15px 'JetBrains Mono',monospace;color:var(--ink)">{{ fk.d }}</span></sc-for></div>
+  <sc-if value="{{ p.fretExt }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:6px"><div style="font:700 9px Outfit;letter-spacing:.12em;color:var(--faint)">FRETS 13–24</div><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px"><sc-for list="{{ p.fretKeysExt }}" as="fe" hint-placeholder-count="12"><span onClick="{{ fe.onTap }}" style="cursor:pointer;height:38px;border-radius:9px;border:1px solid var(--line);background:var(--bg);display:flex;align-items:center;justify-content:center;font:700 14px 'JetBrains Mono',monospace;color:var(--muted)">{{ fe.d }}</span></sc-for></div></div></sc-if>
+  <div style="display:flex;gap:6px"><span onClick="{{ p.onToggleFretExt }}" style="cursor:pointer;flex:1;height:38px;border-radius:9px;border:1px solid var(--line);background:var(--panel);display:flex;align-items:center;justify-content:center;gap:5px;font:700 11px Outfit;color:var(--goldDeep)">{{ p.fretExtLabel }}</span><span onClick="{{ p.onClearFret }}" style="cursor:pointer;flex:1;height:38px;border-radius:9px;border:1px solid #ecd9d2;background:#faf1ee;display:flex;align-items:center;justify-content:center;font:700 12px Outfit;color:#a04030">✕ mute</span><span onClick="{{ p.onCloseSheet }}" style="cursor:pointer;width:52px;height:38px;border-radius:9px;border:1px solid var(--line);background:var(--panel);display:flex;align-items:center;justify-content:center;font:700 13px Outfit;color:var(--muted)">⌫</span></div>
+</div></sc-if>
+
+<sc-if value="{{ p.sheetSections }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;left:0;right:0;bottom:0;z-index:50;background:var(--bg);border-top:1px solid var(--line);border-radius:18px 18px 0 0;box-shadow:0 -6px 20px rgba(80,65,30,.18);max-height:60%;display:flex;flex-direction:column">
+  <div style="flex:none;padding:9px 0 4px;display:flex;justify-content:center"><span style="width:40px;height:4px;border-radius:2px;background:var(--line)"></span></div>
+  <div style="flex:none;display:flex;align-items:center;gap:10px;padding:4px 18px 12px;border-bottom:1px solid var(--line2)"><span style="font:700 18px Outfit;color:var(--ink)">Sections</span><span style="flex:1"></span><span onClick="{{ p.onCloseSheet }}" style="cursor:pointer;width:30px;height:30px;border-radius:50%;background:var(--rail);display:flex;align-items:center;justify-content:center;font:700 14px Outfit;color:var(--faint)">×</span></div>
+  <div style="flex:1;overflow-y:auto;padding:12px 18px 18px;display:flex;flex-direction:column;gap:9px"><sc-for list="{{ p.sectionRows }}" as="sr" hint-placeholder-count="3"><div onClick="{{ sr.onJump }}" style="{{ sr.style }}"><span style="font:700 16px Outfit;color:var(--faint)">⠿</span><span style="font:700 15px Outfit;color:var(--ink)">{{ sr.name }}</span><span style="font:600 11px Outfit;color:var(--faint)">{{ sr.meta }}</span><span style="flex:1"></span><span style="{{ sr.badgeStyle }}">{{ sr.badge }}</span></div></sc-for><div onClick="{{ p.onAddSection }}" style="cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;border:1.5px dashed var(--gold);border-radius:12px;padding:13px 0"><span style="font:700 16px Outfit;color:var(--goldDeep)">+</span><span style="font:700 13px Outfit;color:var(--goldDeep)">Add section</span></div></div>
+</div></sc-if>
+      <sc-if value="{{ p.notPiano }}" hint-placeholder-val="{{ true }}">
+  <div style="flex:none;display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--panel);border-top:1px solid var(--line)">
+    <span onClick="{{ p.onPlay }}" style="{{ p.playBtnStyle }}">{{ p.playGlyph }} {{ p.playWord }}</span>
+    <span onClick="{{ p.onToggleLoop }}" style="{{ p.loopBtnStyle }}">⟳</span>
+    <span style="font:600 12px Outfit;color:var(--muted)">96 BPM</span>
+    <span style="flex:1"></span>
+    <span onClick="{{ p.onCycleTime }}" style="cursor:pointer;display:flex;align-items:center;gap:3px;font:700 12px 'JetBrains Mono',monospace;color:var(--muted);border:1px solid var(--line);border-radius:8px;padding:4px 8px"><span style="font-size:8px;color:var(--faint)">TIME</span>{{ p.posLabel }}</span>
+    <sc-if value="{{ p.isMelody }}" hint-placeholder-val="{{ false }}"><span onClick="{{ p.onOpenPiano }}" style="cursor:pointer;font:700 14px Outfit;color:var(--goldDeep);border:1px solid var(--line);background:var(--panel2);border-radius:11px;padding:5px 9px">🎹</span></sc-if>
+  </div>
+  <div style="flex:none;display:flex;align-items:center;gap:8px;padding:9px 12px 22px;background:var(--panel2);border-top:1px solid var(--line)">
+    <span onClick="{{ p.onCycleLane }}" style="flex:1;cursor:pointer;display:flex;align-items:center;gap:11px;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:8px 13px">
+      <span style="width:32px;height:32px;border-radius:9px;background:var(--goldSoft);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--goldDeep)">{{ p.laneIcon }}</span>
+      <span style="display:flex;flex-direction:column;line-height:1.15"><span style="font:700 14px Outfit;color:var(--ink)">{{ p.laneName }}</span><span style="font:600 10px Outfit;color:var(--faint)">tap to switch → {{ p.nextLaneName }}</span></span>
+      <span style="flex:1"></span>
+      <span style="font-size:18px;color:var(--goldDeep)">⇄</span>
+    </span>
+    <span onClick="{{ p.onOpenMore }}" style="cursor:pointer;width:48px;height:48px;flex:none;border-radius:13px;border:1px solid var(--line);background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--faint)"><span style="font-size:16px">⋯</span><span style="font:600 9px Outfit">More</span></span>
+  </div>
+</sc-if>
+
+<sc-if value="{{ p.pianoOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:none;display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--panel);border-top:1px solid var(--line)">
+    <span onClick="{{ p.onToggleRec }}" style="{{ p.recBtnStyle }}">● REC</span>
+    <span style="display:flex;align-items:center;gap:6px;background:var(--goldSoft);border:1px solid var(--line);border-radius:9px;padding:4px 8px"><span style="font:800 15px Outfit;color:var(--goldDeep)">{{ p.curChordName }}</span><span style="display:flex;gap:3px"><sc-for list="{{ p.curChordTones }}" as="ct" hint-placeholder-count="3"><span style="font:700 8px Outfit;color:#fff;background:#6fcf86;border-radius:3px;padding:1px 4px">{{ ct.name }}</span></sc-for></span></span>
+    <span style="flex:1"></span>
+    <span style="display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:13px;overflow:hidden"><span onClick="{{ p.onOctMinus }}" style="cursor:pointer;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font:700 14px Outfit;color:var(--muted)">−</span><span style="font:700 10px Outfit;color:var(--faint);padding:0 6px">{{ p.octaveLabel }}</span><span onClick="{{ p.onOctPlus }}" style="cursor:pointer;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font:700 14px Outfit;color:var(--muted);border-left:1px solid var(--line)">+</span></span>
+    <span onClick="{{ p.onScaleLock }}" style="{{ p.scaleLockStyle }}">Scale-lock</span>
+  </div>
+  <div style="flex:none;height:150px;position:relative;background:#2b2b2b;padding:9px 8px 10px"><div style="position:relative;height:100%;display:flex;gap:3px"><sc-for list="{{ p.whiteKeys }}" as="w" hint-placeholder-count="9"><div onClick="{{ w.onTap }}" style="{{ w.keyStyle }}"><span style="{{ w.dotStyle }}"></span><span style="{{ w.labelStyle }}">{{ w.label }}</span></div></sc-for><sc-for list="{{ p.blackKeys }}" as="bk" hint-placeholder-count="6"><div onClick="{{ bk.onTap }}" style="{{ bk.keyStyle }}"><span style="{{ bk.dotStyle }}"></span></div></sc-for></div></div>
+  <div style="flex:none;display:flex;align-items:center;gap:8px;padding:8px 14px 20px;background:#2b2b2b"><span style="display:flex;align-items:center;gap:4px;font:600 10px Outfit;color:#7fd894">●chord</span><span style="display:flex;align-items:center;gap:4px;font:600 10px Outfit;color:#edc56a">●scale</span><span style="display:flex;align-items:center;gap:4px;font:600 10px Outfit;color:#c2a6e0">●pass</span><span style="display:flex;align-items:center;gap:4px;font:600 10px Outfit;color:#e8917f">●out</span><span style="flex:1"></span><span onClick="{{ p.onClosePiano }}" style="cursor:pointer;font:600 11px Outfit;color:#cfc7b5;border:1px solid #4a4a44;border-radius:12px;padding:7px 12px">Close</span><span onClick="{{ p.onKeepTake }}" style="cursor:pointer;font:700 11px Outfit;color:#1f1f1f;background:#6fcf86;border-radius:12px;padding:7px 14px">Keep take</span></div>
+</sc-if>
+    </div>
+  </div>
+  <div style="flex:none;width:300px;align-self:center;display:flex;flex-direction:column;gap:18px">
+  <div>
+    <div style="font:800 12px/1 Outfit;letter-spacing:.2em;text-transform:uppercase;color:#a98432">Undercover Zest</div>
+    <h1 style="margin:6px 0 0;font:800 30px/1.05 'Playfair Display',serif;color:#2b2b2b">Mobile builder — interactive</h1>
+    <p style="margin:10px 0 0;font:400 14px/1.55 Outfit;color:#6f685a">Direction A, live. Everything below is tappable — this is a working prototype, not a mockup.</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:11px">
+    <div style="display:flex;gap:10px;align-items:flex-start"><span style="flex:none;width:22px;height:22px;border-radius:50%;background:#c8a04a;color:#fff;font:700 11px/22px Outfit;text-align:center">1</span><div style="font:400 13px/1.45 Outfit;color:#5f5a4e"><b style="color:#2b2b2b">Tap a chord</b> to select &amp; open its editor — change length (½/1/2), nudge its start, duplicate or remove. The ruler updates live.</div></div>
+    <div style="display:flex;gap:10px;align-items:flex-start"><span style="flex:none;width:22px;height:22px;border-radius:50%;background:#c8a04a;color:#fff;font:700 11px/22px Outfit;text-align:center">2</span><div style="font:400 13px/1.45 Outfit;color:#5f5a4e"><b style="color:#2b2b2b">+ Chord</b> opens the palette; tap a diatonic chord to append it.</div></div>
+    <div style="display:flex;gap:10px;align-items:flex-start"><span style="flex:none;width:22px;height:22px;border-radius:50%;background:#c8a04a;color:#fff;font:700 11px/22px Outfit;text-align:center">3</span><div style="font:400 13px/1.45 Outfit;color:#5f5a4e"><b style="color:#2b2b2b">Switch lanes</b> via the bottom bar or by tapping a <b>peek strip</b>. Tab cells open a fret pad; Melody shows the note-name axis &amp; tier colours.</div></div>
+    <div style="display:flex;gap:10px;align-items:flex-start"><span style="flex:none;width:22px;height:22px;border-radius:50%;background:#c8a04a;color:#fff;font:700 11px/22px Outfit;text-align:center">4</span><div style="font:400 13px/1.45 Outfit;color:#5f5a4e"><b style="color:#2b2b2b">▶ Loop</b> plays &amp; sweeps the playhead; the sounding chord lights gold. <b>Play</b> tab docks the piano — keys tint by tier and capture into Melody while <b>REC</b> is armed.</div></div>
+    <div style="display:flex;gap:10px;align-items:flex-start"><span style="flex:none;width:22px;height:22px;border-radius:50%;background:#c8a04a;color:#fff;font:700 11px/22px Outfit;text-align:center">5</span><div style="font:400 13px/1.45 Outfit;color:#5f5a4e"><b style="color:#2b2b2b">☀/☾</b> flips the whole app between Bright &amp; Shadow.</div></div>
+  </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1180,&quot;height&quot;:920}}">
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    this._uid = 200;
+    this.PC = {C:0,'C#':1,D:2,'D#':3,E:4,F:5,'F#':6,G:7,'G#':8,A:9,'A#':10,B:11};
+    this.NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+    this.bars = 4;
+    this.BPM = 96;
+    this.CHORDLIB = [
+      {name:'G',roman:'I',pcs:[7,11,2]},
+      {name:'Am',roman:'ii',pcs:[9,0,4]},
+      {name:'Bm',roman:'iii',pcs:[11,2,6]},
+      {name:'C',roman:'IV',pcs:[0,4,7]},
+      {name:'D',roman:'V',pcs:[2,6,9]},
+      {name:'Em',roman:'vi',pcs:[4,7,11]}
+    ];
+    this.SCALE = [7,9,11,0,2,4,6];
+    this.TIER = {
+      chord:{fill:'#6fcf86',text:'#2f8a4c',dark:'#16361f'},
+      scale:{fill:'#e8b84a',text:'#b3892a',dark:'#4a3608'},
+      passing:{fill:'#b79ad8',text:'#7d57b0',dark:'#2e1a47'},
+      outside:{fill:'#df7d6f',text:'#c0392b',dark:'#451712'}
+    };
+    this.STRINGS = ['e','B','G','D','A','E'];
+    this.TOOLS = [
+      {id:'mysongs',icon:'\uD83C\uDFB5',name:'My Songs',desc:'Songs saved in this browser',kind:'sheet'},
+      {id:'file',icon:'\uD83D\uDCC1',name:'File',desc:'Save, open, export, share',kind:'sheet'},
+      {id:'lyrics',icon:'\uD83D\uDCDD',name:'Lyrics',desc:'Write lyrics alongside the song',kind:'sheet'},
+      {id:'showscale',icon:'\uD83D\uDCD0',name:'Show Scale',desc:'Scales across the neck',kind:'panel'},
+      {id:'arp',icon:'\uD83C\uDFBC',name:'Arpeggiator',desc:'Chord tones on the neck',kind:'panel'},
+      {id:'chordpicker',icon:'\uD83C\uDFB9',name:'Chord Picker',desc:'Build a chord by name',kind:'sheet'},
+      {id:'keyfinder',icon:'\uD83D\uDD0D',name:'Key Finder',desc:'Find the key from chords',kind:'sheet'},
+      {id:'analysis',icon:'\uD83D\uDCCA',name:'Progression Analysis',desc:'Romans, key fit, cadence',kind:'sheet'},
+      {id:'shapeeditor',icon:'\u2666',name:'Chord Shape Editor',desc:'By name, shape, or frets',kind:'sheet'},
+      {id:'tuner',icon:'\uD83C\uDFAF',name:'Tuner',desc:'Mic guitar tuner',kind:'panel'},
+      {id:'tutorial',icon:'\uD83D\uDCD6',name:'Tutorial',desc:'How to use',kind:'modal'},
+      {id:'shapes',icon:'\uD83C\uDFB8',name:'Shapes',desc:'Full / Compact / Names only',kind:'toggle'}
+    ];
+    this.PICKER_QUAL = [['','Major'],['m','Minor'],['sus2','Sus2'],['sus4','Sus4'],['dim','Dim'],['aug','Aug']];
+    this.PICKER_EXT = [['','Basic'],['6','6'],['7','7'],['maj7','maj7'],['add9','add9'],['9','9']];
+    this.SHAPE_STATES = [['full','Full'],['compact','Compact'],['names','Names only']];
+    this.SHAPES = {
+      'G':[3,2,0,0,0,3],'G7':[3,2,0,0,0,1],'C':[-1,3,2,0,1,0],'C7':[-1,3,2,3,1,0],
+      'D':[-1,-1,0,2,3,2],'D7':[-1,-1,0,2,1,2],'Dm':[-1,-1,0,2,3,1],'E':[0,2,2,1,0,0],
+      'Em':[0,2,2,0,0,0],'E7':[0,2,0,1,0,0],'A':[-1,0,2,2,2,0],'Am':[-1,0,2,2,1,0],
+      'A7':[-1,0,2,0,2,0],'Am7':[-1,0,2,0,1,0],'B':[-1,2,4,4,4,2],'Bm':[-1,2,4,4,3,2],
+      'F':[1,3,3,2,1,1],'Fm':[1,3,3,1,1,1],'F7':[1,3,1,2,1,1]
+    };
+    this.DIATONIC = {
+      major:[['','I'],['m','ii'],['m','iii'],['','IV'],['','V'],['m','vi'],['dim','vii°']],
+      minor:[['m','i'],['dim','ii°'],['','III'],['m','iv'],['m','v'],['','VI'],['','VII']]
+    };
+    this.MAJ_SCALE=[0,2,4,5,7,9,11];
+    this.MIN_SCALE=[0,2,3,5,7,8,10];
+    this.TUNE = ['E','A','D','G','B','e'];
+    this.SCALES = {Major:[0,2,4,5,7,9,11],Minor:[0,2,3,5,7,8,10],Dorian:[0,2,3,5,7,9,10],Mixolydian:[0,2,4,5,7,9,10],Pentatonic:[0,2,4,7,9],Blues:[0,3,5,6,7,10]};
+    this.ARPPATS = [['up','Up'],['down','Down'],['updown','Up-Down'],['random','Random']];
+    this.ARPRATES = ['1/4','1/8','1/16'];
+    this.MELROWS = [
+      {name:'F#',pc:6},{name:'E',pc:4},{name:'D',pc:2},{name:'C',pc:0},
+      {name:'B',pc:11},{name:'A',pc:9},{name:'G',pc:7}
+    ];
+    this.WHITE = [['C',0],['D',0],['E',0],['F',0],['G',0],['A',0],['B',0],['C',1],['D',1]];
+    this.BLACK = [['C#',0,7.5],['D#',0,18.6],['F#',0,40.8],['G#',0,51.9],['A#',0,63.0],['C#',1,85.3]];
+    this.state = {
+      keyMode:'major', keyRoot:'G', songTitle:'Song one (newer)', activeLane:'chords', secIdx:0, selId:null, sheet:null,
+      playing:false, ph:0, loopOn:true, selectMode:false, sel:[], marquee:null, selTab:[],
+      octave:4, recording:false, scaleLock:false, fret:null, pianoOpen:false,
+      activeTool:'builder', openTools:['builder'], arpPattern:'up', arpRate:'1/8', arpOn:true, scaleSel:'Major', tunerString:3, arpOct:1, drag:null, tsTop:4, tsBottom:4, addAt:null, fretExt:false,
+      pickerRoot:'C', pickerQual:'', pickerExt:'', shapeState:'full', showShapes:true, shFrets:[3,2,-1,-1,3,3], shName:'G', shBase:0, shPick:null, songView:false, songDrag:null, songShapes:false, songLyrics:false, railY:0, railDrag:false, lyricsText:'', lyricsTab:'lyrics', lyricsView:'freewrite', lyricsSections:[], lyricPick:null, howtoOpen:true, rhymeWord:'', rhymeResults:[],
+      sections:[
+        {name:'Verse 1',
+         chords:[{id:1,name:'G',roman:'I',start:0,len:4},{id:2,name:'C',roman:'IV',start:4,len:4},{id:3,name:'D',roman:'V',start:8,len:4},{id:4,name:'G',roman:'I',start:12,len:4}],
+         tab:[{si:5,beat:0,fret:3},{si:4,beat:4,fret:2},{si:3,beat:8,fret:0},{si:5,beat:12,fret:3}],
+         melody:[{id:11,pc:4,oct:4,beat:0},{id:12,pc:7,oct:4,beat:5},{id:13,pc:9,oct:4,beat:8},{id:14,pc:11,oct:4,beat:13}]},
+        {name:'Chorus',
+         chords:[{id:5,name:'C',roman:'IV',start:0,len:4},{id:6,name:'G',roman:'I',start:4,len:4},{id:7,name:'D',roman:'V',start:8,len:4},{id:8,name:'Em',roman:'vi',start:12,len:4}],
+         tab:[{si:4,beat:0,fret:3},{si:3,beat:8,fret:2}],
+         melody:[{id:21,pc:0,oct:5,beat:0},{id:22,pc:11,oct:4,beat:6},{id:23,pc:7,oct:4,beat:10}]},
+        {name:'Verse 2',
+         chords:[{id:9,name:'G',roman:'I',start:0,len:8},{id:10,name:'D',roman:'V',start:8,len:8}],
+         tab:[], melody:[]}
+      ]
+    };
+    this.tick = this.tick.bind(this);
+    this._onMove = this._onMove.bind(this);
+    this._onUp = this._onUp.bind(this);
+    this._onMarq = this._onMarq.bind(this);
+    this._onMarqUp = this._onMarqUp.bind(this);
+    this._onSongSecMove = this._onSongSecMove.bind(this);
+    this._onSongSecUp = this._onSongSecUp.bind(this);
+    this._onSongChordMove = this._onSongChordMove.bind(this);
+    this._onSongChordUp = this._onSongChordUp.bind(this);
+    this._onRailMove = this._onRailMove.bind(this);
+    this._onRailUp = this._onRailUp.bind(this);
+  }
+  componentWillUnmount(){ if(this._raf) cancelAnimationFrame(this._raf); }
+
+  cur(){ return this.state.sections[this.state.secIdx]; }
+  total(){ var base=this.bars*this.state.tsTop; var maxEnd=base; this.cur().chords.forEach(function(c){ maxEnd=Math.max(maxEnd, c.start+c.len); }); var bars=Math.ceil(maxEnd/this.state.tsTop); return Math.max(this.bars,bars)*this.state.tsTop; }
+  cycleTime(){ var sigs=[[4,4],[3,4],[6,8],[2,4]]; var i=0; for(var k=0;k<sigs.length;k++){ if(sigs[k][0]===this.state.tsTop&&sigs[k][1]===this.state.tsBottom){i=k;break;} } var n=sigs[(i+1)%sigs.length]; this.setState({tsTop:n[0],tsBottom:n[1],ph:0}); }
+  segStyle(active){ return {cursor:'pointer',fontFamily:'Outfit',fontWeight:active?700:600,fontSize:'11px',borderRadius:'12px',padding:'6px 10px',color: active?'#fff':'var(--muted)',background: active?'var(--ink)':'var(--panel)',border:'1px solid '+(active?'var(--ink)':'var(--line)')}; }
+  update(fn){
+    var s = this.state.sections.slice();
+    var c = Object.assign({}, s[this.state.secIdx]);
+    fn(c); s[this.state.secIdx] = c;
+    this.setState({sections:s});
+  }
+  tonesOf(name){ var c=this.CHORDLIB.find(x=>x.name===name); return c?c.pcs:[]; }
+  tierOf(pc, name){
+    pc=((pc%12)+12)%12;
+    var ct=this.tonesOf(name);
+    if(ct.indexOf(pc)>=0) return 'chord';
+    if(this.SCALE.indexOf(pc)>=0) return 'scale';
+    if(ct.indexOf((pc+1)%12)>=0 || ct.indexOf((pc+11)%12)>=0) return 'passing';
+    return 'outside';
+  }
+  chordAt(beat){
+    var cs=this.cur().chords;
+    var c=cs.find(x=> beat>=x.start && beat<x.start+x.len);
+    return c || cs[0] || {name:'G',roman:'I',start:0,len:4};
+  }
+  curChord(){ return this.chordAt(this.state.ph); }
+
+  parseChord(name){
+    var m = (name||'').match(/^([A-G][#b]?)(.*)$/); if(!m) return null;
+    var pc = this.PC[m[1].replace('b','#')]; if(pc==null){ var fl={'Db':1,'Eb':3,'Gb':6,'Ab':8,'Bb':10}; pc=fl[m[1]]; }
+    var suf = m[2]||''; var qual='';
+    if(/^m(?!aj)/.test(suf)) qual='m'; else if(/^dim|^°/.test(suf)) qual='dim'; else if(/^aug|^\+/.test(suf)) qual='aug';
+    return {pc:((pc%12)+12)%12, qual:qual};
+  }
+  scalePcs(){
+    var root=this.PC[this.state.keyRoot]; if(root==null) root=7;
+    var sc=this.state.keyMode==='minor'?this.MIN_SCALE:this.MAJ_SCALE;
+    return sc.map(function(s){ return (root+s)%12; });
+  }
+  analyzeChord(name){
+    var p=this.parseChord(name); if(!p) return {inKey:true, roman:''};
+    var root=this.PC[this.state.keyRoot]; if(root==null) root=7;
+    var deg=((p.pc-root)%12+12)%12;
+    var table=this.DIATONIC[this.state.keyMode==='minor'?'minor':'major'];
+    var sc=this.state.keyMode==='minor'?this.MIN_SCALE:this.MAJ_SCALE;
+    var di=sc.indexOf(deg);
+    if(di>=0 && table[di][0]===p.qual) return {inKey:true, roman:table[di][1]};
+    if(di>=0) return {inKey:false, roman:table[di][1].toLowerCase(), reason:'quality'};
+    return {inKey:false, roman:'', reason:'chromatic'};
+  }
+  chordDiagram(name){
+    var frets=this.SHAPES[name]; if(!frets) return null;
+    var pos=frets.filter(function(f){ return f>0; });
+    var base=pos.length?Math.min.apply(null,pos):1; if(base<1) base=1;
+    var span=4;
+    var markers=frets.map(function(f){ return f<0?'x':(f===0?'o':''); });
+    var dots=[];
+    frets.forEach(function(f,i){ if(f>0){ var row=f-base; if(row>=0&&row<span) dots.push({left:(i/5*100), top:((row+0.5)/span*100)}); } });
+    return {markers:markers, dots:dots, base: base>1?base:0};
+  }
+  detectChord(frets){
+    // frets: array of 6 (low E->high e), -1 muted, 0 open. Returns chord name or '' if none.
+    var open=[4,9,2,7,11,4]; // E A D G B e pitch classes
+    var pcs={};
+    frets.forEach(function(f,i){ if(f>=0){ pcs[((open[i]+f)%12+12)%12]=true; } });
+    var set=Object.keys(pcs).map(Number).sort(function(a,b){return a-b;});
+    if(set.length<3) return '';
+    var names=this.NAMES;
+    var QUAL=[['',[0,4,7]],['m',[0,3,7]],['dim',[0,3,6]],['aug',[0,4,8]],['7',[0,4,7,10]],['m7',[0,3,7,10]],['maj7',[0,4,7,11]],['sus4',[0,5,7]],['sus2',[0,2,7]]];
+    for(var r=0;r<12;r++){
+      for(var q=0;q<QUAL.length;q++){
+        var iv=QUAL[q][1].map(function(x){ return (r+x)%12; }).sort(function(a,b){return a-b;});
+        if(iv.length===set.length && iv.every(function(v,k){ return v===set[k]; })) return names[r]+QUAL[q][0];
+      }
+    }
+    return '';
+  }
+  openShapeEditor(){ this.setState({sheet:'shapeeditor', shFrets:[3,2,-1,-1,3,3], shName:'G', shBase:0, shPick:null}); }
+  openShapeFor(cid){ var c=this.cur().chords.find(function(x){return x.id===cid;}); var nm=c?c.name:'G'; var frets=this.SHAPES[nm]||[3,2,-1,-1,3,3]; this.setState({sheet:'shapeeditor', shFrets:frets.slice(), shName:nm, shBase:0, shPick:null, selId:cid}); }
+  shGridTap(si, fret){ var f=this.state.shFrets.slice(); f[si] = (f[si]===fret) ? -1 : fret; this.setState({shFrets:f, shPick:null}); }
+  shSetString(si, val){ var f=this.state.shFrets.slice(); f[si]=val; this.setState({shFrets:f, shPick:null}); }
+  shOpenPick(si){ this.setState({shPick: this.state.shPick===si ? null : si}); }
+  shShift(d){ var f=this.state.shFrets.map(function(x){ return x>0 ? Math.max(0, x+d) : x; }); this.setState({shFrets:f}); }
+  shWindow(d){ this.setState({shBase: Math.max(0, Math.min(20, this.state.shBase+d))}); }
+  shClear(){ this.setState({shFrets:[-1,-1,-1,-1,-1,-1], shPick:null}); }
+  saveShapeChord(){ var det=this.detectChord(this.state.shFrets); var name= det || this.state.shName; var T=this.total(); var end=0; this.cur().chords.forEach(function(x){ end=Math.max(end,x.start+x.len); }); if(end>=T){ this.setState({sheet:null}); return; } var len=Math.min(4,T-end); this.update(function(s){ s.chords=s.chords.concat([{id:this._uid++,name:name,roman:'',start:end,len:len,shape:this.state.shFrets.slice()}]); }.bind(this)); this.setState({sheet:null}); }
+  shNoteInfo(){
+    var open=[4,9,2,7,11,4]; var det=this.detectChord(this.state.shFrets);
+    var rootPc = det ? this.PC[det.match(/^[A-G][#b]?/)[0].replace('b','#')] : null;
+    var ivName=function(semi){ return ({0:'R',1:'♭9',2:'9',3:'♭3',4:'3',5:'4',6:'♭5',7:'5',8:'♯5',9:'6',10:'♭7',11:'7'})[semi]||''; };
+    var out=[]; var self=this;
+    this.state.shFrets.forEach(function(f,i){ if(f>=0){ var pc=((open[i]+f)%12+12)%12; var iv = rootPc!=null ? ivName(((pc-rootPc)%12+12)%12) : ''; out.push({note:self.NAMES[pc], iv:iv}); } });
+    return out;
+  }
+  shAlternatives(){
+    var det=this.detectChord(this.state.shFrets); if(!det) return [];
+    var rootName=det.match(/^[A-G][#b]?/)[0]; var rootPc=this.PC[rootName.replace('b','#')];
+    var open=[4,9,2,7,11,4]; var entered={};
+    this.state.shFrets.forEach(function(f,i){ if(f>=0){ entered[((open[i]+f)%12+12)%12]=true; } });
+    var FORMS=[['7',[0,4,7,10]],['maj7',[0,4,7,11]],['6',[0,4,7,9]],['add9',[0,4,7,2]],['9',[0,4,7,10,2]],['m7',[0,3,7,10]]];
+    return FORMS.map(function(F){ var pcs=F[1].map(function(x){return (rootPc+x)%12;}); var match=pcs.filter(function(p){return entered[p];}).length; return {name:rootName+F[0], ratio:match+'/'+pcs.length, full:match===pcs.length}; })
+      .filter(function(a){ return a.name!==det; }).slice(0,5);
+  }
+
+  // playback
+  togglePlay(){ if(this.state.playing) this.stop(); else this.play(); }
+  play(){ this.setState({playing:true}); this._last=performance.now(); this._raf=requestAnimationFrame(this.tick); }
+  stop(){ this.setState({playing:false}); if(this._raf) cancelAnimationFrame(this._raf); }
+  tick(t){
+    if(!this.state.playing) return;
+    var dt=(t-this._last)/1000; this._last=t;
+    var bps=this.BPM/60;
+    var ph=this.state.ph + dt*bps;
+    var T=this.total(); if(ph>=T){ if(this.state.loopOn) ph=ph-T; else { this.setState({playing:false,ph:0}); return; } }
+    this.setState({ph:ph});
+    this._raf=requestAnimationFrame(this.tick);
+  }
+  toggleLoop(){ this.setState({loopOn:!this.state.loopOn}); }
+  curTheme(){ return this.state.keyMode==='minor' ? 'dark' : 'bright'; }
+  toggleKey(){ this.setState({keyMode: this.state.keyMode==='minor'?'major':'minor'}); }
+  cycleKeyRoot(){ var i=this.NAMES.indexOf(this.state.keyRoot); this.setState({keyRoot:this.NAMES[(i+1)%12]}); }
+  openKeyMenu(){ this.setState({sheet: this.state.sheet==='key'?null:'key'}); }
+  pickKeyRoot(n){ this.setState({keyRoot:n, sheet:null}); }
+  renameSong(){ var n=window.prompt('Song name', this.state.songTitle); if(n!=null && n.trim()) this.setState({songTitle:n.trim()}); }
+  openTool(t){
+    if(t.kind==='panel'){ var ot=this.state.openTools.slice(); if(ot.indexOf(t.id)<0) ot.push(t.id); this.setState({openTools:ot, activeTool:t.id, sheet:null}); }
+    else if(t.kind==='sheet'){ this.setState({sheet:t.id}); }
+    else if(t.kind==='toggle'){ this.cycleShape(); }
+    else if(t.kind==='modal'){ this.setState({sheet:'tutorial'}); }
+  }
+  cycleShape(){ var s=this.SHAPE_STATES.map(function(x){return x[0];}); var i=s.indexOf(this.state.shapeState); this.setState({shapeState:s[(i+1)%3]}); }
+  setPickerRoot(n){ this.setState({pickerRoot:n}); }
+  setPickerQual(q){ this.setState({pickerQual:q}); }
+  setPickerExt(e){ this.setState({pickerExt:e}); }
+  pickerChordName(){
+    var r=this.state.pickerRoot, q=this.state.pickerQual, e=this.state.pickerExt;
+    if(q==='dim'&&e==='7') return r+'dim7';
+    if(q==='aug'&&e==='7') return r+'aug7';
+    if(q==='sus2'&&e==='7') return r+'7sus2';
+    if(q==='sus4'&&e==='7') return r+'7sus4';
+    if(q==='m'&&e==='7') return r+'m7';
+    if(q==='m'&&e==='maj7') return r+'mMaj7';
+    if(q===''&&e==='maj7') return r+'maj7';
+    return r+q+e;
+  }
+  addPickedChord(){
+    var name=this.pickerChordName(); var T=this.total();
+    var end=0; this.cur().chords.forEach(function(x){ end=Math.max(end,x.start+x.len); });
+    if(end>=T){ this.setState({sheet:null}); return; }
+    var len=Math.min(4,T-end);
+    this.update(function(s){ s.chords=s.chords.concat([{id:this._uid++,name:name,roman:'',start:end,len:len}]); }.bind(this));
+    this.setState({sheet:null});
+  }
+  switchTool(id){ this.setState({activeTool:id}); }
+  railDown(e){ this._railStartY=e.clientY; this._railStartOff=this.state.railY; this.setState({railDrag:true}); window.addEventListener('pointermove', this._onRailMove); window.addEventListener('pointerup', this._onRailUp); if(e.preventDefault) e.preventDefault(); }
+  _onRailMove(e){ var dy=e.clientY-this._railStartY; var ny=Math.max(-300, Math.min(300, this._railStartOff+dy)); this.setState({railY:ny}); }
+  _onRailUp(){ window.removeEventListener('pointermove', this._onRailMove); window.removeEventListener('pointerup', this._onRailUp); this.setState({railDrag:false}); }
+  closeTool(id){ var ot=this.state.openTools.filter(function(x){return x!==id;}); var at=this.state.activeTool===id?'builder':this.state.activeTool; this.setState({openTools:ot, activeTool:at}); }
+  setArp(p){ this.setState({arpPattern:p}); }
+  setArpRate(r){ this.setState({arpRate:r}); }
+  toggleArp(){ this.setState({arpOn:!this.state.arpOn}); }
+  setArpOct(d){ this.setState({arpOct:Math.max(1,Math.min(3,this.state.arpOct+d))}); }
+  setScale(s){ this.setState({scaleSel:s}); }
+  setTuner(i){ this.setState({tunerString:i}); }
+
+  setLane(l){ this.setState({activeLane:l, sheet:null, selId:null, pianoOpen:false}); }
+  promote(l){ this.setState({activeLane:l, selId:null}); }
+  toggleSelect(){ this.setState({selectMode:!this.state.selectMode, sel:[], selTab:[], marquee:null, selId:null, sheet:null}); }
+
+  startMarquee(e){
+    if(!this.state.selectMode) return;
+    this._mlane = e.currentTarget;
+    var r = this._mlane.getBoundingClientRect(); this._mrect = r;
+    var x = e.clientX - r.left, y = e.clientY - r.top;
+    this.setState({marquee:{x0:x,y0:y,x1:x,y1:y,moved:false}});
+    window.addEventListener('pointermove', this._onMarq);
+    window.addEventListener('pointerup', this._onMarqUp);
+    if(e.preventDefault) e.preventDefault();
+  }
+  _onMarq(e){
+    var r=this._mrect, m=this.state.marquee; if(!r||!m) return;
+    var x=Math.max(0,Math.min(r.width, e.clientX-r.left));
+    var y=Math.max(0,Math.min(r.height, e.clientY-r.top));
+    this.setState({marquee:Object.assign({},m,{x1:x,y1:y,moved:true})});
+  }
+  _onMarqUp(e){
+    window.removeEventListener('pointermove', this._onMarq);
+    window.removeEventListener('pointerup', this._onMarqUp);
+    var m=this.state.marquee, r=this._mrect;
+    if(!m||!r){ this.setState({marquee:null}); return; }
+    if(!m.moved){ this.setState({marquee:null, selTab:[]}); return; }
+    var x0=Math.min(m.x0,m.x1), x1=Math.max(m.x0,m.x1), y0=Math.min(m.y0,m.y1), y1=Math.max(m.y0,m.y1);
+    var T=this.total(); var cw=r.width/T, ch=r.height/6; var sel=[];
+    this.cur().tab.forEach(function(t){ var cx=(t.beat+0.5)*cw, cy=(t.si+0.5)*ch; if(cx>=x0&&cx<=x1&&cy>=y0&&cy<=y1) sel.push(t.si+'-'+t.beat); });
+    this.setState({marquee:null, selTab:sel});
+  }
+  bulkRemoveTab(){ var ids=this.state.selTab; this.update(function(s){ s.tab=s.tab.filter(function(t){ return ids.indexOf(t.si+'-'+t.beat)<0; }); }); this.setState({selTab:[]}); }
+  clearTabSel(){ this.setState({selTab:[]}); }
+
+  startDrag(id,e){
+    var chip=e.currentTarget; this._lane = chip.closest('[data-chordlane]');
+    var c=this.cur().chords.find(function(x){return x.id===id;}); if(!c) return;
+    var w=this._lane?this._lane.offsetWidth:300;
+    this._beatPx = w / this.total(); // pixels per beat, fixed for this drag
+    this.setState({drag:{id:id, startX:e.clientX, orig:c.start, len:c.len, moved:false}});
+    window.addEventListener('pointermove', this._onMove);
+    window.addEventListener('pointerup', this._onUp);
+    if(e.preventDefault) e.preventDefault();
+  }
+  _onMove(e){
+    var d=this.state.drag; if(!d) return;
+    var dxBeats=(e.clientX-d.startX)/(this._beatPx||10);
+    var moved=Math.abs(e.clientX-d.startX)>4;
+    var id=d.id;
+    var target=Math.max(0, Math.round((d.orig+dxBeats)*2)/2); // snap ½-beat, no upper clamp → grow into new bars
+    this.update(function(s){
+      var me=s.chords.find(function(c){ return c.id===id; }); if(!me) return;
+      me.start=target;
+      // ripple OUTWARD: anchor the dragged chord; push everything else off it to the right (never compact)
+      var sorted=s.chords.slice().sort(function(a,b){ return a.start-b.start || (a.id===id?1:-1); });
+      var mi=sorted.indexOf(me);
+      // push chords to the RIGHT of me outward
+      var cur=me.start+me.len;
+      for(var i=mi+1;i<sorted.length;i++){ if(sorted[i].start<cur){ sorted[i].start=cur; } cur=sorted[i].start+sorted[i].len; }
+      // push chords to the LEFT of me that overlap it leftward (down to 0)
+      var lc=me.start;
+      for(var j=mi-1;j>=0;j--){ if(sorted[j].start+sorted[j].len>lc){ sorted[j].start=Math.max(0, lc-sorted[j].len); } lc=sorted[j].start; }
+      s.chords=s.chords.map(function(c){ return Object.assign({},c); });
+    });
+    if(moved && !d.moved) this.setState({drag:Object.assign({},d,{moved:true})});
+  }
+  _onUp(e){
+    window.removeEventListener('pointermove', this._onMove);
+    window.removeEventListener('pointerup', this._onUp);
+    var d=this.state.drag; this.setState({drag:null});
+    if(d && !d.moved){
+      if(this.state.selectMode){ this.tapChord(d.id); } else { this.setState({selId:d.id, sheet:'editor'}); }
+    }
+  }
+  tapChord(id){
+    if(this.state.selectMode){
+      var s=this.state.sel.slice(); var i=s.indexOf(id);
+      if(i>=0) s.splice(i,1); else s.push(id);
+      this.setState({sel:s});
+    } else {
+      this.setState({selId:id, sheet:'editor'});
+    }
+  }
+  changeLen(len){ var id=this.state.selId; var T=this.total(); this.update(s=>{ s.chords=s.chords.map(c=> c.id===id?Object.assign({},c,{len:Math.min(len,T-c.start)}):c); }); }
+  move(d){ var id=this.state.selId; var T=this.total(); this.update(s=>{ s.chords=s.chords.map(c=>{ if(c.id!==id)return c; var ns=Math.max(0,Math.min(T-c.len,c.start+d)); return Object.assign({},c,{start:ns}); }); }); }
+  removeChord(){ var id=this.state.selId; this.update(s=>{ s.chords=s.chords.filter(c=>c.id!==id); }); this.setState({selId:null,sheet:null}); }
+  dupChord(){ var id=this.state.selId; var c=this.cur().chords.find(x=>x.id===id); if(!c)return; var start=Math.min(this.total()-c.len,c.start+c.len); this.update(s=>{ s.chords=s.chords.concat([Object.assign({},c,{id:this._uid++,start:start})]); }); }
+  addChord(it, at){ var T=this.total(); var len; var start; if(at!=null){ start=at; var others=this.cur().chords.filter(function(x){return x.start>start;}); var next=others.length?Math.min.apply(null,others.map(function(x){return x.start;})):T; len=Math.min(4,Math.max(2,next-start)); } else { var end=0; this.cur().chords.forEach(x=>{ end=Math.max(end,x.start+x.len); }); if(end>=T){ this.setState({sheet:null}); return; } start=end; len=Math.min(4,T-end); } this.update(s=>{ s.chords=s.chords.concat([{id:this._uid++,name:it.name,roman:it.roman,start:start,len:len}]); }); this.setState({sheet:null, addAt:null}); }
+  bulkRemove(){ var ids=this.state.sel; this.update(s=>{ s.chords=s.chords.filter(c=>ids.indexOf(c.id)<0); }); this.setState({sel:[]}); }
+  openPaletteAt(at){ this.setState({sheet:'palette', addAt:at}); }
+
+  openFret(si,beat){ if(this.state.selectMode) return; this.setState({fret:{si:si,beat:beat}, sheet:'fret', fretExt:false}); }
+  setFret(d){ var f=this.state.fret; if(!f)return; this.update(s=>{ s.tab=s.tab.filter(t=>!(t.si===f.si&&t.beat===f.beat)).concat([{si:f.si,beat:f.beat,fret:d}]); }); this.setState({fret:null,sheet:null}); }
+  clearFret(){ var f=this.state.fret; if(!f)return; this.update(s=>{ s.tab=s.tab.filter(t=>!(t.si===f.si&&t.beat===f.beat)); }); this.setState({fret:null,sheet:null}); }
+
+  jumpSection(i){ this.setState({secIdx:i, sheet:null, selId:null, ph:0}); }
+  addSection(){ this.setState({sections:this.state.sections.concat([{name:'Section '+(this.state.sections.length+1),chords:[],tab:[],melody:[]}])}); }
+
+  toggleSongView(){ this.setState({songView:!this.state.songView, sheet:null, selId:null}); }
+  openSectionInBuilder(i){ this.setState({songView:false, secIdx:i, activeLane:'chords', selId:null, sheet:null, ph:0}); }
+  toggleSongLyrics(){ this.setState({songLyrics:!this.state.songLyrics}); }
+  lyricWordsForSongSection(songSecIdx){
+    // returns {chordName: [word,word,...]} from any lyrics section linked to this song section
+    var map={}; var self=this;
+    this.state.lyricsSections.forEach(function(sec){
+      if(sec.lineIdx!==songSecIdx) return;
+      sec.lines.forEach(function(lineText, li){
+        var tokens=lineText.split(/(\s+)/);
+        var cm=sec.chordMap[li]||{};
+        Object.keys(cm).forEach(function(wi){ var ch=cm[wi]; var w=tokens[+wi]; if(ch && w && w.trim()){ (map[ch]=map[ch]||[]).push(w); } });
+      });
+    });
+    return map;
+  }
+
+  lyricsSetTab(t){ this.setState({lyricsTab:t}); }
+  lyricsSetView(v){ this.setState({lyricsView:v, lyricPick:null}); }
+  lyricsInput(v){ this.setState({lyricsText:v}); }
+  toggleHowto(){ this.setState({howtoOpen:!this.state.howtoOpen}); }
+  insertSectionMarker(name){
+    var t=this.state.lyricsText; var ins=(t && !/\n$/.test(t) ? '\n' : '')+'['+name+']\n';
+    this.setState({lyricsText: t+ins});
+  }
+  parseLyricsSections(text){
+    var lines=text.split('\n'); var secs=[]; var cur=null;
+    lines.forEach(function(line){
+      var m=line.match(/^\s*\[([^\]]+)\]\s*$/);
+      if(m){ cur={label:m[1].trim(), lines:[], lineIdx:-1, chordMap:{}}; secs.push(cur); }
+      else if(cur && line.trim()!==''){ cur.lines.push(line); }
+    });
+    var self=this;
+    secs.forEach(function(sec){
+      var li=self.state.sections.findIndex(function(s){ return (s.name||'').toLowerCase()===sec.label.toLowerCase(); });
+      sec.lineIdx=li;
+    });
+    return secs;
+  }
+  parseLyrics(){
+    var old=this.state.lyricsSections;
+    var secs=this.parseLyricsSections(this.state.lyricsText);
+    // carry over chordMap from matching old labels
+    secs.forEach(function(sec){
+      var prev=old.find(function(o){ return o.label.toLowerCase()===sec.label.toLowerCase(); });
+      if(prev && prev.chordMap) sec.chordMap=prev.chordMap;
+    });
+    this.setState({lyricsSections:secs, lyricsView:'structured', lyricPick:null});
+  }
+  sectionChordsFor(lineIdx){
+    if(lineIdx<0 || !this.state.sections[lineIdx]) return [];
+    var seen={}, out=[];
+    this.state.sections[lineIdx].chords.slice().sort(function(a,b){return a.start-b.start;}).forEach(function(c){ if(!seen[c.name]){ seen[c.name]=1; out.push(c.name); } });
+    return out;
+  }
+  openLyricPick(si,li,wi){ this.setState({lyricPick:{si:si,li:li,wi:wi}}); }
+  assignLyricChord(ch){
+    var p=this.state.lyricPick; if(!p) return;
+    var secs=this.state.lyricsSections.slice(); var sec=Object.assign({},secs[p.si]);
+    var cm=Object.assign({},sec.chordMap); cm[p.li]=Object.assign({},cm[p.li]); cm[p.li][p.wi]=ch; sec.chordMap=cm; secs[p.si]=sec;
+    this.setState({lyricsSections:secs, lyricPick:null});
+  }
+  removeLyricChord(){
+    var p=this.state.lyricPick; if(!p) return;
+    var secs=this.state.lyricsSections.slice(); var sec=Object.assign({},secs[p.si]);
+    var cm=Object.assign({},sec.chordMap); if(cm[p.li]){ cm[p.li]=Object.assign({},cm[p.li]); delete cm[p.li][p.wi]; } sec.chordMap=cm; secs[p.si]=sec;
+    this.setState({lyricsSections:secs, lyricPick:null});
+  }
+  rhymeSearch(word){
+    var w=(word||'').replace(/[^a-zA-Z'-]/g,''); if(w.length<2){ this.setState({rhymeWord:w, rhymeResults:[]}); return; }
+    // lightweight suffix-rhyme mock (real app embeds RhymeForge iframe)
+    var BANK=['day','way','say','stay','play','gray','today','away','night','light','bright','sight','fight','time','rhyme','climb','mind','find','line','shine','sign','design','heart','start','part','apart','dark','spark','fire','desire','higher','street','beat','repeat','complete','street','dream','stream','seem','team','gold','hold','told','cold','bold','soul','road','flow','slow','glow','know','show','low'];
+    var end=w.slice(-3).toLowerCase();
+    var res=BANK.filter(function(x){ return x!==w.toLowerCase() && x.slice(-3)===end; });
+    if(res.length<3){ var e2=w.slice(-2).toLowerCase(); res=BANK.filter(function(x){ return x!==w.toLowerCase() && x.slice(-2)===e2; }); }
+    this.setState({rhymeWord:w, rhymeResults:res.slice(0,18)});
+  }
+
+  // --- Song view: drag a whole section row to reorder ---
+  songSecDown(idx, e){
+    this._songRow = e.currentTarget.closest('[data-songrow]');
+    this._songList = this._songRow ? this._songRow.closest('[data-songlist]') : null;
+    this.setState({songDrag:{kind:'section', idx:idx, moved:false}});
+    window.addEventListener('pointermove', this._onSongSecMove);
+    window.addEventListener('pointerup', this._onSongSecUp);
+    if(e.preventDefault) e.preventDefault();
+  }
+  _onSongSecMove(e){
+    var d=this.state.songDrag; if(!d||d.kind!=='section'||!this._songList) return;
+    var rows=this._songList.querySelectorAll('[data-songrow]');
+    var over=d.idx;
+    for(var i=0;i<rows.length;i++){ var r=rows[i].getBoundingClientRect(); if(e.clientY>=r.top && e.clientY<=r.bottom){ over=i; break; } if(e.clientY<r.top){ over=i; break; } if(e.clientY>r.bottom) over=i; }
+    if(over!==d.idx){
+      var secs=this.state.sections.slice(); var moved=secs.splice(d.idx,1)[0]; secs.splice(over,0,moved);
+      var newSecIdx=this.state.secIdx; if(this.state.secIdx===d.idx) newSecIdx=over; else { if(d.idx<this.state.secIdx && over>=this.state.secIdx) newSecIdx--; else if(d.idx>this.state.secIdx && over<=this.state.secIdx) newSecIdx++; }
+      this.setState({sections:secs, secIdx:newSecIdx, songDrag:Object.assign({},d,{idx:over,moved:true})});
+    } else if(!d.moved){ this.setState({songDrag:Object.assign({},d,{moved:true})}); }
+  }
+  _onSongSecUp(){ window.removeEventListener('pointermove', this._onSongSecMove); window.removeEventListener('pointerup', this._onSongSecUp); this.setState({songDrag:null}); }
+
+  // --- Song view: drag a chord within a section row to reorder ---
+  songChordDown(secIdx, id, e){
+    this._songChordWrap = e.currentTarget.closest('[data-songchords]');
+    this.setState({songDrag:{kind:'chord', secIdx:secIdx, id:id, moved:false}});
+    window.addEventListener('pointermove', this._onSongChordMove);
+    window.addEventListener('pointerup', this._onSongChordUp);
+    if(e.stopPropagation) e.stopPropagation();
+    if(e.preventDefault) e.preventDefault();
+  }
+  _onSongChordMove(e){
+    var d=this.state.songDrag; if(!d||d.kind!=='chord'||!this._songChordWrap) return;
+    var wrap=this._songChordWrap.getBoundingClientRect();
+    var secs=this.state.sections.slice(); var sec=Object.assign({},secs[d.secIdx]);
+    var chords=sec.chords.slice().sort(function(a,b){return a.start-b.start;});
+    var curIdx=chords.findIndex(function(c){return c.id===d.id;}); if(curIdx<0) return;
+    var rel=(e.clientX-wrap.left)/Math.max(1,wrap.width);
+    var target=Math.round(rel*chords.length - 0.5); target=Math.max(0,Math.min(chords.length-1,target));
+    if(target!==curIdx){
+      var m=chords.splice(curIdx,1)[0]; chords.splice(target,0,m);
+      var cur=0; chords.forEach(function(c){ c.start=cur; cur+=c.len; });
+      sec.chords=chords; secs[d.secIdx]=sec;
+      this.setState({sections:secs, songDrag:Object.assign({},d,{moved:true})});
+    } else if(!d.moved){ this.setState({songDrag:Object.assign({},d,{moved:true})}); }
+  }
+  _onSongChordUp(){ window.removeEventListener('pointermove', this._onSongChordMove); window.removeEventListener('pointerup', this._onSongChordUp); this.setState({songDrag:null}); }
+
+  openPiano(){ this.setState({pianoOpen:true, activeLane:'melody', recording:true, selId:null, sheet:null}); if(!this.state.playing) this.play(); }
+  closePiano(){ this.setState({pianoOpen:false, recording:false}); this.stop(); }
+  toggleRec(){ this.setState({recording:!this.state.recording}); }
+  octave(d){ this.setState({octave:Math.max(2,Math.min(6,this.state.octave+d))}); }
+  toggleScaleLock(){ this.setState({scaleLock:!this.state.scaleLock}); }
+  tapKey(pc,oct){
+    if(this.state.recording){
+      var beat=Math.round(this.state.ph); if(beat>15)beat=15; if(beat<0)beat=0;
+      this.update(s=>{ s.melody=s.melody.concat([{id:this._uid++,pc:pc,oct:oct,beat:beat}]); });
+    }
+  }
+  keepTake(){ this.setState({recording:false}); this.stop(); }
+  tapMelody(id){ this.update(s=>{ s.melody=s.melody.filter(m=>m.id!==id); }); }
+
+  getVars(){
+    if(this.curTheme()==='dark') return {'--bg':'#1f222b','--panel':'#20232c','--panel2':'#232732','--line':'#343845','--line2':'#2c2f3a','--ink':'#f0ece2','--muted':'#a59e90','--faint':'#938b7d','--rail':'#262a34','--gold':'#c8a04a','--goldDeep':'#e0c878','--goldSoft':'#2a2d1f','--grid':'#2c2f3a','--chordBg':'#262a34','--chordBorder':'#3c4150','--red':'#e06b5e','--selBg':'#2c2a22','--barline':'#4a4f5e','--keyW':'#e9e4d8'};
+    return {'--bg':'#fbf7ee','--panel':'#fffdf8','--panel2':'#ffffff','--line':'#e7e0d2','--line2':'#ece3cf','--ink':'#2b2b2b','--muted':'#6f685a','--faint':'#8a8378','--rail':'#fbf7ee','--gold':'#c8a04a','--goldDeep':'#a98432','--goldSoft':'#faf3e2','--grid':'#ece3cf','--chordBg':'#ffffff','--chordBorder':'#dddddd','--red':'#c0392b','--selBg':'#fdf3df','--barline':'#cfc6ae','--keyW':'#ffffff'};
+  }
+
+  renderVals(){
+    var st=this.state, self=this, T=this.total();
+    var sec=this.cur();
+    var vars=this.getVars();
+    var isDark=this.curTheme()==='dark';
+    var pct=function(b){ return (b/T*100)+'%'; };
+    var curC=this.curChord();
+    var nextC=null;
+    if(st.playing){ var idx=sec.chords.indexOf(curC); nextC = sec.chords[(idx+1)%sec.chords.length]; }
+
+    // chord chips
+    var chordItems = sec.chords.map(function(c){
+      var sel=c.id===st.selId;
+      var inSel=st.sel.indexOf(c.id)>=0;
+      var playing=st.playing && c.id===curC.id;
+      var isNext=nextC && c.id===nextC.id && !playing;
+      var card={height:'100%',borderRadius:'9px',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'3px',position:'relative',background:'var(--chordBg)',border:'1px solid var(--chordBorder)',cursor:'pointer'};
+      if(playing){ card.background='var(--selBg)'; card.border='2px solid var(--gold)'; card.boxShadow='0 0 16px rgba(200,160,74,.5)'; }
+      else if(sel){ card.border='2px solid var(--gold)'; card.background='var(--selBg)'; card.boxShadow='0 0 0 3px rgba(200,160,74,.28)'; }
+      else if(inSel){ card.border='2px solid #4a6fa5'; card.background='rgba(74,111,165,.08)'; }
+      else if(isNext){ card.border='1.5px solid #e3c87f'; card.boxShadow='0 0 0 3px rgba(200,160,74,.16)'; }
+      var bars=c.len/4;
+      var badge = c.len===2?'½ bar':(bars+' bar'+(bars>1?'s':''));
+      var dragging = st.drag && st.drag.id===c.id && st.drag.moved;
+      if(dragging){ card.boxShadow='0 10px 22px rgba(200,160,74,.45)'; card.border='2px solid var(--gold)'; card.zIndex=20; card.cursor='grabbing'; }
+      else { card.cursor='grab'; }
+      var ana=self.analyzeChord(c.name);
+      if(!ana.inKey && !sel && !playing && !inSel){ card.border='1.5px solid #d98a3a'; }
+      var diag=self.chordDiagram(c.name);
+      var showDiag = st.shapeState!=='names' && st.showShapes && !!diag;
+      return {id:c.id, name:c.name, roman: ana.roman||c.roman, badge:badge,
+        showRoman: st.shapeState!=='names', showBadge: st.shapeState==='full' && !showDiag,
+        outOfKey: !ana.inKey, ookTitle: ana.reason==='quality'?'out of key (quality)':'out of key',
+        diagram: diag, diagDots: diag?diag.dots:[], diagMarkers: diag?diag.markers.map(function(m,i){ return {m:m, left:(i/5*100)}; }):[], diagBase: diag?diag.base:0, showDiag: showDiag, diagSmall: st.shapeState==='compact',
+        nameStyle:{fontFamily:'Outfit',fontWeight:700,fontSize:(st.shapeState==='compact'?'14px':'17px'),color:'var(--goldDeep)'},
+        pos:{position:'absolute',left:pct(c.start),width:pct(c.len),top:(sel||playing||dragging)?'6px':'10px',bottom:(sel||playing||dragging)?'6px':'10px',padding:'0 4px',transition: dragging?'none':'left .08s, top .08s, bottom .08s',touchAction:'none'},
+        card:card, onDown:function(e){ self.startDrag(c.id,e); }, onShape:(function(cid){ return function(e){ if(e&&e.stopPropagation)e.stopPropagation(); self.openShapeFor(cid); }; })(c.id)};
+    });
+
+    // peeks (two inactive lanes)
+    // per-lane peek content (fixed-order accordion)
+    var labels={chords:'CHORDS',tab:'TAB',melody:'MELODY'};
+    function peekFor(l){
+      var items=[]; var strings=[];
+      if(l==='chords'){ items=sec.chords.map(function(c){ return {style:{position:'absolute',left:pct(c.start+0.3),fontWeight:700,fontSize:'12px',color:'var(--goldDeep)',top:'50%',transform:'translateY(-50%)'}, text:c.name, dot:false}; }); }
+      else if(l==='tab'){
+        for(var si=0; si<6; si++){ var th=0.8+si*0.32; strings.push({style:{position:'absolute',left:'0',right:'0',top:((si+0.5)/6*100)+'%',height:th+'px',background:'var(--barline)',transform:'translateY(-50%)'}}); }
+        items=sec.tab.map(function(t){ return {style:{position:'absolute',left:pct(t.beat+0.2),fontFamily:"'JetBrains Mono',monospace",fontWeight:700,fontSize:'10px',lineHeight:'1',color:'var(--muted)',background:'var(--panel)',padding:'1px 2px',borderRadius:'3px',top:((t.si+0.5)/6*100)+'%',transform:'translateY(-50%)'}, text:String(t.fret), dot:false}; }); }
+      else { items=sec.melody.map(function(m){ var pcn=((m.pc%12)+12)%12; var tier=self.tierOf(m.pc, self.chordAt(m.beat).name); var tc=self.TIER[tier]; return {style:{position:'absolute',left:pct(m.beat+0.2),minWidth:'17px',height:'15px',padding:'0 3px',borderRadius:'4px',top:'50%',transform:'translateY(-50%)',background:tc.fill,color:tc.dark,display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'Outfit',fontWeight:700,fontSize:'9px'}, text:self.NAMES[pcn], dot:false}; }); }
+      return {key:l, label:labels[l], items:items, strings:strings, onTap:function(){ self.promote(l); }};
+    }
+    var peekChords=peekFor('chords'), peekTab=peekFor('tab'), peekMelody=peekFor('melody');
+
+    // tab grid
+    var tabGrid=this.STRINGS.map(function(sname,si){
+      var cells=[];
+      var th=(0.6+si*0.34).toFixed(2); // high e (thin) → low E (thick)
+      var lineBg='linear-gradient(transparent calc(50% - '+th+'px),var(--barline) calc(50% - '+th+'px),var(--barline) calc(50% + '+th+'px),transparent calc(50% + '+th+'px))';
+      for(var b=0;b<T;b++){ (function(b){
+        var note=sec.tab.find(function(t){ return t.si===si && t.beat===b; });
+        var seld = !!note && st.selTab.indexOf(si+'-'+b)>=0;
+        var fretStyle = seld
+          ? {fontFamily:"'JetBrains Mono',monospace",fontWeight:700,fontSize:'12px',color:'#fff',background:'#4a6fa5',borderRadius:'9px',padding:'1px 6px',boxShadow:'0 0 0 2px rgba(74,111,165,.35)'}
+          : {fontFamily:"'JetBrains Mono',monospace",fontWeight:700,fontSize:'12px',color:'var(--muted)',background:'var(--bg)',padding:'0 3px'};
+        cells.push({key:si+'-'+b, fret: note?String(note.fret):'', has:!!note, fretStyle:fretStyle,
+          style:{flex:'1',borderRight:'1px solid var(--line2)',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',background:lineBg},
+          onTap:function(){ self.openFret(si,b); }});
+      })(b); }
+      return {label:sname, cells:cells, gaugeStyle:{width:'12px',height:th+'px',borderRadius:th+'px',background:'var(--faint)',flex:'none'}};
+    });
+    // marquee box + tab selection bar
+    var mq=st.marquee, mqStyle=null;
+    if(mq){ var mx0=Math.min(mq.x0,mq.x1), my0=Math.min(mq.y0,mq.y1); mqStyle={position:'absolute',left:mx0+'px',top:my0+'px',width:Math.abs(mq.x1-mq.x0)+'px',height:Math.abs(mq.y1-mq.y0)+'px',border:'1.5px dashed #4a6fa5',background:'rgba(74,111,165,.12)',zIndex:7,pointerEvents:'none',borderRadius:'4px'}; }
+
+    // melody — scale grid across 2+ octaves (high at top)
+    var rootPc = (self.PC[st.keyRoot]!=null) ? self.PC[st.keyRoot] : 7;
+    var maj=[0,2,4,5,7,9,11];
+    var melAsc=[];
+    for(var nn=0; nn<15; nn++){ var deg=nn%7, oo=Math.floor(nn/7); var rpc=(rootPc+maj[deg])%12; melAsc.push({name:self.NAMES[rpc], pc:rpc, abs:36+rootPc+maj[deg]+12*oo}); }
+    var melRows=melAsc.slice().reverse();
+    var rowH=100/melRows.length;
+    var melodyAxis=melRows.map(function(r){ return {name:r.name}; });
+    var melodyItems=sec.melody.map(function(m){
+      var pcn=((m.pc%12)+12)%12;
+      var abs=m.oct*12+pcn;
+      var ri=melRows.findIndex(function(r){ return r.abs===abs; });
+      if(ri<0){ var best=0,bd=999; melRows.forEach(function(r,i){ var d=Math.abs(r.abs-abs); if(d<bd){bd=d;best=i;} }); ri=best; }
+      var tier=self.tierOf(m.pc, self.chordAt(m.beat).name);
+      var tc=self.TIER[tier];
+      return {id:m.id, label:self.NAMES[pcn],
+        style:{position:'absolute',left:pct(m.beat+0.15),top:'calc('+(ri*rowH)+'% + 1px)',height:'calc('+rowH+'% - 2px)',minHeight:'13px',width:'24px',borderRadius:'4px',background:tc.fill,display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'Outfit',fontWeight:700,fontSize:'9px',color:tc.dark,cursor:'pointer'},
+        onTap:function(){ self.tapMelody(m.id); }};
+    });
+
+    // playhead
+    var ph={position:'absolute',left:pct(st.ph),top:'0',bottom:'0',width:'2px',background:'var(--red)',zIndex:6,opacity:st.playing?1:0.0,boxShadow:'0 0 8px rgba(192,57,43,.5)',pointerEvents:'none'};
+
+    // chips
+    var chips=sec ? this.state.sections.map(function(s,i){
+      return {name:s.name, active:i===st.secIdx,
+        style:{flex:'none',whiteSpace:'nowrap',cursor:'pointer',borderRadius:'14px',padding:'7px 13px',fontFamily:'Outfit',fontWeight: i===st.secIdx?700:600,fontSize:'12px',
+          color: i===st.secIdx?'var(--panel)':'var(--muted)', background: i===st.secIdx?'var(--ink)':'var(--panel)', border: i===st.secIdx?'1px solid var(--ink)':'1px solid var(--line)'},
+        onTap:function(){ self.jumpSection(i); }};
+    }) : [];
+
+    // bottom tabs
+    var laneOrder=['chords','tab','melody'];
+    var laneMeta={chords:['\u25C6','Chords'],tab:['\u266B','Tab'],melody:['\u270E','Melody']};
+    var li=laneOrder.indexOf(st.activeLane); if(li<0)li=0;
+    var nextLane=laneOrder[(li+1)%3];
+
+    // palette
+    var palette=this.CHORDLIB.map(function(it){
+      return {name:it.name, roman:it.roman, onAdd:function(){ self.addChord(it, st.addAt); }};
+    });
+
+    // empty gaps in the chord lane → tap to insert
+    var gaps=[]; var occ=new Array(T).fill(false);
+    sec.chords.forEach(function(c){ for(var b=c.start;b<c.start+c.len;b++){ if(b>=0&&b<T) occ[b]=true; } });
+    var g=0; while(g<T){ if(occ[g]){ g++; continue; } var s0=g; while(g<T && !occ[g]) g++; var len=g-s0;
+      gaps.push({onTap:(function(at){ return function(){ self.openPaletteAt(at); }; })(s0),
+        style:{position:'absolute',left:pct(s0),width:pct(len),top:'10px',bottom:'10px',padding:'0 4px',cursor:'pointer'},
+        inner:{height:'100%',borderRadius:'9px',border:'1.5px dashed var(--line)',background:'rgba(200,160,74,.05)',display:'flex',alignItems:'center',justifyContent:'center',color:'var(--faint)',fontFamily:'Outfit',fontWeight:700,fontSize:'18px'}});
+    }
+
+    // editor
+    var selChord=sec.chords.find(function(c){ return c.id===st.selId; });
+    var editor=null;
+    if(selChord){
+      var bn=selChord.len/4;
+      editor={name:selChord.name, roman:selChord.roman,
+        lenLabel: selChord.len===2?'½ bar':(bn+' bar'+(bn>1?'s':'')),
+        startLabel:'beat '+(selChord.start+1),
+        halfStyle: self.segStyle(selChord.len===2), oneStyle: self.segStyle(selChord.len===4), twoStyle: self.segStyle(selChord.len===8),
+        onHalf:function(){ self.changeLen(2); }, onOne:function(){ self.changeLen(4); }, onTwo:function(){ self.changeLen(8); },
+        onLeft:function(){ self.move(-1); }, onRight:function(){ self.move(1); },
+        onDup:function(){ self.dupChord(); }, onRemove:function(){ self.removeChord(); }};
+    }
+
+    // fret
+    var fretKeys=[];
+    for(var d=0;d<=12;d++){ (function(d){ fretKeys.push({d:d, onTap:function(){ self.setFret(d); }}); })(d); }
+    var fretKeysExt=[];
+    for(var d2=13;d2<=24;d2++){ (function(d2){ fretKeysExt.push({d:d2, onTap:function(){ self.setFret(d2); }}); })(d2); }
+    var fretTitle = st.fret ? ('Fret · string '+this.STRINGS[st.fret.si]+' · beat '+(st.fret.beat+1)) : '';
+
+    // sections sheet
+    var sectionRows=this.state.sections.map(function(s,i){
+      var bars=Math.max.apply(null,s.chords.map(function(c){return c.start+c.len;}).concat([0]))/4;
+      var act=i===st.secIdx;
+      return {name:s.name, meta: s.chords.length+' chords · '+bars+' bars',
+        active:act, badge: act?'EDITING':'',
+        style:{display:'flex',alignItems:'center',gap:'11px',cursor:'pointer',background:'var(--panel2)',border:'1px solid '+(act?'var(--gold)':'var(--line)'),borderRadius:'12px',padding:'12px 14px',boxShadow: act?'0 2px 8px rgba(200,160,74,.18)':'none'},
+        badgeStyle: act?{font:'700 9px Outfit',color:'#fff',background:'var(--goldDeep)',borderRadius:'9px',padding:'3px 8px'}:{display:'none'},
+        onJump:function(){ self.jumpSection(i); }};
+    });
+
+    // piano
+    var curName=curC.name;
+    var whiteKeys=this.WHITE.map(function(w){
+      var pc=self.PC[w[0]]; var oct=st.octave+w[1];
+      var tier=self.tierOf(pc, curName); var tc=self.TIER[tier];
+      var dis=st.scaleLock && tier==='outside';
+      return {label:w[0], dotStyle:{width:'8px',height:'8px',borderRadius:'50%',background:tc.fill,marginBottom:'3px'},
+        labelStyle:{fontFamily:'Outfit',fontWeight:700,fontSize:'10px',color:tc.text},
+        keyStyle:{flex:'1',position:'relative',background:'var(--keyW)',borderRadius:'0 0 6px 6px',boxShadow:'0 2px 3px rgba(0,0,0,.28)',display:'flex',flexDirection:'column',justifyContent:'flex-end',alignItems:'center',paddingBottom:'7px',cursor: dis?'default':'pointer',opacity: dis?0.32:1},
+        onTap:function(){ if(!dis) self.tapKey(pc,oct); }};
+    });
+    var blackKeys=this.BLACK.map(function(bk){
+      var pc=self.PC[bk[0]]; var oct=st.octave+bk[1];
+      var tier=self.tierOf(pc, curName); var tc=self.TIER[tier];
+      var dis=st.scaleLock && tier==='outside';
+      return {dotStyle:{width:'5px',height:'5px',borderRadius:'50%',background:tc.fill},
+        keyStyle:{position:'absolute',left:bk[2]+'%',top:'0',width:'7.2%',height:'62%',background:'linear-gradient(#3a3a3a,#1a1a1a)',borderRadius:'0 0 4px 4px',boxShadow:'0 3px 4px rgba(0,0,0,.5)',display:'flex',flexDirection:'column',justifyContent:'flex-end',alignItems:'center',paddingBottom:'4px',cursor: dis?'default':'pointer',opacity: dis?0.4:1},
+        onTap:function(){ if(!dis) self.tapKey(pc,oct); }};
+    });
+
+    // ---- tools workspace ----
+    var isBuilder = st.activeTool==='builder';
+    var toolMeta = {builder:['\u25C6','Builder'], showscale:['\uD83D\uDCD0','Scale'], arp:['\uD83C\uDFBC','Arp'], tuner:['\uD83C\uDFAF','Tuner']};
+    var railItems = st.openTools.map(function(id){
+      var m=toolMeta[id]; var act=id===st.activeTool;
+      return {id:id, icon:m[0], name:m[1], closable:id!=='builder',
+        tabStyle:{cursor:'pointer',position:'relative',display:'flex',flexDirection:'column',alignItems:'center',gap:'2px',padding:'9px 5px',borderRadius:'12px 0 0 12px',width:'52px',background: act?'var(--gold)':'var(--panel)',border:'1px solid var(--line)',boxShadow:'-3px 2px 8px rgba(0,0,0,.12)'},
+        iconStyle:{fontSize:'16px',color: act?'#fff':'var(--muted)'},
+        nameStyle:{fontFamily:'Outfit',fontWeight:700,fontSize:'8px',color: act?'#fff':'var(--faint)'},
+        closeStyle:{position:'absolute',top:'2px',right:'4px',fontSize:'9px',lineHeight:1,color: act?'rgba(255,255,255,.8)':'var(--faint)'},
+        onSwitch:function(){ self.switchTool(id); },
+        onClose:function(e){ if(e&&e.stopPropagation)e.stopPropagation(); self.closeTool(id); }};
+    });
+    var moreTools = self.TOOLS.map(function(t){
+      var open = (t.kind==='panel') && st.openTools.indexOf(t.id)>=0;
+      var badge = t.kind==='toggle' ? self.SHAPE_STATES.filter(function(x){return x[0]===st.shapeState;})[0][1] : (open?'Open':'');
+      return {icon:t.icon, name:t.name, desc:t.desc, badge:badge, onOpen:function(){ self.openTool(t); }};
+    });
+    var curTones = self.tonesOf(curC.name);
+    var arpPats = self.ARPPATS.map(function(p2){ return {label:p2[1], style:self.segStyle(st.arpPattern===p2[0]), onTap:function(){ self.setArp(p2[0]); }}; });
+    var arpRates = self.ARPRATES.map(function(r){ return {r:r, style:self.segStyle(st.arpRate===r), onTap:function(){ self.setArpRate(r); }}; });
+    var arpToneChips = curTones.map(function(pc){ return {name:self.NAMES[pc]}; });
+    var seq=curTones.slice();
+    if(st.arpPattern==='down') seq=seq.slice().reverse();
+    else if(st.arpPattern==='updown') seq=seq.concat(seq.slice(1,-1).reverse());
+    var arpSteps=[]; for(var sidx=0; sidx<8 && seq.length; sidx++){ var apc=seq[sidx%seq.length]; var lit= st.playing && st.arpOn && (Math.floor(st.ph*2)%8===sidx); arpSteps.push({name:self.NAMES[apc], style:{minWidth:'24px',textAlign:'center',padding:'8px 0',borderRadius:'7px',fontFamily:'Outfit',fontWeight:700,fontSize:'11px',color: lit?'#16361f':'var(--muted)', background: lit?'#6fcf86':'var(--panel)', border:'1px solid var(--line)'}}); }
+    var scaleNames=Object.keys(self.SCALES).map(function(nm){ return {name:nm, style:self.segStyle(st.scaleSel===nm), onTap:function(){ self.setScale(nm); }}; });
+    var scaleNotes=self.SCALES[st.scaleSel].map(function(iv,di){ var pc=(7+iv)%12; var inChord=curTones.indexOf(pc)>=0; var tc=self.TIER[inChord?'chord':'scale']; return {name:self.NAMES[pc], deg:di+1, style:{display:'flex',flexDirection:'column',alignItems:'center',gap:'2px',minWidth:'40px',padding:'9px 6px',borderRadius:'10px',background:tc.fill,color:tc.dark}}; });
+    var tStrings=['E','A','D','G','B','e'].map(function(sname,i){ var act=st.tunerString===i; return {name:sname, onTap:(function(k){return function(){ self.setTuner(k); };})(i), style:{cursor:'pointer',width:'40px',height:'40px',borderRadius:'10px',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'Outfit',fontWeight:700,fontSize:'15px',color: act?'#fff':'var(--muted)',background: act?'var(--gold)':'var(--panel)',border:'1px solid var(--line)'}}; });
+
+    var bar=Math.floor(st.ph/st.tsTop)+1, beat=Math.floor(st.ph%st.tsTop)+1;
+    // sub-beat gridlines (minor) + bar lines (major)
+    var gridLines=[];
+    for(var gi=1; gi<T; gi++){ (function(gi){ var major=(gi % st.tsTop===0); gridLines.push({style:{position:'absolute',top:'0',bottom:'0',left:pct(gi),width:'1px',background: major?'var(--grid)':'var(--line2)',opacity: major?1:0.45,pointerEvents:'none'}}); })(gi); }
+
+    var P = {
+      screenStyle: Object.assign({}, vars, {position:'relative',width:'392px',height:'806px',borderRadius:'36px',overflow:'hidden',display:'flex',flexDirection:'column',fontFamily:'Outfit,sans-serif',color:'var(--ink)',background:'var(--bg)'}),
+      isDark:isDark,
+      selectBtnStyle:{cursor:'pointer',fontFamily:'Outfit',fontWeight:700,fontSize:'12px',borderRadius:'13px',padding:'6px 11px',color: st.selectMode?'#fff':'var(--muted)',background: st.selectMode?'var(--ink)':'var(--panel)',border:'1px solid '+(st.selectMode?'var(--ink)':'var(--line)')},
+      songTitle: st.songTitle, onRename:function(){ self.renameSong(); },
+      keyLabel: 'KEY '+st.keyRoot, onToggleKey:function(){ self.toggleKey(); }, onCycleKeyRoot:function(){ self.openKeyMenu(); },
+      keyMenuOpen: st.sheet==='key',
+      keyOptions: self.NAMES.map(function(n){ var act=n===st.keyRoot; return {name:n, onTap:function(){ self.pickKeyRoot(n); },
+        style:{cursor:'pointer',height:'38px',borderRadius:'9px',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'Outfit',fontWeight:700,fontSize:'14px',color: act?'#fff':'var(--ink)',background: act?'var(--gold)':'var(--panel)',border:'1px solid '+(act?'var(--gold)':'var(--line)')}}; }),
+      modeLabel: st.keyMode==='minor'?'min':'maj',
+      modeChipStyle:{cursor:'pointer',fontFamily:'Outfit',fontWeight:700,fontSize:'10px',padding:'7px 8px',borderLeft:'1px solid var(--line)',color: st.keyMode==='minor'?'#fff':'var(--muted)',background: st.keyMode==='minor'?'var(--gold)':'var(--panel)'},
+      chips:chips,
+      songView: st.songView, notSongView: !st.songView, onToggleSongView:function(){ self.toggleSongView(); },
+      songRows: self.state.sections.map(function(sec2, si){
+        var maxEnd=Math.max(self.bars*st.tsTop, sec2.chords.reduce(function(m,c){return Math.max(m,c.start+c.len);},0));
+        var bars=Math.ceil(maxEnd/st.tsTop);
+        var lyMap = st.songLyrics ? self.lyricWordsForSongSection(si) : {};
+        var lyCounter = {};
+        var chips2=sec2.chords.slice().sort(function(a,b){return a.start-b.start;}).map(function(c){
+          var ana=self.analyzeChord(c.name);
+          var diag=self.chordDiagram(c.name);
+          var lyWord='';
+          if(st.songLyrics && lyMap[c.name]){ var k=lyCounter[c.name]||0; if(lyMap[c.name][k]){ lyWord=lyMap[c.name][k]; lyCounter[c.name]=k+1; } }
+          var hpx = st.songShapes ? (st.songLyrics?92:74) : (st.songLyrics?68:48);
+          return {id:c.id, name:c.name, roman: ana.roman||c.roman, ook: !ana.inKey,
+            showDiag: st.songShapes && !!diag,
+            diagDots: diag?diag.dots:[], diagMarkers: diag?diag.markers.map(function(m,i){ return {m:m, left:(i/5*100)}; }):[],
+            showLyric: st.songLyrics, lyWord: lyWord||'·', lyHas: !!lyWord,
+            lyStyle:{marginTop:'3px',maxWidth:'94%',font:'600 10px Outfit',color: lyWord?'#5ec269':'var(--line)',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis',borderTop:'1px solid var(--line2)',paddingTop:'3px'},
+            style:{flex: String(c.len), minWidth:'0', height: hpx+'px', margin:'0 3px', borderRadius:'9px', border: ana.inKey?'1px solid var(--chordBorder)':'1.5px solid #d98a3a', background:'var(--chordBg)', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap: (st.songShapes||st.songLyrics)?'2px':'0', cursor:'grab', touchAction:'none', position:'relative'},
+            onDown:(function(sx,cid){ return function(e){ self.songChordDown(sx,cid,e); }; })(si, c.id)};
+        });
+        var active = si===st.secIdx;
+        var dragging = st.songDrag && st.songDrag.kind==='section' && st.songDrag.idx===si;
+        return {idx:si, name:sec2.name, meta: bars+' bar'+(bars>1?'s':'')+' · '+sec2.chords.length+' chords',
+          rowStyle:{display:'flex',flexDirection:'column',gap:'8px',background: active?'var(--goldSoft)':'var(--panel2)',border: active?'1.5px solid var(--gold)':'1px solid var(--line)',borderRadius:'14px',padding:'11px 12px 12px',boxShadow: dragging?'0 12px 28px rgba(30,26,15,.28)':'none',opacity: dragging?0.92:1},
+          chips:chips2,
+          onHandleDown:(function(sx){ return function(e){ self.songSecDown(sx,e); }; })(si),
+          onOpen:(function(sx){ return function(){ self.openSectionInBuilder(sx); }; })(si) };
+      }),
+      onCloseSongView:function(){ self.setState({songView:false}); },
+      songShapes: st.songShapes, onToggleSongShapes:function(){ self.setState({songShapes:!self.state.songShapes}); },
+      songShapesLabel: st.songShapes?'◆ Shapes on':'◆ Shapes',
+      songLyrics: st.songLyrics, onToggleSongLyrics:function(){ self.toggleSongLyrics(); },
+      songLyricsLabel: st.songLyrics?'♪ Lyrics on':'♪ Lyrics',
+      songLyricsBtnStyle:{cursor:'pointer',fontFamily:'Outfit',fontWeight:700,fontSize:'12px',borderRadius:'13px',padding:'7px 12px',color: st.songLyrics?'#fff':'var(--goldDeep)',background: st.songLyrics?'var(--gold)':'var(--goldSoft)',border:'1px solid '+(st.songLyrics?'var(--gold)':'var(--line)')},
+      songShapesBtnStyle:{cursor:'pointer',fontFamily:'Outfit',fontWeight:700,fontSize:'12px',borderRadius:'13px',padding:'7px 12px',color: st.songShapes?'#fff':'var(--goldDeep)',background: st.songShapes?'var(--gold)':'var(--goldSoft)',border:'1px solid '+(st.songShapes?'var(--gold)':'var(--line)')},
+      laneLabel: labels[st.activeLane],
+      selectMode:st.selectMode, onToggleSelect:function(){ self.toggleSelect(); },
+      isChords: st.activeLane==='chords', isTab: st.activeLane==='tab', isMelody: st.activeLane==='melody',
+      notMelody: st.activeLane!=='melody',
+      anySheet: !!st.sheet && st.sheet!=='key', notPiano: !st.pianoOpen,
+      chordItems:chordItems, chordGaps:gaps, peekChords:peekChords, peekTab:peekTab, peekMelody:peekMelody,
+      chordsActive: true, tabActive: st.activeLane==='tab', melodyActive: st.activeLane==='melody',
+      chordsCollapsed: false, tabCollapsed: st.activeLane!=='tab', melodyCollapsed: st.activeLane!=='melody',
+      tabGrid:tabGrid, melodyAxis:melodyAxis, melodyItems:melodyItems,
+      rulerBars: (function(){ var n=Math.round(T/st.tsTop); var a=[]; for(var i=1;i<=n;i++) a.push({n:i}); return a; })(), phStyle:ph,
+      playGlyph: st.playing?'■':'▶', playWord: st.playing?'Stop':'Play',
+      playBtnStyle:{display:'flex',alignItems:'center',gap:'7px',cursor:'pointer',fontFamily:'Outfit',fontWeight:700,fontSize:'13px',color:'#fff',background: st.playing?'var(--red)':'var(--gold)',borderRadius:'20px',padding:'9px 16px',boxShadow:'0 2px 6px rgba(200,160,74,.4)'},
+      onPlay:function(){ self.togglePlay(); }, posLabel: st.tsTop+'/'+st.tsBottom, onCycleTime:function(){ self.cycleTime(); }, gridLines:gridLines,
+      loopOn:st.loopOn, onToggleLoop:function(){ self.toggleLoop(); },
+      loopBtnStyle:{cursor:'pointer',fontFamily:'Outfit',fontWeight:700,fontSize:'14px',width:'34px',height:'34px',display:'flex',alignItems:'center',justifyContent:'center',borderRadius:'17px',color: st.loopOn?'#fff':'var(--muted)',background: st.loopOn?'var(--goldDeep)':'var(--panel)',border:'1px solid '+(st.loopOn?'var(--goldDeep)':'var(--line)')},
+      recBtnStyle:{cursor:'pointer',fontFamily:'Outfit',fontWeight:700,fontSize:'11px',borderRadius:'13px',padding:'7px 11px',color:'#fff',background: st.recording?'#c0392b':'#5a3a37',animation: st.recording?'recblink 1.1s infinite':'none'},
+      scaleLockStyle:{cursor:'pointer',fontFamily:'Outfit',fontWeight:700,fontSize:'11px',borderRadius:'12px',padding:'7px 10px',color: st.scaleLock?'#1f1f1f':'#cfc7b5',background: st.scaleLock?'#e0c878':'transparent',border:'1px solid '+(st.scaleLock?'#e0c878':'#4a4a44')},
+
+      laneIcon: laneMeta[st.activeLane][0], laneName: laneMeta[st.activeLane][1], nextLaneName: laneMeta[nextLane][1],
+      onCycleLane:function(){ self.setLane(nextLane); },
+      onOpenMore:function(){ self.setState({sheet:'more'}); },
+      isBuilder:isBuilder, auxActive:!isBuilder,
+      isTuner: st.activeTool==='tuner', isArp: st.activeTool==='arp', isScales: st.activeTool==='showscale',
+      toolTitle: toolMeta[st.activeTool][1],
+      railShow: st.openTools.length>1, railItems:railItems, moreTools:moreTools,
+      railWrapStyle:{position:'absolute',right:'0',top:'50%',zIndex:60,display:'flex',flexDirection:'column',alignItems:'flex-end',gap:'6px',transform:'translateY(calc(-50% + '+st.railY+'px))',transition: st.railDrag?'none':'transform .18s'},
+      railHandleStyle:{cursor:'grab',touchAction:'none',width:'40px',height:'20px',borderRadius:'10px 0 0 10px',background: st.railDrag?'var(--gold)':'var(--panel)',border:'1px solid var(--line)',borderRight:'none',display:'flex',alignItems:'center',justifyContent:'center',boxShadow:'0 2px 6px rgba(30,26,15,.18)'},
+      onRailDown:function(e){ self.railDown(e); },
+      sheetMore: st.sheet==='more',
+      sheetPicker: st.sheet==='chordpicker', sheetTutorial: st.sheet==='tutorial',
+      sheetAnalysis: st.sheet==='analysis',
+      sheetLyrics: st.sheet==='lyrics',
+      lyTab: st.lyricsTab, lyIsLyrics: st.lyricsTab==='lyrics', lyIsRhymes: st.lyricsTab==='rhymes',
+      onLyTabLyrics:function(){ self.lyricsSetTab('lyrics'); }, onLyTabRhymes:function(){ self.lyricsSetTab('rhymes'); },
+      lyTabLyricsStyle:{flex:'none',cursor:'pointer',padding:'10px 16px',background:'none',border:'none',borderBottom:'2px solid '+(st.lyricsTab==='lyrics'?'#d4a853':'transparent'),color: st.lyricsTab==='lyrics'?'#d4a853':'#606068',font:'600 12px Outfit',letterSpacing:'.04em',textTransform:'uppercase'},
+      lyTabRhymesStyle:{flex:'none',cursor:'pointer',padding:'10px 16px',background:'none',border:'none',borderBottom:'2px solid '+(st.lyricsTab==='rhymes'?'#d4a853':'transparent'),color: st.lyricsTab==='rhymes'?'#d4a853':'#606068',font:'600 12px Outfit',letterSpacing:'.04em',textTransform:'uppercase'},
+      lyIsFree: st.lyricsView==='freewrite', lyIsStructured: st.lyricsView==='structured',
+      onLyFree:function(){ self.lyricsSetView('freewrite'); }, onLyStructured:function(){ self.lyricsSetView('structured'); },
+      lyFreeBtnStyle:{flex:'1',cursor:'pointer',padding:'7px 10px',background: st.lyricsView==='freewrite'?'rgba(212,168,83,.15)':'#14141e',border:'1px solid '+(st.lyricsView==='freewrite'?'#d4a853':'#252530'),color: st.lyricsView==='freewrite'?'#d4a853':'#a0a0a8',font:'600 11px Outfit',borderRadius:'5px'},
+      lyStructBtnStyle:{flex:'1',cursor:'pointer',padding:'7px 10px',background: st.lyricsView==='structured'?'rgba(212,168,83,.15)':'#14141e',border:'1px solid '+(st.lyricsView==='structured'?'#d4a853':'#252530'),color: st.lyricsView==='structured'?'#d4a853':'#a0a0a8',font:'600 11px Outfit',borderRadius:'5px'},
+      lyricsText: st.lyricsText, onLyricsInput:function(e){ self.lyricsInput(e.target.value); },
+      lyInsertBtns: self.state.sections.map(function(s,i){ return {name: s.name||('Line '+(i+1)), onTap:(function(nm){ return function(){ self.insertSectionMarker(nm); }; })(s.name||('Line '+(i+1))) }; }),
+      onParseLyrics:function(){ self.parseLyrics(); },
+      howtoOpen: st.howtoOpen, onToggleHowto:function(){ self.toggleHowto(); }, howtoChevron: st.howtoOpen?'▾':'▸',
+      lyHasSections: st.lyricsSections.length>0, lyNoSections: st.lyricsSections.length===0,
+      lySections: st.lyricsSections.map(function(sec, si){
+        var linked=sec.lineIdx>=0;
+        return {label:sec.label, linked:linked, unlinked:!linked,
+          linkText: linked ? ('⟵ '+(self.state.sections[sec.lineIdx].name||('Line '+(sec.lineIdx+1)))) : 'Not linked',
+          lines: sec.lines.map(function(lineText, li){
+            var tokens=lineText.split(/(\s+)/);
+            return {stacks: tokens.map(function(tok, ti){
+              if(/^\s+$/.test(tok) || tok===''){ return {space:true, real:false, ch:'', word: tok===''?'\u00a0':tok, hasChord:false}; }
+              var wi=ti; var ch=(sec.chordMap[li]&&sec.chordMap[li][wi])||'';
+              return {space:false, real:true, ch: ch||'\u00a0', word:tok, hasChord:!!ch,
+                chStyle:{font:"700 11px 'JetBrains Mono',monospace",color:'#5ec269',minHeight:'14px',textAlign:'center',cursor:'pointer',marginBottom:'2px'},
+                wordStyle:{font:"600 14px 'JetBrains Mono',monospace",color: ch?'#d4a853':'#ebe8e2',fontWeight: ch?700:400,cursor:'pointer',padding:'4px 3px',borderRadius:'4px',textAlign:'center',minHeight:'30px',display:'flex',alignItems:'center',justifyContent:'center'},
+                onTap:(function(s,l,w){ return function(){ self.openLyricPick(s,l,w); }; })(si,li,wi)};
+            })};
+          })};
+      }),
+      lyPickOpen: !!st.lyricPick,
+      lyPickChords: st.lyricPick ? self.sectionChordsFor((st.lyricsSections[st.lyricPick.si]||{}).lineIdx).map(function(ch){ return {name:ch, onTap:(function(c){ return function(){ self.assignLyricChord(c); }; })(ch) }; }) : [],
+      lyPickHasCurrent: !!(st.lyricPick && st.lyricsSections[st.lyricPick.si] && st.lyricsSections[st.lyricPick.si].chordMap[st.lyricPick.li] && st.lyricsSections[st.lyricPick.si].chordMap[st.lyricPick.li][st.lyricPick.wi]),
+      lyPickEmpty: !!(st.lyricPick && self.sectionChordsFor((st.lyricsSections[st.lyricPick.si]||{}).lineIdx).length===0),
+      onLyPickRemove:function(){ self.removeLyricChord(); }, onLyPickClose:function(){ self.setState({lyricPick:null}); },
+      rhymeWord: st.rhymeWord, rhymeResults: st.rhymeResults.map(function(r){ return {w:r}; }), rhymeHasResults: st.rhymeResults.length>0, rhymeEmpty: st.rhymeResults.length===0,
+      onRhymeInput:function(e){ self.rhymeSearch(e.target.value); },
+      sheetShapeEditor: st.sheet==='shapeeditor',
+      shDetected: self.detectChord(st.shFrets) || '—',
+      shMismatch: (function(){ var d=self.detectChord(st.shFrets); return d && st.shName && d!==st.shName; })(),
+      shName: st.shName, shTitle: (self.detectChord(st.shFrets)||st.shName||'—'),
+      shWindowLabel: 'Frets '+st.shBase+'–'+(st.shBase+4),
+      onShWinDown:function(){ self.shWindow(-1); }, onShWinUp:function(){ self.shWindow(1); },
+      onShShiftDown:function(){ self.shShift(-1); }, onShShiftUp:function(){ self.shShift(1); },
+      onShClear:function(){ self.shClear(); },
+      shTypeStr: st.shFrets.map(function(f){ return f<0?'x':String(f); }).join(' '),
+      shFretCols: (function(){ var cols=[]; for(var r=0;r<5;r++){ cols.push({fret: st.shBase+r}); } return cols; })(),
+      shStringRows: ['E','A','D','G','B','e'].map(function(sn,i){ var v=st.shFrets[i]; return {label:sn, val: v<0?'×':String(v), pickOpen: st.shPick===i, onPick:(function(k){ return function(){ self.shOpenPick(k); }; })(i),
+        valStyle:{cursor:'pointer',minWidth:'30px',height:'30px',padding:'0 6px',borderRadius:'7px',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:"'JetBrains Mono',monospace",fontWeight:700,fontSize:'13px',color: v<0?'#a04030':'var(--ink)',background:'var(--panel2)',border:'1px solid var(--line)'},
+        pickKeys: (function(k){ var arr=[]; for(var n=0;n<=12;n++){ (function(n){ arr.push({n:n, onTap:function(){ self.shSetString(k,n); }}); })(n); } arr.push({n:'×', onTap:function(){ self.shSetString(k,-1); }}); return arr; })(i),
+        cells: (function(si){ var cs=[]; for(var r=0;r<5;r++){ (function(r){ var fret=st.shBase+r; var on=st.shFrets[si]===fret; cs.push({on:on, onTap:(function(s,fr){ return function(){ self.shGridTap(s,fr); }; })(si,fret),
+          style:{flex:'1',height:'38px',margin:'2px',borderRadius:'7px',border: on?'1px solid var(--gold)':'1px solid var(--line)',background: on?'var(--goldSoft)':'var(--panel2)',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer'},
+          dotStyle: on?{width:'17px',height:'17px',borderRadius:'50%',background:'var(--goldDeep)'}:{display:'none'} }); })(r); } return cs; })(i) }; }),
+      shDetectedFull: self.detectChord(st.shFrets),
+      shCheckOk: !!self.detectChord(st.shFrets),
+      shNotes: self.shNoteInfo(),
+      shAlts: self.shAlternatives(),
+      onSaveShape:function(){ self.saveShapeChord(); }, onPickByName:function(){ self.setState({sheet:'chordpicker'}); },
+      analysisKey: st.keyRoot+(st.keyMode==='minor'?' minor':' major'),
+      analysisRows: sec.chords.slice().sort(function(a,b){return a.start-b.start;}).map(function(c){ var an=self.analyzeChord(c.name); return {name:c.name, roman: an.roman||'—', inKey:an.inKey, badge: an.inKey?'in key':(an.reason==='quality'?'borrowed':'chromatic'), badgeStyle: an.inKey?{font:'700 9px Outfit',color:'#2f8a4c',background:'#e8f3ea',borderRadius:'6px',padding:'3px 7px'}:{font:'700 9px Outfit',color:'#a8702a',background:'#faf0e0',borderRadius:'6px',padding:'3px 7px'}, romanLine:(an.roman||'—')}; }),
+      analysisInKeyCount: sec.chords.filter(function(c){ return self.analyzeChord(c.name).inKey; }).length,
+      analysisTotal: sec.chords.length,
+      analysisRomanLine: sec.chords.slice().sort(function(a,b){return a.start-b.start;}).map(function(c){ return self.analyzeChord(c.name).roman||'?'; }).join('  –  '),
+      pickerRoots: self.NAMES.map(function(n){ var act=n===st.pickerRoot; return {name:n, onTap:function(){ self.setPickerRoot(n); },
+        style:{cursor:'pointer',height:'38px',borderRadius:'8px',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'Outfit',fontWeight:700,fontSize:'13px',color: act?'#fff':'var(--ink)',background: act?'var(--gold)':'var(--panel)',border:'1px solid '+(act?'var(--gold)':'var(--line)')}}; }),
+      pickerQuals: self.PICKER_QUAL.map(function(q){ var act=q[0]===st.pickerQual; return {label:q[1], onTap:function(){ self.setPickerQual(q[0]); }, style:self.segStyle(act)}; }),
+      pickerExts: self.PICKER_EXT.map(function(e){ var act=e[0]===st.pickerExt; return {label:e[1], onTap:function(){ self.setPickerExt(e[0]); }, style:self.segStyle(act)}; }),
+      pickerResult: self.pickerChordName(), onAddPicked:function(){ self.addPickedChord(); },
+      onManageSections:function(){ self.setState({sheet:'sections'}); },
+      onBackToBuilder:function(){ self.switchTool('builder'); },
+      arpPats:arpPats, arpRates:arpRates, arpToneChips:arpToneChips, arpSteps:arpSteps,
+      arpToggleLabel: st.arpOn?'On':'Off',
+      arpToggleStyle:{cursor:'pointer',fontFamily:'Outfit',fontWeight:700,fontSize:'12px',borderRadius:'13px',padding:'7px 14px',color: st.arpOn?'#fff':'var(--muted)',background: st.arpOn?'#2f8a4c':'var(--panel)',border:'1px solid '+(st.arpOn?'#2f8a4c':'var(--line)')},
+      arpOctLabel:'\u00d7'+st.arpOct, onArpOctMinus:function(){ self.setArpOct(-1); }, onArpOctPlus:function(){ self.setArpOct(1); },
+      scaleNames:scaleNames, scaleNotes:scaleNotes, scaleSel:st.scaleSel,
+      tStrings:tStrings, tunerTarget:['E','A','D','G','B','e'][st.tunerString], tunerCents:'+4\u00a2',
+      onOpenPiano:function(){ self.openPiano(); },
+      sheetPalette: st.sheet==='palette', sheetEditor: st.sheet==='editor'&&!!editor, sheetSections: st.sheet==='sections', sheetFret: st.sheet==='fret',
+      palette:palette, editor:editor, fretKeys:fretKeys, fretKeysExt:fretKeysExt, fretExt:st.fretExt, fretExtLabel: st.fretExt?'▴ Hide 13–24':'▾ Frets 13–24', onToggleFretExt:function(){ self.setState({fretExt:!self.state.fretExt}); }, fretTitle:fretTitle, sectionRows:sectionRows,
+      onCloseSheet:function(){ self.setState({sheet:null}); },
+      onOpenPalette:function(){ self.setState({sheet:'palette', addAt:null}); },
+      onAddSection:function(){ self.addSection(); },
+      onClearFret:function(){ self.clearFret(); },
+      pianoOpen:st.pianoOpen, whiteKeys:whiteKeys, blackKeys:blackKeys,
+      recording:st.recording, onToggleRec:function(){ self.toggleRec(); },
+      octaveLabel:'OCT '+st.octave, onOctMinus:function(){ self.octave(-1); }, onOctPlus:function(){ self.octave(1); },
+      scaleLock:st.scaleLock, onScaleLock:function(){ self.toggleScaleLock(); },
+      onKeepTake:function(){ self.keepTake(); }, onClosePiano:function(){ self.closePiano(); },
+      curChordName:curName,
+      curChordTones: self.tonesOf(curName).map(function(pp){ return {name: self.NAMES[((pp%12)+12)%12]}; }),
+      sel:st.sel, selCount:st.sel.length, onBulkRemove:function(){ self.bulkRemove(); },
+      marqueeStyle:mqStyle, hasMarquee: !!mqStyle, onTabPointerDown:function(e){ self.startMarquee(e); },
+      tabSelCount: st.selTab.length, hasTabSel: st.selTab.length>0, onBulkRemoveTab:function(){ self.bulkRemoveTab(); }, onClearTabSel:function(){ self.clearTabSel(); }
+    };
+    return { p: P };
+  }
+}
+</script>
+</body>
+</html>
